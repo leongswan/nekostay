@@ -1,34 +1,44 @@
 class StaySplitter
-  MAX_DAYS = 14
-
   def initialize(stay)
     @stay = stay
   end
 
-  # 分割結果を返す
-  def split
-    periods = []
-    current_start = @stay.start_date
+  # 分割して保存
+  def save_splits!(destroy_original: false)
+    # すでに子が存在する場合 → いったん削除
+    @stay.children.destroy_all if @stay.children.exists?
 
-    while current_start <= @stay.end_date
-      current_end = [current_start + (MAX_DAYS - 1).days, @stay.end_date].min
-      periods << { pet_name: @stay.pet_name, start_date: current_start, end_date: current_end }
-      current_start = current_end + 1.day
-    end
+    # 分割結果を作成
+    slices = split
 
-    periods
-  end
-
-  # DBに保存する場合
-  def save_splits!
-    split.each do |period|
-      Stay.create!(
-        user: @stay.user,
-        pet_name: period[:pet_name],
-        start_date: period[:start_date],
-        end_date: period[:end_date],
-        notes: @stay.notes
+    slices.each do |range|
+      @stay.children.create!(
+        pet:        @stay.pet,
+        owner:      @stay.owner,
+        sitter:     @stay.sitter,
+        place:      @stay.place,
+        status:     @stay.status,
+        start_on:   range.first,
+        end_on:     range.last,
+        notes:      @stay.notes
       )
     end
+
+    # 元の Stay を削除するか残すか
+    @stay.destroy if destroy_original
+  end
+
+  # 14日ごとに分割
+  def split
+    ranges = []
+    current_start = @stay.start_on
+
+    while current_start <= @stay.end_on
+      current_end = [current_start + 13, @stay.end_on].min
+      ranges << (current_start..current_end)
+      current_start = current_end + 1
+    end
+
+    ranges
   end
 end
