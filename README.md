@@ -6,7 +6,7 @@
 | id          | PK     |                                       |
 | name        | string | null: false                           |
 | email       | string | null: false, unique                   |
-| role        | string | enum(owner/sitter/admin), null\:false |
+| role        | string | enum(owner/sitter/admin), null:false  |
 | phone       | string |                                       |
 | address_id  | FK     | references addresses                  |
 | verified    | bool   | default: false                        |
@@ -120,7 +120,7 @@
 | meal        | json     |                  |
 | litter      | json     |                  |
 | meds        | json     |                  |
-| weight      | decimal  | decimal(6,2) 推奨 |
+| weight      | decimal  | precision: 6, scale: 2 |
 | memo        | text     |                  |
 
 
