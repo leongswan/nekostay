@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_17_040752) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_17_044729) do
+  create_table "checkins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "stay_id", null: false
+    t.datetime "checked_at"
+    t.decimal "weight", precision: 10
+    t.string "mood"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stay_id"], name: "index_checkins_on_stay_id"
+  end
+
+  create_table "handoffs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "stay_id", null: false
+    t.datetime "scheduled_at"
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stay_id"], name: "index_handoffs_on_stay_id"
+  end
+
+  create_table "stays", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "pet_name"
+    t.date "start_date"
+    t.date "end_date"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_stays_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -24,4 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_17_040752) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "checkins", "stays"
+  add_foreign_key "handoffs", "stays"
+  add_foreign_key "stays", "users"
 end

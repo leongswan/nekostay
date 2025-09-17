@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  stay: one
+  checked_at: 2025-09-17 13:47:29
+  weight: 9.99
+  mood: MyString
+  notes: MyText
+
+two:
+  stay: two
+  checked_at: 2025-09-17 13:47:29
+  weight: 9.99
+  mood: MyString
+  notes: MyText
