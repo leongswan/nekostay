@@ -1,0 +1,18 @@
+<h1>Checkin</h1>
+
+<p><strong>Time:</strong> <%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %></p>
+<p><strong>Weight:</strong> <%= @checkin.weight %> kg</p>
+
+<h3>Meal</h3>
+<pre><%= JSON.pretty_generate(@checkin.meal || {}) %></pre>
+
+<h3>Litter</h3>
+<pre><%= JSON.pretty_generate(@checkin.litter || {}) %></pre>
+
+<h3>Meds</h3>
+<pre><%= JSON.pretty_generate(@checkin.meds || []) %></pre>
+
+<h3>Memo</h3>
+<p><%= simple_format(@checkin.memo) %></p>
+
+<p><%= link_to "一覧へ", stay_checkins_path(@stay) %></p>

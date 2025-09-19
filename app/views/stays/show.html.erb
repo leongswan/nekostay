@@ -1,0 +1,12 @@
+<h1>Stay #<%= @stay.id %></h1>
+
+<p>
+  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %><br>
+  場所: <%= @stay.place %><br>
+  ステータス: <%= @stay.status %>
+</p>
+
+<p>
+  <%= link_to "Checkins一覧へ", stay_checkins_path(@stay) %> |
+  <%= link_to "Stays一覧に戻る", stays_path %>
+</p>

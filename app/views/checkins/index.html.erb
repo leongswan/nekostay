@@ -1,0 +1,31 @@
+<h1>Checkins for Stay <%= @stay.id %></h1>
+
+<p>
+  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %> /
+  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay) %>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Weight</th>
+      <th>Meal</th>
+      <th>Litter</th>
+      <th>Meds</th>
+      <th>Memo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @checkins.each do |c| %>
+      <tr>
+        <td><%= link_to c.checked_at&.strftime("%Y-%m-%d %H:%M"), stay_checkin_path(@stay, c) %></td>
+        <td><%= c.weight %></td>
+        <td><pre><%= JSON.pretty_generate(c.meal || {}) %></pre></td>
+        <td><pre><%= JSON.pretty_generate(c.litter || {}) %></pre></td>
+        <td><pre><%= JSON.pretty_generate(c.meds || {}) %></pre></td>
+        <td><%= simple_format(c.memo) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

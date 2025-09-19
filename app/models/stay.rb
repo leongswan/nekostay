@@ -9,6 +9,7 @@ class Stay < ApplicationRecord
              class_name: "Stay",
              foreign_key: :parent_stay_id,
              dependent: :destroy   # 🔹 子も削除される
+  has_many :checkins, dependent: :destroy
   has_many :outgoing_handoffs,
            class_name: "Handoff", foreign_key: :from_stay_id,
            dependent: :destroy

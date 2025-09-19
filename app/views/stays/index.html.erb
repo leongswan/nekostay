@@ -1,0 +1,18 @@
+<h1>Stays一覧</h1>
+
+<% if @stays.any? %>
+  <ul>
+    <% @stays.each do |stay| %>
+      <li>
+        Stay #<%= stay.id %>
+        (<%= stay.start_on %> - <%= stay.end_on %>)
+        /
+        <%= link_to "詳細", stay_path(stay) %>
+        /
+        <%= link_to "Checkins", stay_checkins_path(stay) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>まだ滞在がありません。</p>
+<% end %>

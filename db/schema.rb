@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_19_124153) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_19_131245) do
   create_table "addresses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "postal_code", null: false
     t.string "prefecture", null: false
@@ -29,6 +29,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_19_124153) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "meal"
+    t.json "litter"
+    t.json "meds"
+    t.text "memo"
     t.index ["checked_at"], name: "index_checkins_on_checked_at"
     t.index ["stay_id"], name: "index_checkins_on_stay_id"
   end

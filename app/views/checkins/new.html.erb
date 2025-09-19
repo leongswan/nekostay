@@ -1,0 +1,41 @@
+<h1>New Checkin</h1>
+
+<%= form_with model: [@stay, @checkin], local: true do |f| %>
+  <div>
+    <%= f.label :checked_at %><br>
+    <%= f.datetime_local_field :checked_at %>
+  </div>
+
+  <div>
+    <%= f.label :weight, "体重(kg)" %><br>
+    <%= f.number_field :weight, step: "0.01" %>
+  </div>
+
+  <hr>
+
+  <div>
+    <%= f.label :meal_raw, "meal(JSON)" %><br>
+    <%= text_area_tag :meal_raw, params.dig(:checkin, :meal_raw), rows: 4, cols: 60 %>
+    <p>例: {"breakfast": true, "dinner": false}</p>
+  </div>
+
+  <div>
+    <%= f.label :litter_raw, "litter(JSON)" %><br>
+    <%= text_area_tag :litter_raw, params.dig(:checkin, :litter_raw), rows: 4, cols: 60 %>
+    <p>例: {"scoop": true, "change": false}</p>
+  </div>
+
+  <div>
+    <%= f.label :meds_raw, "meds(JSON)" %><br>
+    <%= text_area_tag :meds_raw, params.dig(:checkin, :meds_raw), rows: 4, cols: 60 %>
+    <p>例: [{"name":"抗生剤","time":"09:00"}]</p>
+  </div>
+
+  <div>
+    <%= f.label :memo %><br>
+    <%= f.text_area :memo, rows: 4, cols: 60 %>
+  </div>
+
+  <%= f.submit "保存" %>
+<% end %>
+
