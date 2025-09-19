@@ -1,0 +1,23 @@
+<h1>Handoffs</h1>
+<table>
+  <thead>
+    <tr>
+      <th>From</th><th>To</th><th>Scheduled</th><th>Status</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @handoffs.each do |h| %>
+      <tr>
+        <td><%= [h.from_stay.start_on, h.from_stay.end_on].join(" ~ ") %></td>
+        <td><%= [h.to_stay.start_on,   h.to_stay.end_on].join(" ~ ") %></td>
+        <td><%= h.scheduled_at&.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= h.completed_at ? "完了" : "未完了" %></td>
+        <td>
+          <% unless h.completed_at %>
+            <%= button_to "完了にする", complete_handoff_path(h), method: :patch %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

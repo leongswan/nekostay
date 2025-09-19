@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_17_122125) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_19_124153) do
   create_table "addresses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "postal_code", null: false
     t.string "prefecture", null: false
@@ -53,12 +53,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_17_122125) do
   end
 
   create_table "handoffs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "stay_id", null: false
     t.datetime "scheduled_at"
-    t.boolean "completed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["stay_id"], name: "index_handoffs_on_stay_id"
+    t.bigint "from_stay_id", null: false
+    t.bigint "to_stay_id", null: false
+    t.text "checklist"
+    t.datetime "completed_at"
+    t.index ["from_stay_id"], name: "index_handoffs_on_from_stay_id"
+    t.index ["to_stay_id"], name: "index_handoffs_on_to_stay_id"
   end
 
   create_table "media", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -168,7 +171,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_17_122125) do
   add_foreign_key "checkins", "stays"
   add_foreign_key "contracts", "stays"
   add_foreign_key "emergency_contacts", "pets"
-  add_foreign_key "handoffs", "stays"
+  add_foreign_key "handoffs", "stays", column: "from_stay_id"
+  add_foreign_key "handoffs", "stays", column: "to_stay_id"
   add_foreign_key "messages", "stays"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "payments", "stays"

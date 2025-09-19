@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'handoffs/index'
+  get 'handoffs/complete'
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -8,4 +10,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resources :handoffs, only: [:index] do
+  member do
+    patch :complete
+  end
 end

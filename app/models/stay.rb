@@ -9,6 +9,12 @@ class Stay < ApplicationRecord
              class_name: "Stay",
              foreign_key: :parent_stay_id,
              dependent: :destroy   # 🔹 子も削除される
+  has_many :outgoing_handoffs,
+           class_name: "Handoff", foreign_key: :from_stay_id,
+           dependent: :destroy
+  has_many :incoming_handoffs,
+           class_name: "Handoff", foreign_key: :to_stay_id,
+           dependent: :destroy           
 
   # 文字列enum（DBはstring）
   enum :place,  { owner_home: "owner_home", sitter_home: "sitter_home" },  prefix: true
