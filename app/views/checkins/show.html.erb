@@ -1,18 +1,15 @@
-<h1>Checkin</h1>
+<h1>Checkin #<%= @checkin.id %> (Stay <%= @stay.id %>)</h1>
+<p>Time: <%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %></p>
+<p>Weight: <%= @checkin.weight %></p>
+<p>Mood: <%= @checkin.mood %></p>
+<p>Meal: <pre><%= JSON.pretty_generate(@checkin.meal || {}) %></pre></p>
+<p>Litter: <pre><%= JSON.pretty_generate(@checkin.litter || {}) %></pre></p>
+<p>Meds: <pre><%= JSON.pretty_generate(@checkin.meds || {}) %></pre></p>
+<p>Memo: <%= simple_format(@checkin.memo) %></p>
 
-<p><strong>Time:</strong> <%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %></p>
-<p><strong>Weight:</strong> <%= @checkin.weight %> kg</p>
+<p>
+  <%= link_to "一覧へ", stay_checkins_path(@stay) %> |
+  <%= button_to "削除", stay_checkin_path(@stay, @checkin),
+        method: :delete, data: { confirm: "削除しますか？" } %>
+</p>
 
-<h3>Meal</h3>
-<pre><%= JSON.pretty_generate(@checkin.meal || {}) %></pre>
-
-<h3>Litter</h3>
-<pre><%= JSON.pretty_generate(@checkin.litter || {}) %></pre>
-
-<h3>Meds</h3>
-<pre><%= JSON.pretty_generate(@checkin.meds || []) %></pre>
-
-<h3>Memo</h3>
-<p><%= simple_format(@checkin.memo) %></p>
-
-<p><%= link_to "一覧へ", stay_checkins_path(@stay) %></p>
