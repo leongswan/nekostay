@@ -1,7 +1,7 @@
 class CheckinsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_stay
-  before_action :set_checkin, only: [:show, :destroy]   # ← show/destroy だけ
+  before_action :set_checkin, only: %i[show edit update destroy]
 
   def index
     @checkins = @stay.checkins.order(checked_at: :desc)
@@ -21,6 +21,21 @@ class CheckinsController < ApplicationController
     else
       flash.now[:alert] = "保存に失敗しました。入力内容をご確認ください。"
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    # 先に通常カラムをセット
+    @checkin.assign_attributes(checkin_params)
+    # JSON を反映 → バリデーション → 保存
+    if normalize_json!(@checkin) && @checkin.save
+      redirect_to stay_checkin_path(@stay, @checkin), notice: "チェックインを更新しました。"
+    else
+      flash.now[:alert] = "更新に失敗しました。入力内容をご確認ください。"
+      render :edit, status: :unprocessable_entity
     end
   end
 

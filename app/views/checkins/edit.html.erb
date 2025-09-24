@@ -1,0 +1,9 @@
+<h1>Checkin 編集（Stay #<%= @stay.id %>）</h1>
+
+<p>
+  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %> /
+  <%= link_to "詳細へ戻る", stay_checkin_path(@stay, @checkin) %> |
+  <%= link_to "一覧へ戻る",  stay_checkins_path(@stay) %>
+</p>
+
+<%= render "form", checkin: @checkin %>

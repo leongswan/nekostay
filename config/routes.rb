@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :stays do
-    resources :checkins, only: %i[index new create show destroy]
+    resources :checkins, only: %i[index new create show edit update destroy]
   end
 
   resources :handoffs, only: [:index] do
