@@ -1,7 +1,7 @@
 class CheckinsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_stay
-  before_action :set_checkin, only: %i[show destroy]   # ← show/destroy だけ
+  before_action :set_checkin, only: [:show, :destroy]   # ← show/destroy だけ
 
   def index
     @checkins = @stay.checkins.order(checked_at: :desc)
@@ -19,14 +19,14 @@ class CheckinsController < ApplicationController
     if normalize_json!(@checkin) && @checkin.save
       redirect_to stay_checkin_path(@stay, @checkin), notice: "チェックインを登録しました。"
     else
-      flash.now[:alert] = "保存に失敗しました。"
+      flash.now[:alert] = "保存に失敗しました。入力内容をご確認ください。"
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
     @checkin.destroy
-    redirect_to stay_checkins_path(@stay), notice: "削除しました。"
+    redirect_to stay_checkins_path(@stay), notice: "チェックインを削除しました。"
   end
 
   private
@@ -41,14 +41,15 @@ class CheckinsController < ApplicationController
   end
 
   def checkin_params
-    params.require(:checkin).permit(:checked_at, :weight, :mood, :memo,
-                                    :meal_raw, :litter_raw, :meds_raw)
+    params.require(:checkin).permit(:checked_at, :weight, :memo)
+                                    
   end
 
   # *_raw を JSON に変換してセット
   def normalize_json!(checkin)
     %i[meal litter meds].each do |field|
-      raw = params.dig(:checkin, :"#{field}_raw")
+      raw_key = :"#{field}_raw"
+      raw = params[:checkin][raw_key] rescue nil
       next if raw.blank?
       begin
         parsed = JSON.parse(raw)
@@ -56,7 +57,7 @@ class CheckinsController < ApplicationController
         checkin.errors.add(field, "JSON の形式が不正です")
         return false
       end
-      checkin.public_send("#{field}=", parsed)
+      checkin.send("#{field}=", parsed)
     end
     true
   end

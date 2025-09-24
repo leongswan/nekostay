@@ -1,18 +1,8 @@
-<h1>New Checkin for Stay <%= @stay.id %></h1>
+<h1>Checkin 新規作成（Stay #<%= @stay.id %>）</h1>
 
-<%= form_with model: [@stay, @checkin] do |f| %>
-  <div>日時 <%= f.datetime_field :checked_at %></div>
-  <div>体重 <%= f.number_field :weight, step: 0.01 %></div>
-  <div>気分 <%= f.text_field :mood %></div>
-  <div>メモ <%= f.text_area :memo %></div>
+<p>
+  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %> /
+  <%= link_to "一覧へ戻る", stay_checkins_path(@stay) %>
+</p>
 
-  <hr>
-  <div>Meal (JSON)  <%= f.text_area :meal_raw %></div>
-  <div>Litter (JSON)<%= f.text_area :litter_raw %></div>
-  <div>Meds (JSON)  <%= f.text_area :meds_raw %></div>
-
-  <%= f.submit "保存" %>
-<% end %>
-
-<p><%= link_to "戻る", stay_checkins_path(@stay) %></p>
-
+<%= render "form", checkin: @checkin %>

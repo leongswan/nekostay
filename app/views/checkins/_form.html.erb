@@ -1,0 +1,61 @@
+<%= form_with model: [@stay, @checkin], local: true do |f| %>
+  <% if @checkin.errors.any? %>
+    <div class="alert">
+      <p><strong><%= @checkin.errors.count %>件のエラー</strong> が発生しました：</p>
+      <ul>
+        <% @checkin.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :checked_at, "記録時刻" %><br>
+    <%= f.datetime_local_field :checked_at, value: (@checkin.checked_at || Time.zone.now).strftime("%Y-%m-%dT%H:%M") %>
+  </div>
+
+  <div>
+    <%= f.label :weight, "体重(kg)" %><br>
+    <%= f.number_field :weight, step: "0.01", min: 0 %>
+  </div>
+
+  <div>
+    <%= f.label :memo, "メモ" %><br>
+    <%= f.text_area :memo, rows: 4, placeholder: "フード食べた/元気/排泄など…" %>
+  </div>
+
+  <hr>
+
+  <details>
+    <summary>詳細（JSON 項目：食事/トイレ/投薬）</summary>
+
+    <p>各欄は <code>{"key":"value"}</code> 形式の JSON として保存されます。空欄でもOKです。</p>
+
+    <div>
+      <%= f.label :meal_raw, "Meal（例：{\"amount\":\"50g\",\"brand\":\"Royal Canin\"}）" %><br>
+      <%= text_area_tag :meal_raw,
+          (@checkin.meal.present? ? JSON.pretty_generate(@checkin.meal) : ""),
+          rows: 4, style: "width:100%;" %>
+    </div>
+
+    <div>
+      <%= f.label :litter_raw, "Litter（例：{\"clumps\":2,\"odor\":\"normal\"}）" %><br>
+      <%= text_area_tag :litter_raw,
+          (@checkin.litter.present? ? JSON.pretty_generate(@checkin.litter) : ""),
+          rows: 4, style: "width:100%;" %>
+    </div>
+
+    <div>
+      <%= f.label :meds_raw, "Meds（例：{\"name\":\"抗生剤\",\"dose\":\"1/2錠\"}）" %><br>
+      <%= text_area_tag :meds_raw,
+          (@checkin.meds.present? ? JSON.pretty_generate(@checkin.meds) : ""),
+          rows: 4, style: "width:100%;" %>
+    </div>
+  </details>
+
+  <div style="margin-top: 1rem;">
+    <%= f.submit class: "btn" %>
+    <%= link_to "キャンセル", stay_checkins_path(@stay) %>
+  </div>
+<% end %>
