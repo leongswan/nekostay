@@ -1,61 +1,104 @@
-<%= form_with model: [@stay, @checkin], local: true do |f| %>
-  <% if @checkin.errors.any? %>
-    <div class="alert">
-      <p><strong><%= @checkin.errors.count %>件のエラー</strong> が発生しました：</p>
-      <ul>
-        <% @checkin.errors.full_messages.each do |m| %>
-          <li><%= m %></li>
-        <% end %>
-      </ul>
+<%= form_with model: [@stay, checkin], local: true, class: "card" do |f| %>
+  <%# この partial は render "form", checkin: @checkin で呼ばれている前提 %>
+  <%# f.object と checkin は同じものですが、下で checkin.* を使うために残しています %>
+
+  <h2 style="margin-top:0;">チェックイン</h2>
+
+  <div class="form-grid">
+    <div>
+      <%= f.label :checked_at, "記録日時" %>
+      <%= f.datetime_local_field :checked_at,
+            value: (checkin.checked_at&.strftime("%Y-%m-%dT%H:%M") || Time.zone.now.strftime("%Y-%m-%dT%H:%M")),
+            class: "input" %>
     </div>
-  <% end %>
 
-  <div>
-    <%= f.label :checked_at, "記録時刻" %><br>
-    <%= f.datetime_local_field :checked_at, value: (@checkin.checked_at || Time.zone.now).strftime("%Y-%m-%dT%H:%M") %>
+    <div>
+      <%= f.label :weight, "体重(kg)" %>
+      <%= f.number_field :weight, step: "0.01", class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :weight, "体重(kg)" %><br>
-    <%= f.number_field :weight, step: "0.01", min: 0 %>
-  </div>
-
-  <div>
-    <%= f.label :memo, "メモ" %><br>
-    <%= f.text_area :memo, rows: 4, placeholder: "フード食べた/元気/排泄など…" %>
+  <div style="margin-top:12px;">
+    <%= f.label :memo, "メモ" %>
+    <%= f.text_area :memo, rows: 4, class: "textarea" %>
   </div>
 
   <hr>
 
-  <details>
-    <summary>詳細（JSON 項目：食事/トイレ/投薬）</summary>
-
-    <p>各欄は <code>{"key":"value"}</code> 形式の JSON として保存されます。空欄でもOKです。</p>
-
+  <% meal = checkin.meal || {} %>
+  <h3>Meal</h3>
+  <div class="form-grid">
     <div>
-      <%= f.label :meal_raw, "Meal（例：{\"amount\":\"50g\",\"brand\":\"Royal Canin\"}）" %><br>
-      <%= text_area_tag :meal_raw,
-          (@checkin.meal.present? ? JSON.pretty_generate(@checkin.meal) : ""),
-          rows: 4, style: "width:100%;" %>
+      <%= f.label :meal_amount, "量" %>
+      <%= f.text_field :meal_amount, value: meal["amount"], class: "input" %>
     </div>
-
     <div>
-      <%= f.label :litter_raw, "Litter（例：{\"clumps\":2,\"odor\":\"normal\"}）" %><br>
-      <%= text_area_tag :litter_raw,
-          (@checkin.litter.present? ? JSON.pretty_generate(@checkin.litter) : ""),
-          rows: 4, style: "width:100%;" %>
+      <%= f.label :meal_brand, "フード名" %>
+      <%= f.text_field :meal_brand, value: meal["brand"], class: "input" %>
     </div>
+  </div>
 
+  <hr>
+
+  <% lt = checkin.litter || {} %>
+  <h3>Litter</h3>
+  <div class="form-grid">
     <div>
-      <%= f.label :meds_raw, "Meds（例：{\"name\":\"抗生剤\",\"dose\":\"1/2錠\"}）" %><br>
-      <%= text_area_tag :meds_raw,
-          (@checkin.meds.present? ? JSON.pretty_generate(@checkin.meds) : ""),
-          rows: 4, style: "width:100%;" %>
+      <%= f.label :litter_clumps, "固まり数" %>
+      <%= f.number_field :litter_clumps, value: lt["clumps"], class: "input", min: 0 %>
     </div>
-  </details>
+    <div>
+      <%= f.label :litter_pee, "おしっこ回数" %>
+      <%= f.number_field :litter_pee, value: lt["pee"], class: "input", min: 0 %>
+    </div>
+  </div>
 
-  <div style="margin-top: 1rem;">
-    <%= f.submit class: "btn" %>
-    <%= link_to "キャンセル", stay_checkins_path(@stay) %>
+  <hr>
+
+  <% md = checkin.meds || {} %>
+  <h3>Meds</h3>
+  <div class="form-grid">
+    <div>
+      <%= f.label :meds_name, "薬剤名" %>
+      <%= f.text_field :meds_name, value: md["name"], class: "input" %>
+    </div>
+    <div>
+      <%= f.label :meds_dose, "投与量" %>
+      <%= f.text_field :meds_dose, value: md["dose"], class: "input" %>
+    </div>
+  </div>
+
+  <div class="form-grid" style="margin-top:8px;">
+    <label class="checkbox">
+      <%= f.check_box :meds_given,  { checked: !!md["given"],  class: "exclusive-med" }, "true", "false" %> 投与済
+    </label>
+    <label class="checkbox">
+      <%= f.check_box :meds_none,   { checked: !!md["none"],   class: "exclusive-med" }, "true", "false" %> 投与なし
+    </label>
+    <label class="checkbox">
+      <%= f.check_box :vaccine_3rd, { checked: !!md["vaccine_3rd"] }, "true", "false" %> ワクチン3回目済
+    </label>
+  </div>
+
+  <div class="stack" style="margin-top:16px;">
+    <%= link_to "キャンセル", stay_checkins_path(@stay), class: "btn" %>
+    <%= f.submit (checkin.persisted? ? "更新する" : "保存する"), class: "btn btn--primary" %>
   </div>
 <% end %>
+
+<script>
+  // 投与済 / 投与なし は排他（どちらか一方）
+  const applyExclusive = () => {
+    const group = document.querySelectorAll(".exclusive-med");
+    group.forEach(cb => {
+      cb.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          group.forEach(other => { if (other !== e.target) other.checked = false; });
+        }
+      });
+    });
+  };
+  document.addEventListener("DOMContentLoaded", applyExclusive);
+  document.addEventListener("turbo:load", applyExclusive);
+</script>
+

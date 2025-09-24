@@ -1,11 +1,15 @@
-<h1>Checkins for Stay <%= @stay.id %></h1>
+<h1>Checkins <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
 
-<p>
-  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %> /
-  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay) %>
+<p class="meta">
+  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
 </p>
 
-<table>
+<div class="stack stack--end" style="margin: 8px 0 16px;">
+  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), class: "btn btn--primary" %>
+  <%= link_to "Stay詳細へ", stay_path(@stay), class: "btn" %>
+</div>
+
+<table class="table">
   <thead>
     <tr>
       <th>Time</th>
@@ -14,17 +18,49 @@
       <th>Litter</th>
       <th>Meds</th>
       <th>Memo</th>
+      <th style="width:160px;">Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @checkins.each do |c| %>
       <tr>
-        <td><%= link_to c.checked_at&.strftime("%Y-%m-%d %H:%M"), stay_checkin_path(@stay, c) %></td>
-        <td><%= c.weight %></td>
-        <td><pre><%= JSON.pretty_generate(c.meal || {}) %></pre></td>
-        <td><pre><%= JSON.pretty_generate(c.litter || {}) %></pre></td>
-        <td><pre><%= JSON.pretty_generate(c.meds || {}) %></pre></td>
+        <td><%= link_to(c.checked_at&.strftime("%Y-%m-%d %H:%M"), stay_checkin_path(@stay, c)) %></td>
+        <td><%= c.weight %> kg</td>
+        <td><% m = c.meal || {} %>
+  <% if m.present? %>
+    <%= [m["brand"], m["amount"]].compact.join(" / ") %>
+  <% else %>
+    -
+  <% end %></td>
+        <td><% l = c.litter || {} %>
+  <% if l.present? %>
+    <% items = [] %>
+    <% items << "固まり: #{l['clumps']}" if l['clumps'] %>
+    <% items << "おしっこ: #{l['pee']}" if l['pee'] %>
+    <%= items.presence || "-" %>
+  <% else %>
+    -
+  <% end %></td>
+        <td><% md = c.meds || {} %>
+            <% items = [] %>
+            <% items << "投与なし" if md["none"] %>
+            <% items << "投与済"   if md["given"] %>
+            <% items << "ワクチン3回目済" if md["vaccine_3rd"] %>
+            <% items << "薬剤: #{md['name']}" if md['name'].present? %>
+            <% items << "投与量: #{md['dose']}" if md['dose'].present? %>
+            <%= items.present? ? items.join(" / ") : "-" %>
+       </td>
         <td><%= simple_format(c.memo) %></td>
+        <td>
+          <div class="stack">
+            <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
+            <%= link_to "編集", edit_stay_checkin_path(@stay, c), class: "btn" %>
+            <%= button_to "削除", stay_checkin_path(@stay, c),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "削除してよろしいですか？" }, class: "inline" },
+                  class: "btn btn--danger" %>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>

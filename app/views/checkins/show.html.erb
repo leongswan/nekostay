@@ -1,37 +1,50 @@
-<h1>Checkin 詳細（Stay #<%= @stay.id %>）</h1>
+<h1>Checkin 詳細 <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
 
-<p>
-  記録日時: <%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %><br>
-  体重: <%= @checkin.weight %> kg<br>
-  メモ: <%= simple_format(@checkin.memo) %>
-</p>
+<div class="card" style="margin-bottom:16px;">
+  <p class="meta">記録日時</p>
+  <p><strong><%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %></strong></p>
 
-<hr>
+  <p class="meta" style="margin-top:8px;">体重</p>
+  <p><%= @checkin.weight %> kg</p>
 
-<h2>詳細記録</h2>
-<p><strong>Meal:</strong></p>
-<pre><%= JSON.pretty_generate(@checkin.meal || {}) %></pre>
+  <p class="meta" style="margin-top:8px;">メモ</p>
+  <p><%= simple_format(@checkin.memo) %></p>
+</div>
 
-<p><strong>Litter:</strong></p>
-<pre><%= JSON.pretty_generate(@checkin.litter || {}) %></pre>
+<div class="card">
+  <h3 style="margin-top:0;">詳細記録</h3>
 
-<p><strong>Meds:</strong></p>
-<pre><%= JSON.pretty_generate(@checkin.meds || {}) %></pre>
+  <h3>Meal</h3>
+  <% m = @checkin.meal || {} %>
+  <p><%= m.present? ? [m["brand"], m["amount"]].compact.join(" / ") : "-" %></p>
 
-<hr>
+  <h3>Litter</h3>
+  <% l = @checkin.litter || {} %>
+  <p>
+    <% items = [] %>
+    <% items << "固まり: #{l['clumps']}" if l['clumps'] %>
+    <% items << "おしっこ: #{l['pee']}" if l['pee'] %>
+    <%= items.present? ? items.join(" / ") : "-" %>
+  </p>
 
-<div style="margin-top:1rem;">
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay) %> |
+  <h3>Meds</h3>
+  <% md = @checkin.meds || {} %>
+  <p>
+    <% items = [] %>
+    <% items << "投与なし" if md["none"] %>
+    <% items << "投与済"   if md["given"] %>
+    <% items << "ワクチン3回目済" if md["vaccine_3rd"] %>
+    <% items << "薬剤: #{md['name']}" if md['name'].present? %>
+    <% items << "投与量: #{md['dose']}" if md['dose'].present? %>
+    <%= items.present? ? items.join(" / ") : "-" %>
+  </p>
+</div>
+
+<div class="stack" style="margin-top:16px;">
+  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
+  <%= link_to "編集", edit_stay_checkin_path(@stay, @checkin), class: "btn btn--primary" %>
   <%= button_to "削除", stay_checkin_path(@stay, @checkin),
         method: :delete,
-        data: { confirm: "本当に削除しますか？" },
-        class: "btn btn-danger" %>
+        form: { data: { turbo_confirm: "削除してよろしいですか？" }, class: "inline" },
+        class: "btn btn--danger" %>
 </div>
-
-<div style="margin-top:1rem;">
-  <%= link_to "編集", edit_stay_checkin_path(@stay, @checkin) %> |
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay) %> |
-  <%= button_to "削除", stay_checkin_path(@stay, @checkin),
-        method: :delete, data: { confirm: "本当に削除しますか？" } %>
-</div>
-

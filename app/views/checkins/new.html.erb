@@ -1,8 +1,10 @@
-<h1>Checkin 新規作成（Stay #<%= @stay.id %>）</h1>
+<h1>Checkin 新規作成</h1>
 
 <p>
-  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %> /
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay) %>
+  Stay #<%= @stay.id %>
+  (<%= @stay.start_on %> 〜 <%= @stay.end_on %>)
+  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
 </p>
 
-<%= render "form", checkin: @checkin %>
+<%= render partial: "form", locals: { checkin: @checkin } %>
+

@@ -11,6 +11,17 @@
   </head>
 
   <body>
+    <div class="container">
+    <!-- フラッシュメッセージ -->
+    <% if notice.present? %>
+      <p style="color: #155724; background:#d4edda; padding:6px 10px;"><%= notice %></p>
+    <% end %>
+
+    <% if alert.present? %>
+      <p style="color: #721c24; background:#f8d7da; padding:6px 10px;"><%= alert %></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
+
