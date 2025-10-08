@@ -159,3 +159,7 @@ pre.json {
   overflow: auto;
   font-size: 13px;
 }
+
+.def { display: grid; grid-template-columns: 120px 1fr; row-gap: 6px; column-gap: 12px; }
+.def dt { color: #666; }
+.def dd { margin: 0; }

@@ -1,27 +1,20 @@
 <h1>Checkin 詳細 <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
 
 <div class="card" style="margin-bottom:16px;">
-  <p class="meta">記録日時</p>
-  <p><strong><%= @checkin.checked_at&.strftime("%Y-%m-%d %H:%M") %></strong></p>
-
-  <p class="meta" style="margin-top:8px;">体重</p>
-  <p><%= @checkin.weight %> kg</p>
-
-  <p class="meta" style="margin-top:8px;">メモ</p>
-  <p><%= simple_format(@checkin.memo) %></p>
+  <dl class="def">
+    <dt>記録日時</dt><dd><%= dt_label(@checkin.checked_at) %></dd>
+    <dt>体重</dt><dd><%= weight_label(@checkin.weight) %></dd>
+    <dt>メモ</dt><dd><%= simple_format(@checkin.memo.presence || "-") %></dd>
+  </dl>
 </div>
 
 <div class="card">
   <h3 style="margin-top:0;">詳細記録</h3>
-
-  <h3>Meal</h3>
-  <p><%= meal_label(@checkin.meal) %></p>
-
-  <h3>Litter</h3>
-  <p><%= litter_label(@checkin.litter) %></p>
-
-  <h3>Meds</h3>
-  <p><%= meds_label(@checkin.meds) %></p>
+  <dl class="def">
+    <dt>Meal</dt><dd><%= meal_label(@checkin.meal) %></dd>
+    <dt>Litter</dt><dd><%= litter_label(@checkin.litter) %></dd>
+    <dt>Meds</dt><dd><%= meds_label(@checkin.meds) %></dd>
+  </dl>
 </div>
 
 <div class="stack" style="margin-top:16px;">
