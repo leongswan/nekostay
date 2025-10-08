@@ -1,12 +1,85 @@
 <h1>Stay #<%= @stay.id %></h1>
 
-<p>
-  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %><br>
-  場所: <%= @stay.place %><br>
-  ステータス: <%= @stay.status %>
-</p>
+<div class="card" style="margin-bottom:16px;">
+  <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+    <p><span class="meta">Pet</span><br><%= @stay.pet&.name || "-" %></p>
+    <p><span class="meta">場所</span><br><%= @stay.place %></p>
+    <p><span class="meta">期間</span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
+    <p><span class="meta">ステータス</span><br><span class="pill"><%= @stay.status %></span></p>
+  </div>
 
-<p>
-  <%= link_to "Checkins一覧へ", stay_checkins_path(@stay) %> |
-  <%= link_to "Stays一覧に戻る", stays_path %>
-</p>
+  <% if @stay.notes.present? %>
+    <p class="meta" style="margin-top:8px;">メモ</p>
+    <p><%= simple_format(@stay.notes) %></p>
+  <% end %>
+</div>
+
+<%# 子分割の一覧（ある場合） %>
+<% if @stay.children.exists? %>
+  <div class="card" style="margin-bottom:16px;">
+    <h3 style="margin-top:0;">分割された子ステイ (<%= @stay.children.count %>)</h3>
+    <ul style="margin:0; padding-left:18px;">
+      <% @stay.children.order(:start_on).each do |child| %>
+        <li>
+          #<%= child.id %> … <%= child.start_on %>〜<%= child.end_on %>
+          <%= link_to "Checkins", stay_checkins_path(child), class: "btn btn--ghost", style: "margin-left:8px;" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%# Checkins サマリ %>
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="margin:0;">最近の Checkins</h3>
+    <div class="stack stack--end">
+      <%= link_to "一覧へ", stay_checkins_path(@stay), class: "btn" %>
+      <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), class: "btn btn--primary" %>
+    </div>
+  </div>
+
+  <% if @recent_checkins.blank? %>
+    <p class="meta" style="margin-top:12px;">まだチェックインがありません。</p>
+  <% else %>
+    <table class="table" style="margin-top:12px;">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Weight</th>
+          <th>Meal</th>
+          <th>Litter</th>
+          <th>Meds</th>
+          <th>Memo</th>
+          <th style="width:120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_checkins.each do |c| %>
+          <tr>
+            <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
+            <td class="col-right"><%= weight_label(c.weight) %></td>
+            <td><%= meal_label(c.meal) %></td>
+            <td><%= litter_label(c.litter) %></td>
+            <td>
+              <% md = c.meds || {} %>
+              <% if md["none"] %><span class="pill pill--warn">投与なし</span><% end %>
+              <% if md["given"] %><span class="pill pill--ok">投与済</span><% end %>
+              <% if md["vaccine_3rd"] %><span class="pill pill--ok">ワクチン3回目済</span><% end %>
+              <% if md["name"].present? || md["dose"].present? %>
+                <span class="pill"><%= [md["name"], md["dose"]].compact.join(" / ") %></span>
+              <% end %>
+            </td>
+            <td class="truncate"><%= simple_format(c.memo) %></td>
+            <td>
+              <div class="stack">
+                <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
+                <%= link_to "編集", edit_stay_checkin_path(@stay, c), class: "btn" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

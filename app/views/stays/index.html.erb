@@ -1,18 +1,48 @@
-<h1>Stays一覧</h1>
+<h1>Stays</h1>
 
-<% if @stays.any? %>
-  <ul>
-    <% @stays.each do |stay| %>
-      <li>
-        Stay #<%= stay.id %>
-        (<%= stay.start_on %> - <%= stay.end_on %>)
-        /
-        <%= link_to "詳細", stay_path(stay) %>
-        /
-        <%= link_to "Checkins", stay_checkins_path(stay) %>
-      </li>
+<div class="meta" style="margin-bottom:12px;">
+  自分の滞在一覧（最新順）
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Pet</th>
+      <th>期間</th>
+      <th>場所</th>
+      <th>ステータス</th>
+      <th>子分割</th>
+      <th style="width:220px;">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @stays.empty? %>
+      <tr>
+        <td colspan="7" class="meta" style="text-align:center; padding:24px;">
+          まだ滞在データがありません。
+        </td>
+      </tr>
+    <% else %>
+      <% @stays.each do |stay| %>
+        <tr>
+          <td class="nowrap">#<%= stay.id %></td>
+          <td><%= stay.pet&.name || "-" %></td>
+          <td class="nowrap"><%= stay.start_on %> 〜 <%= stay.end_on %></td>
+          <td><%= stay.place %></td>
+          <td><span class="pill"><%= stay.status %></span></td>
+          <td><%= stay.children.count %></td>
+          <td>
+            <div class="stack">
+              <%= link_to "詳細", stay_path(stay), class: "btn btn--ghost" %>
+              <%= link_to "Checkins", stay_checkins_path(stay), class: "btn" %>
+              <%= link_to "新規Checkin", new_stay_checkin_path(stay), class: "btn btn--primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
-  </ul>
-<% else %>
-  <p>まだ滞在がありません。</p>
-<% end %>
+  </tbody>
+</table>
+
