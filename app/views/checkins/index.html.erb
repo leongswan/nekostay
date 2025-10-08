@@ -21,15 +21,34 @@
       <th style="width:160px;">Actions</th>
     </tr>
   </thead>
-  <tbody>
+    <tbody>
+  <% if @checkins.empty? %>
+    <tr>
+      <td colspan="7" class="meta" style="text-align:center; padding:24px;">
+        まだチェックインがありません。
+        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), class: "btn btn--primary", style: "margin-left:8px;" %>
+      </td>
+    </tr>
+  <% else %>
     <% @checkins.each do |c| %>
       <tr>
-        <td><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
-        <td><%= weight_label(c.weight) %></td>
+        <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
+        <td class="col-right"><%= weight_label(c.weight) %></td>
         <td><%= meal_label(c.meal) %></td>
         <td><%= litter_label(c.litter) %></td>
-        <td><%= meds_label(c.meds) %></td>
-        <td><%= simple_format(c.memo) %></td>
+
+        <td>
+          <% md = c.meds || {} %>
+          <% if md["none"] %><span class="pill pill--warn">投与なし</span><% end %>
+          <% if md["given"] %><span class="pill pill--ok">投与済</span><% end %>
+          <% if md["vaccine_3rd"] %><span class="pill pill--ok">ワクチン3回目済</span><% end %>
+          <% if md["name"].present? || md["dose"].present? %>
+            <span class="pill"><%= [md["name"], md["dose"]].compact.join(" / ") %></span>
+          <% end %>
+        </td>
+
+        <td class="truncate"><%= simple_format(c.memo) %></td>
+
         <td>
           <div class="stack">
             <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
@@ -42,6 +61,7 @@
         </td>
       </tr>
     <% end %>
-  </tbody>
+  <% end %>
+</tbody>
 </table>
 
