@@ -85,21 +85,21 @@ class CheckinsController < ApplicationController
     }.compact
     checkin.litter = litter.presence
 
-    # meds
-    meds_none   = ActiveModel::Type::Boolean.new.cast(p[:meds_none])
-    meds_given  = ActiveModel::Type::Boolean.new.cast(p[:meds_given])
-    vaccine_3rd = ActiveModel::Type::Boolean.new.cast(p[:vaccine_3rd])
+    # meds（排他ルール）
+    bool = ActiveModel::Type::Boolean.new
+    none  = bool.cast(p[:meds_none])
+    given = bool.cast(p[:meds_given])
+    v3    = bool.cast(p[:vaccine_3rd])
 
-    if meds_none
-      # 「投与なし」優先（他の入力は無視）
-      checkin.meds = { "none" => true, "vaccine_3rd" => (vaccine_3rd || nil) }.compact
+    if none
+      # 投与なしのときは他の入力を無視
+      checkin.meds = { "none" => true, "vaccine_3rd" => v3 }.compact
     else
-      meds = {
-        "name" => p[:meds_name].presence,
-        "dose" => p[:meds_dose].presence
-      }.compact
-      meds["given"]       = true if meds_given
-      meds["vaccine_3rd"] = true if vaccine_3rd
+      meds = {}
+      meds["given"]       = true if given
+      meds["vaccine_3rd"] = true if v3
+      meds["name"]        = p[:meds_name] if p[:meds_name].present?
+      meds["dose"]        = p[:meds_dose] if p[:meds_dose].present?
       checkin.meds = meds.presence
     end
   end

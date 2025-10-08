@@ -86,19 +86,45 @@
   </div>
 <% end %>
 
+<!-- 相互排他＆入力無効化のちょい足しJS（Stimulusなしの素朴版） -->
 <script>
-  // 投与済 / 投与なし は排他（どちらか一方）
-  const applyExclusive = () => {
-    const group = document.querySelectorAll(".exclusive-med");
-    group.forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          group.forEach(other => { if (other !== e.target) other.checked = false; });
-        }
-      });
-    });
-  };
-  document.addEventListener("DOMContentLoaded", applyExclusive);
-  document.addEventListener("turbo:load", applyExclusive);
+(function() {
+  function ready(fn){ 
+    if (document.readyState !== 'loading') fn();
+    document.addEventListener('DOMContentLoaded', fn);
+    document.addEventListener('turbo:load', fn); // Turbo対応
+  }
+
+  ready(function(){
+    var given = document.getElementById('checkin_meds_given');
+    var none  = document.getElementById('checkin_meds_none');
+    var name  = document.getElementById('checkin_meds_name');
+    var dose  = document.getElementById('checkin_meds_dose');
+
+    if (!given || !none) return;
+
+    function sync() {
+      // 排他：どちらかONならもう一方はOFF
+      if (given.checked) none.checked = false;
+      if (none.checked)  given.checked = false;
+
+      // 「投与なし」がONの間は、名前/量/投与済を無効化
+      var disableDetail = none.checked;
+      given.disabled = disableDetail;
+      name.disabled  = disableDetail;
+      dose.disabled  = disableDetail;
+
+      if (disableDetail) {
+        // UI的にも値を空にしておくと分かりやすい（任意）
+        // name.value = '';
+        // dose.value = '';
+      }
+    }
+
+    given.addEventListener('change', sync);
+    none.addEventListener('change',  sync);
+    sync(); // 初期同期
+  });
+})();
 </script>
 
