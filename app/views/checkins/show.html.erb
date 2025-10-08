@@ -15,29 +15,13 @@
   <h3 style="margin-top:0;">詳細記録</h3>
 
   <h3>Meal</h3>
-  <% m = @checkin.meal || {} %>
-  <p><%= m.present? ? [m["brand"], m["amount"]].compact.join(" / ") : "-" %></p>
+  <p><%= meal_label(@checkin.meal) %></p>
 
   <h3>Litter</h3>
-  <% l = @checkin.litter || {} %>
-  <p>
-    <% items = [] %>
-    <% items << "固まり: #{l['clumps']}" if l['clumps'] %>
-    <% items << "おしっこ: #{l['pee']}" if l['pee'] %>
-    <%= items.present? ? items.join(" / ") : "-" %>
-  </p>
+  <p><%= litter_label(@checkin.litter) %></p>
 
   <h3>Meds</h3>
-  <% md = @checkin.meds || {} %>
-  <p>
-    <% items = [] %>
-    <% items << "投与なし" if md["none"] %>
-    <% items << "投与済"   if md["given"] %>
-    <% items << "ワクチン3回目済" if md["vaccine_3rd"] %>
-    <% items << "薬剤: #{md['name']}" if md['name'].present? %>
-    <% items << "投与量: #{md['dose']}" if md['dose'].present? %>
-    <%= items.present? ? items.join(" / ") : "-" %>
-  </p>
+  <p><%= meds_label(@checkin.meds) %></p>
 </div>
 
 <div class="stack" style="margin-top:16px;">

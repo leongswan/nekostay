@@ -24,32 +24,11 @@
   <tbody>
     <% @checkins.each do |c| %>
       <tr>
-        <td><%= link_to(c.checked_at&.strftime("%Y-%m-%d %H:%M"), stay_checkin_path(@stay, c)) %></td>
-        <td><%= c.weight %> kg</td>
-        <td><% m = c.meal || {} %>
-  <% if m.present? %>
-    <%= [m["brand"], m["amount"]].compact.join(" / ") %>
-  <% else %>
-    -
-  <% end %></td>
-        <td><% l = c.litter || {} %>
-  <% if l.present? %>
-    <% items = [] %>
-    <% items << "固まり: #{l['clumps']}" if l['clumps'] %>
-    <% items << "おしっこ: #{l['pee']}" if l['pee'] %>
-    <%= items.presence || "-" %>
-  <% else %>
-    -
-  <% end %></td>
-        <td><% md = c.meds || {} %>
-            <% items = [] %>
-            <% items << "投与なし" if md["none"] %>
-            <% items << "投与済"   if md["given"] %>
-            <% items << "ワクチン3回目済" if md["vaccine_3rd"] %>
-            <% items << "薬剤: #{md['name']}" if md['name'].present? %>
-            <% items << "投与量: #{md['dose']}" if md['dose'].present? %>
-            <%= items.present? ? items.join(" / ") : "-" %>
-       </td>
+        <td><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
+        <td><%= weight_label(c.weight) %></td>
+        <td><%= meal_label(c.meal) %></td>
+        <td><%= litter_label(c.litter) %></td>
+        <td><%= meds_label(c.meds) %></td>
         <td><%= simple_format(c.memo) %></td>
         <td>
           <div class="stack">
@@ -65,3 +44,4 @@
     <% end %>
   </tbody>
 </table>
+
