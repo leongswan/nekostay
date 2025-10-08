@@ -31,7 +31,10 @@
           <td><%= stay.pet&.name || "-" %></td>
           <td class="nowrap"><%= stay.start_on %> 〜 <%= stay.end_on %></td>
           <td><%= stay.place %></td>
-          <td><span class="pill"><%= stay.status %></span></td>
+          <td><%= status_badge(stay) %></td>
+
+
+
           <td><%= stay.children.count %></td>
           <td>
             <div class="stack">

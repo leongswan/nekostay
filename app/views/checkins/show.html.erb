@@ -14,57 +14,36 @@
         class: "btn btn--danger" %>
 </div>
 
-<!-- 概要カード -->
+<!-- 概要カード（dl.def でスッキリ表示） -->
 <div class="card" style="margin-bottom:16px;">
-  <div class="form-grid">
-    <div>
-      <p class="meta">記録日時</p>
-      <p><strong><%= dt_label(@checkin.checked_at) %></strong></p>
-    </div>
-    <div>
-      <p class="meta">体重</p>
-      <p><%= weight_label(@checkin.weight) %></p>
-    </div>
-  </div>
+  <dl class="def">
+    <dt>記録日時</dt>
+    <dd><strong><%= dt_label(@checkin.checked_at) %></strong></dd>
 
-  <p class="meta" style="margin-top:8px;">メモ</p>
-  <p class="truncate"><%= simple_format(@checkin.memo.presence || "—") %></p>
+    <dt>体重</dt>
+    <dd><%= weight_label(@checkin.weight) %></dd>
+
+    <dt>メモ</dt>
+    <dd><%= simple_format(@checkin.memo.presence || "—") %></dd>
+  </dl>
 </div>
 
 <!-- 詳細カード -->
 <div class="card">
   <h3 style="margin-top:0;">詳細記録</h3>
+  <dl class="def">
+    <dt>Meal</dt>
+    <dd><%= meal_label(@checkin.meal) %></dd>
 
-  <div class="form-grid">
-    <div>
-      <p class="meta">Meal</p>
-      <p><%= meal_label(@checkin.meal) %></p>
-    </div>
+    <dt>Litter</dt>
+    <dd><%= litter_label(@checkin.litter) %></dd>
 
-    <div>
-      <p class="meta">Litter</p>
-      <p><%= litter_label(@checkin.litter) %></p>
-    </div>
-  </div>
-
-  <p class="meta" style="margin-top:12px;">Meds</p>
-  <p>
-    <% md = @checkin.meds || {} %>
-    <% if md.blank? %>
-      -
-    <% else %>
-      <%# バッジ表示（一覧と統一） %>
-      <% if md["none"] %><span class="pill pill--warn">投与なし</span><% end %>
-      <% if md["given"] %><span class="pill pill--ok">投与済</span><% end %>
-      <% if md["vaccine_3rd"] %><span class="pill pill--ok">ワクチン3回目済</span><% end %>
-      <% if md["name"].present? || md["dose"].present? %>
-        <span class="pill"><%= [md["name"], md["dose"]].compact.join(" / ") %></span>
-      <% end %>
-    <% end %>
-  </p>
+    <!-- ピル表示（ヘルパー meds_badges を使用） -->
+    <dt>Meds</dt>
+    <dd><%= meds_badges(@checkin) %></dd>
+  </dl>
 </div>
 
-<!-- 下部アクション（上にもあるけどページ末にも置くと便利） -->
 <div class="stack" style="margin-top:16px;">
   <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
   <%= link_to "編集", edit_stay_checkin_path(@stay, @checkin), class: "btn btn--primary" %>

@@ -5,7 +5,7 @@
     <p><span class="meta">Pet</span><br><%= @stay.pet&.name || "-" %></p>
     <p><span class="meta">場所</span><br><%= @stay.place %></p>
     <p><span class="meta">期間</span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
-    <p><span class="meta">ステータス</span><br><span class="pill"><%= @stay.status %></span></p>
+    <p><span class="meta">ステータス</span><br><%= status_badge(@stay) %></p>
   </div>
 
   <% if @stay.notes.present? %>
@@ -61,15 +61,7 @@
             <td class="col-right"><%= weight_label(c.weight) %></td>
             <td><%= meal_label(c.meal) %></td>
             <td><%= litter_label(c.litter) %></td>
-            <td>
-              <% md = c.meds || {} %>
-              <% if md["none"] %><span class="pill pill--warn">投与なし</span><% end %>
-              <% if md["given"] %><span class="pill pill--ok">投与済</span><% end %>
-              <% if md["vaccine_3rd"] %><span class="pill pill--ok">ワクチン3回目済</span><% end %>
-              <% if md["name"].present? || md["dose"].present? %>
-                <span class="pill"><%= [md["name"], md["dose"]].compact.join(" / ") %></span>
-              <% end %>
-            </td>
+            <td><%= meds_badges(c.meds) %></td>
             <td class="truncate"><%= simple_format(c.memo) %></td>
             <td>
               <div class="stack">
