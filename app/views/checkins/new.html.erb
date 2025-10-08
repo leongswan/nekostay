@@ -1,20 +1,9 @@
-<%# app/views/checkins/new.html.erb %>
-<% if turbo_frame_request? %>
-  <turbo-frame id="modal" data-controller="modal">
-    <%= render "shared/modal",
-               title: (action_name == "new" ? "新規チェックイン" : "チェックインを編集") do %>
-      <%= render "form", checkin: @checkin %>
-    <% end %>
-  </turbo-frame>
-<% else %>
-  <h1>Checkin 新規作成</h1>
+<h1>Checkin 新規作成</h1>
 
-  <p>
-    Stay #<%= @stay.id %>
-    (<%= @stay.start_on %> 〜 <%= @stay.end_on %>)
-    <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
-  </p>
+<p>
+  Stay #<%= @stay.id %> (<%= @stay.start_on %> 〜 <%= @stay.end_on %>)
+  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
+</p>
 
-  <%= render "form", checkin: @checkin %>
-<% end %>
+<%= render "form", checkin: @checkin %>
 

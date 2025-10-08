@@ -36,7 +36,7 @@
     <h3 style="margin:0;">最近の Checkins</h3>
     <div class="stack stack--end">
       <%= link_to "一覧へ", stay_checkins_path(@stay), class: "btn" %>
-      <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), class: "btn btn--primary" %>
+      <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
     </div>
   </div>
 
@@ -67,7 +67,7 @@
             <td>
               <div class="stack">
                 <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
-                <%= link_to "編集", edit_stay_checkin_path(@stay, c), class: "btn" %>
+                <%= link_to "編集", edit_stay_checkin_path(@stay, c), data: { turbo_frame: "modal" }, class: "btn" %>
               </div>
             </td>
           </tr>

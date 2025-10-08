@@ -26,7 +26,7 @@
     <tr>
       <td colspan="7" class="meta" style="text-align:center; padding:24px;">
         まだチェックインがありません。
-        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), class: "btn btn--primary", style: "margin-left:8px;" %>
+        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), data: { turbo_frame: "modal" }, class: "btn btn--primary", style: "margin-left:8px;" %>
       </td>
     </tr>
   <% else %>
@@ -56,4 +56,5 @@
   <% end %>
 </tbody>
 </table>
+
 

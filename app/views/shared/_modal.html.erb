@@ -1,8 +1,13 @@
-<div class="modal-overlay" data-action="click->modal#backdrop">
+<!-- app/views/shared/_modal.html.erb -->
+<div class="modal-overlay" data-action="click->modal#backdrop" aria-modal="true" role="dialog">
   <div class="modal-panel" data-modal-target="panel" data-action="click->modal#stop">
     <div class="modal-header">
-      <h3 style="margin:0;"><%= local_assigns[:title] || "" %></h3>
-      <button class="modal-close" data-action="click->modal#close" aria-label="閉じる">×</button>
+      <h3 class="modal-title"><%= local_assigns[:title] || "" %></h3>
+      <!-- ← ここに type="button" を付ける -->
+      <button type="button"
+              class="modal-close"
+              data-action="click->modal#close"
+              aria-label="閉じる">×</button>
     </div>
     <%= yield %>
   </div>
