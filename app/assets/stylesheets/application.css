@@ -189,3 +189,16 @@ pre.json {
 .nowrap    { white-space:nowrap; }
 .col-right { text-align:right; }
 .truncate  { max-width: 420px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* ---- Modal (Turbo Frame #modal) ---- */
+#modal .modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.35);
+  display:flex; align-items:center; justify-content:center; z-index:50;
+}
+#modal .modal-panel{
+  width:min(720px, 92vw); max-height:88vh; overflow:auto;
+  background:#fff; border:1px solid var(--border);
+  border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.2); padding:16px;
+}
+#modal .modal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+#modal .modal-close{ border:none; background:transparent; font-size:22px; cursor:pointer; }

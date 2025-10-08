@@ -1,0 +1,9 @@
+<div class="modal-overlay" data-action="click->modal#backdrop">
+  <div class="modal-panel" data-modal-target="panel" data-action="click->modal#stop">
+    <div class="modal-header">
+      <h3 style="margin:0;"><%= local_assigns[:title] || "" %></h3>
+      <button class="modal-close" data-action="click->modal#close" aria-label="閉じる">×</button>
+    </div>
+    <%= yield %>
+  </div>
+</div>
