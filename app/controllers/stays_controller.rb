@@ -9,7 +9,8 @@ class StaysController < ApplicationController
   end
 
   def show
-    # @stay は set_stay で取得済み
+    @stay = Stay.find(params[:id])
+    @recent_checkins = @stay.checkins.order(checked_at: :desc).limit(3)
   end
 
   private
