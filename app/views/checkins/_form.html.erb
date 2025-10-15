@@ -1,4 +1,4 @@
-<%= form_with model: [@stay, checkin], local: true, class: "card" do |f| %>
+<%= form_with model: [@stay, checkin], class: "card" do |f| %>
   <%# この partial は render "form", checkin: @checkin で呼ばれている前提 %>
   <%# f.object と checkin は同じものですが、下で checkin.* を使うために残しています %>
 
@@ -81,7 +81,7 @@
   </div>
 
   <div class="stack" style="margin-top:16px;">
-    <%= link_to "キャンセル", stay_checkins_path(@stay), class: "btn" %>
+    <%= link_to "キャンセル", stay_checkins_path(@stay), data: { turbo_frame: "_self" }, class: "btn" %>
     <%= f.submit (checkin.persisted? ? "更新する" : "保存する"), class: "btn btn--primary" %>
   </div>
 <% end %>

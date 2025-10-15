@@ -1,8 +1,9 @@
 class CheckinsController < ApplicationController
+  before_action :set_turbo_frame_variant
   before_action :authenticate_user!
   before_action :set_stay
   before_action :set_checkin, only: %i[show edit update destroy]
-  before_action :set_turbo_frame_variant
+  
 
   def index
     @checkins = @stay.checkins.order(checked_at: :desc)
@@ -12,7 +13,11 @@ class CheckinsController < ApplicationController
 
   def new
     @checkin = @stay.checkins.new(checked_at: Time.zone.now)
+    unless turbo_frame_request?
+    end
   end
+
+# before_action :set_turbo_frame_variant は不要になりますので、削除またはコメントアウトしてください。
 
   def create
     @checkin = @stay.checkins.new
@@ -47,13 +52,17 @@ class CheckinsController < ApplicationController
   private
 
   def set_turbo_frame_variant
+    puts "Turbo Frame Request Detected: #{turbo_frame_request?}"
     # Turbo Frameからのリクエストなら、:turbo_frame ビューを使うよう明示
     request.variant = :turbo_frame if turbo_frame_request?
   end
   
   def set_stay
     @stay = Stay.find(params[:stay_id])
-    head :forbidden unless @stay.owner_id == current_user.id
+    unless @stay.owner_id == current_user.id
+      head :forbidden 
+      return # 処理を終了
+    end
   end
 
   def set_checkin
