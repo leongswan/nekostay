@@ -1,15 +1,15 @@
-<h1>Stay #<%= @stay.id %></h1>
+<h1><%= t(".title", id: @stay.id) %></h1>
 
 <div class="card" style="margin-bottom:16px;">
   <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-    <p><span class="meta">Pet</span><br><%= @stay.pet&.name || "-" %></p>
-    <p><span class="meta">場所</span><br><%= @stay.place %></p>
-    <p><span class="meta">期間</span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
-    <p><span class="meta">ステータス</span><br><%= status_badge(@stay) %></p>
+    <p><span class="meta"><%= t(".pet") %></span><br><%= @stay.pet&.name || "-" %></p>
+    <p><span class="meta"><%= t(".place") %></span><br><%= @stay.place %></p>
+    <p><span class="meta"><%= t(".period") %></span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
+    <p><span class="meta"><%= t(".status") %></span><br><%= status_badge(@stay) %></p>
   </div>
 
   <% if @stay.notes.present? %>
-    <p class="meta" style="margin-top:8px;">メモ</p>
+    <p class="meta" style="margin-top:8px;"><%= t(".notes") %></p>
     <p><%= simple_format(@stay.notes) %></p>
   <% end %>
 </div>
@@ -17,42 +17,41 @@
 <%# 子分割の一覧（ある場合） %>
 <% if @stay.children.exists? %>
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="margin-top:0;">分割された子ステイ (<%= @stay.children.count %>)</h3>
+    <h3 style="margin-top:0;"><%= t(".children_title", count: @stay.children.count) %></h3>
     <ul style="margin:0; padding-left:18px;">
       <% @stay.children.order(:start_on).each do |child| %>
         <li>
           #<%= child.id %> … <%= child.start_on %>〜<%= child.end_on %>
-          <%= link_to "Checkins", stay_checkins_path(child), class: "btn btn--ghost", style: "margin-left:8px;" %>
+          <%= link_to t(".action.checkins"), stay_checkins_path(child), class: "btn btn--ghost", style: "margin-left:8px;" %>
         </li>
       <% end %>
     </ul>
   </div>
 <% end %>
 
-<%# Checkins サマリ %>
-<!-- 最近の Checkins -->
+<%# 最近の Checkins %>
 <div class="card" style="margin-top:16px;">
   <div style="display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="margin:0;">最近の Checkins</h3>
+    <h3 style="margin:0;"><%= t(".recent_checkins") %></h3>
     <div class="stack stack--end">
-      <%= link_to "一覧へ", stay_checkins_path(@stay), class: "btn" %>
-      <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
+      <%= link_to t(".action.to_index"), stay_checkins_path(@stay), class: "btn" %>
+      <%= link_to t(".action.new_checkin"), new_stay_checkin_path(@stay), class: "btn btn--primary" %>
     </div>
   </div>
 
   <% if @recent_checkins.blank? %>
-    <p class="meta" style="margin-top:12px;">まだチェックインがありません。</p>
+    <p class="meta" style="margin-top:12px;"><%= t(".no_checkins") %></p>
   <% else %>
     <table class="table" style="margin-top:12px;">
       <thead>
         <tr>
-          <th>Time</th>
-          <th>Weight</th>
-          <th>Meal</th>
-          <th>Litter</th>
-          <th>Meds</th>
-          <th>Memo</th>
-          <th style="width:120px;">Actions</th>
+          <th><%= t(".table.time") %></th>
+          <th><%= t(".table.weight") %></th>
+          <th><%= t(".table.meal") %></th>
+          <th><%= t(".table.litter") %></th>
+          <th><%= t(".table.meds") %></th>
+          <th><%= t(".table.memo") %></th>
+          <th style="width:120px;"><%= t(".table.actions") %></th>
         </tr>
       </thead>
       <tbody>
@@ -66,8 +65,8 @@
             <td class="truncate"><%= simple_format(c.memo) %></td>
             <td>
               <div class="stack">
-                <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
-                <%= link_to "編集", edit_stay_checkin_path(@stay, c), data: { turbo_frame: "modal" }, class: "btn" %>
+                <%= link_to t(".action.show"), stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
+                <%= link_to t(".action.edit"), edit_stay_checkin_path(@stay, c), class: "btn" %>
               </div>
             </td>
           </tr>
@@ -76,5 +75,7 @@
     </table>
   <% end %>
 </div>
+
+
 
 <turbo-frame id="modal"></turbo-frame>

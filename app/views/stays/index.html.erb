@@ -1,19 +1,19 @@
-<h1>Stays</h1>
+<h1><%= t(".title") %></h1>
 
 <div class="meta" style="margin-bottom:12px;">
-  自分の滞在一覧（最新順）
+  <%= t(".subtitle") %>
 </div>
 
 <table class="table">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Pet</th>
-      <th>期間</th>
-      <th>場所</th>
-      <th>ステータス</th>
-      <th>子分割</th>
-      <th style="width:220px;">Actions</th>
+      <th><%= t(".th.id") %></th>
+      <th><%= t(".th.pet") %></th>
+      <th><%= t(".th.period") %></th>
+      <th><%= t(".th.place") %></th>
+      <th><%= t(".th.status") %></th>
+      <th><%= t(".th.children") %></th>
+      <th style="width:220px;"><%= t(".th.actions") %></th>
     </tr>
   </thead>
 
@@ -21,7 +21,7 @@
     <% if @stays.empty? %>
       <tr>
         <td colspan="7" class="meta" style="text-align:center; padding:24px;">
-          まだ滞在データがありません。
+          <%= t(".empty") %>
         </td>
       </tr>
     <% else %>
@@ -32,15 +32,12 @@
           <td class="nowrap"><%= stay.start_on %> 〜 <%= stay.end_on %></td>
           <td><%= stay.place %></td>
           <td><%= status_badge(stay) %></td>
-
-
-
           <td><%= stay.children.count %></td>
           <td>
             <div class="stack">
-              <%= link_to "詳細", stay_path(stay), class: "btn btn--ghost" %>
-              <%= link_to "Checkins", stay_checkins_path(stay), class: "btn" %>
-              <%= link_to "新規Checkin", new_stay_checkin_path(stay), class: "btn btn--primary" %>
+              <%= link_to t(".action.show"), stay_path(stay), class: "btn btn--ghost" %>
+              <%= link_to t(".action.checkins"), stay_checkins_path(stay), class: "btn" %>
+              <%= link_to t(".action.new_checkin"), new_stay_checkin_path(stay), class: "btn btn--primary" %>
             </div>
           </td>
         </tr>
@@ -48,4 +45,3 @@
     <% end %>
   </tbody>
 </table>
-

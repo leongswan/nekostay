@@ -1,60 +1,61 @@
-<h1>Checkins <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
+<h1><%= t(".title") %> <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
 
 <p class="meta">
-  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
+  <%= t(".period") %>: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
 </p>
 
 <div class="stack stack--end" style="margin: 8px 0 16px;">
-  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), data: { turbo_frame: "modal", turbo: true }, class: "btn btn--primary" %>
-  <%= link_to "Stay詳細へ", stay_path(@stay), class: "btn" %>
+  <%= link_to t(".new"), new_stay_checkin_path(@stay),
+        data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
+  <%= link_to t(".to_stay"), stay_path(@stay), class: "btn" %>
 </div>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Time</th>
-      <th>Weight</th>
-      <th>Meal</th>
-      <th>Litter</th>
-      <th>Meds</th>
-      <th>Memo</th>
-      <th style="width:160px;">Actions</th>
+      <th><%= t(".th.time") %></th>
+      <th><%= t(".th.weight") %></th>
+      <th><%= t(".th.meal") %></th>
+      <th><%= t(".th.litter") %></th>
+      <th><%= t(".th.meds") %></th>
+      <th><%= t(".th.memo") %></th>
+      <th style="width:160px;"><%= t(".th.actions") %></th>
     </tr>
   </thead>
-    <tbody>
-  <% if @checkins.empty? %>
-    <tr>
-      <td colspan="7" class="meta" style="text-align:center; padding:24px;">
-        まだチェックインがありません。
-        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), data: { turbo_frame: "modal", turbo: true }, class: "btn btn--primary", style: "margin-left:8px;" %>
-      </td>
-    </tr>
-  <% else %>
-    <% @checkins.each do |c| %>
+
+  <tbody>
+    <% if @checkins.empty? %>
       <tr>
-        <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
-        <td class="col-right"><%= weight_label(c.weight) %></td>
-        <td><%= meal_label(c.meal) %></td>
-        <td><%= litter_label(c.litter) %></td>
-        <td><%= meds_badges(c.meds) %></td>
-
-
-        <td class="truncate"><%= simple_format(c.memo) %></td>
-
-        <td>
-          <div class="stack">
-            <%= link_to "詳細", stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
-            <%= link_to "編集", edit_stay_checkin_path(@stay, c), turbo_frame: "modal", class: "btn" %>
-            <%= button_to "削除", stay_checkin_path(@stay, c),
-                  method: :delete,
-                  form: { data: { turbo_confirm: "削除してよろしいですか？" }, class: "inline" },
-                  class: "btn btn--danger" %>
-          </div>
+        <td colspan="7" class="meta" style="text-align:center; padding:24px;">
+          <%= t(".empty") %>
+          <%= link_to t(".create_first"), new_stay_checkin_path(@stay),
+                data: { turbo_frame: "modal" }, class: "btn btn--primary", style: "margin-left:8px;" %>
         </td>
       </tr>
+    <% else %>
+      <% @checkins.each do |c| %>
+        <tr>
+          <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
+          <td class="col-right"><%= weight_label(c.weight) %></td>
+          <td><%= meal_label(c.meal) %></td>
+          <td><%= litter_label(c.litter) %></td>
+          <td><%= meds_badges(c.meds) %></td>
+          <td class="truncate"><%= simple_format(c.memo) %></td>
+          <td>
+            <div class="stack">
+              <%= link_to t(".show"),  stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
+              <%= link_to t(".edit"),  edit_stay_checkin_path(@stay, c),
+                    data: { turbo_frame: "modal" }, class: "btn" %>
+              <%= button_to t(".destroy"), stay_checkin_path(@stay, c),
+                    method: :delete,
+                    form: { data: { turbo_confirm: t(".confirm_destroy") }, class: "inline" },
+                    class: "btn btn--danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
-  <% end %>
-</tbody>
+  </tbody>
 </table>
 
 <turbo-frame id="modal"></turbo-frame>

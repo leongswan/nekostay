@@ -1,5 +1,5 @@
 <turbo-frame id="modal" data-controller="modal">
-  <%= render "shared/modal", title: "新規チェックイン" do %>
+  <%= render "shared/modal", title: t(".title") do %>
     <%= render "form", checkin: @checkin %>
   <% end %>
 </turbo-frame>

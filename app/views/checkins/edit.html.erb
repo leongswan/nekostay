@@ -1,9 +1,8 @@
-<h1>チェックインを編集</h1>
+<h1><%= t(".title") %></h1>
 
 <p>
   Stay #<%= @stay.id %> (<%= @stay.start_on %> 〜 <%= @stay.end_on %>)
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
+  <%= link_to t(".back"), stay_checkins_path(@stay), class: "btn" %>
 </p>
 
 <%= render "form", checkin: @checkin %>
-

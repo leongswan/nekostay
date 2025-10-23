@@ -1,0 +1,116 @@
+ja:
+  enums:
+    stay:
+      status:
+        draft: 下書き
+        active: 滞在中
+        completed: 完了
+        cancelled: キャンセル
+  helpers:
+    pills:
+      meds:
+        none: 投与なし
+        given: 投与済
+        vaccine_3rd: ワクチン3回目済
+  views:
+    stays:
+      index:
+        title: Stays
+        subtitle: 自分の滞在一覧（最新順）
+        th:
+          id: ID
+          pet: Pet
+          period: 期間
+          place: 場所
+          status: ステータス
+          children: 子分割
+          actions: 操作
+        empty: まだ滞在データがありません。
+        action:
+          show: 詳細
+          checkins: Checkins
+          new_checkin: 新規Checkin
+      show:
+        title: "Stay #%{id}"
+        pet: Pet
+        place: 場所
+        period: 期間
+        status: ステータス
+        notes: メモ
+        children_title: "分割された子ステイ (%{count})"
+        recent_checkins: 最近の Checkins
+        no_checkins: まだチェックインがありません。
+        table:
+          time: Time
+          weight: Weight
+          meal: Meal
+          litter: Litter
+          meds: Meds
+          memo: Memo
+          actions: Actions
+        action:
+          to_index: 一覧へ
+          new_checkin: 新規チェックイン
+          show: 詳細
+          edit: 編集
+      statuses:
+        draft: 下書き
+        active: 滞在中
+        completed: 完了
+        cancelled: キャンセル
+    checkins:
+      index:
+        title: チェックイン一覧
+        period: 期間
+        new: 新規チェックイン
+        to_stay: Stay詳細へ
+        empty: まだチェックインがありません。
+        create_first: 最初のチェックインを作成
+        show: 詳細
+        edit: 編集
+        destroy: 削除
+        confirm_destroy: 削除してよろしいですか？
+        th:
+          time: 時刻
+          weight: 体重
+          meal: Meal
+          litter: Litter
+          meds: 投薬
+          memo: メモ
+          actions: 操作
+      show:
+        title: チェックイン詳細
+        period: 期間
+        back: 一覧へ戻る
+        edit: 編集
+        destroy: 削除
+        confirm_destroy: 削除してよろしいですか？
+        checked_at: 記録日時
+        weight: 体重
+        memo: メモ
+        details: 詳細記録
+      new:
+        title: 新規チェックイン
+      edit:
+        title: チェックインを編集
+        back: 一覧へ戻る
+      form:
+        form_title: チェックイン
+        checked_at: 記録日時
+        weight: 体重(kg)
+        memo: メモ
+        meal: 食事
+        meal_amount: 量
+        meal_brand: フード名
+        litter: トイレ
+        litter_clumps: 固まり数
+        litter_pee: おしっこ回数
+        meds: 薬
+        meds_name: 薬剤名
+        meds_dose: 投与量
+        meds_given: 投与済
+        meds_none: 投与なし
+        vaccine_3rd: ワクチン3回目済
+        cancel: キャンセル
+        update: 更新する
+        create: 保存する

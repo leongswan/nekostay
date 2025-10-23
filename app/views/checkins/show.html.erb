@@ -1,36 +1,35 @@
 <!-- app/views/checkins/show.html.erb -->
-<h1>Checkin 詳細 <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
+<h1><%= t(".title") %> <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
 
 <p class="meta">
-  期間: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
+  <%= t(".period") %>: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
 </p>
 
 <div class="stack stack--end" style="margin: 8px 0 16px;">
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
-  <%= link_to "編集", edit_stay_checkin_path(@stay, @checkin), data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
-  <%= button_to "削除", stay_checkin_path(@stay, @checkin),
+  <%= link_to t(".back"), stay_checkins_path(@stay), class: "btn" %>
+  <%= link_to t(".edit"), edit_stay_checkin_path(@stay, @checkin),
+        data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
+  <%= button_to t(".destroy"), stay_checkin_path(@stay, @checkin),
         method: :delete,
-        form: { data: { turbo_confirm: "削除してよろしいですか？" }, class: "inline" },
+        form: { data: { turbo_confirm: t(".confirm_destroy") }, class: "inline" },
         class: "btn btn--danger" %>
 </div>
 
-<!-- 概要カード（dl.def でスッキリ表示） -->
 <div class="card" style="margin-bottom:16px;">
   <dl class="def">
-    <dt>記録日時</dt>
+    <dt><%= t(".checked_at") %></dt>
     <dd><strong><%= dt_label(@checkin.checked_at) %></strong></dd>
 
-    <dt>体重</dt>
+    <dt><%= t(".weight") %></dt>
     <dd><%= weight_label(@checkin.weight) %></dd>
 
-    <dt>メモ</dt>
+    <dt><%= t(".memo") %></dt>
     <dd><%= simple_format(@checkin.memo.presence || "—") %></dd>
   </dl>
 </div>
 
-<!-- 詳細カード -->
 <div class="card">
-  <h3 style="margin-top:0;">詳細記録</h3>
+  <h3 style="margin-top:0;"><%= t(".details") %></h3>
   <dl class="def">
     <dt>Meal</dt>
     <dd><%= meal_label(@checkin.meal) %></dd>
@@ -38,17 +37,18 @@
     <dt>Litter</dt>
     <dd><%= litter_label(@checkin.litter) %></dd>
 
-    <!-- ピル表示（ヘルパー meds_badges を使用） -->
     <dt>Meds</dt>
     <dd><%= meds_badges(@checkin) %></dd>
   </dl>
 </div>
 
 <div class="stack" style="margin-top:16px;">
-  <%= link_to "一覧へ戻る", stay_checkins_path(@stay), class: "btn" %>
-  <%= link_to "編集", edit_stay_checkin_path(@stay, @checkin), data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
-  <%= button_to "削除", stay_checkin_path(@stay, @checkin),
+  <%= link_to t(".back"), stay_checkins_path(@stay), class: "btn" %>
+  <%= link_to t(".edit"), edit_stay_checkin_path(@stay, @checkin),
+        data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
+  <%= button_to t(".destroy"), stay_checkin_path(@stay, @checkin),
         method: :delete,
-        form: { data: { turbo_confirm: "削除してよろしいですか？" }, class: "inline" },
+        form: { data: { turbo_confirm: t(".confirm_destroy") }, class: "inline" },
         class: "btn btn--danger" %>
 </div>
+

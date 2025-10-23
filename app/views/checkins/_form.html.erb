@@ -1,39 +1,36 @@
 <%= form_with model: [@stay, checkin], class: "card" do |f| %>
-  <%# この partial は render "form", checkin: @checkin で呼ばれている前提 %>
-  <%# f.object と checkin は同じものですが、下で checkin.* を使うために残しています %>
-
-  <h2 style="margin-top:0;">チェックイン</h2>
+  <h2 style="margin-top:0;"><%= t(".form_title") %></h2>
 
   <div class="form-grid">
     <div>
-      <%= f.label :checked_at, "記録日時" %>
+      <%= f.label :checked_at, t(".checked_at") %>
       <%= f.datetime_local_field :checked_at,
             value: (checkin.checked_at&.strftime("%Y-%m-%dT%H:%M") || Time.zone.now.strftime("%Y-%m-%dT%H:%M")),
             class: "input" %>
     </div>
 
     <div>
-      <%= f.label :weight, "体重(kg)" %>
+      <%= f.label :weight, t(".weight") %>
       <%= f.number_field :weight, step: "0.01", class: "input" %>
     </div>
   </div>
 
   <div style="margin-top:12px;">
-    <%= f.label :memo, "メモ" %>
+    <%= f.label :memo, t(".memo") %>
     <%= f.text_area :memo, rows: 4, class: "textarea" %>
   </div>
 
   <hr>
 
   <% meal = checkin.meal || {} %>
-  <h3>Meal</h3>
+  <h3><%= t(".meal") %></h3>
   <div class="form-grid">
     <div>
-      <%= f.label :meal_amount, "量" %>
+      <%= f.label :meal_amount, t(".meal_amount") %>
       <%= f.text_field :meal_amount, value: meal["amount"], class: "input" %>
     </div>
     <div>
-      <%= f.label :meal_brand, "フード名" %>
+      <%= f.label :meal_brand, t(".meal_brand") %>
       <%= f.text_field :meal_brand, value: meal["brand"], class: "input" %>
     </div>
   </div>
@@ -41,14 +38,14 @@
   <hr>
 
   <% lt = checkin.litter || {} %>
-  <h3>Litter</h3>
+  <h3><%= t(".litter") %></h3>
   <div class="form-grid">
     <div>
-      <%= f.label :litter_clumps, "固まり数" %>
+      <%= f.label :litter_clumps, t(".litter_clumps") %>
       <%= f.number_field :litter_clumps, value: lt["clumps"], class: "input", min: 0 %>
     </div>
     <div>
-      <%= f.label :litter_pee, "おしっこ回数" %>
+      <%= f.label :litter_pee, t(".litter_pee") %>
       <%= f.number_field :litter_pee, value: lt["pee"], class: "input", min: 0 %>
     </div>
   </div>
@@ -56,38 +53,34 @@
   <hr>
 
   <% md = checkin.meds || {} %>
-  <h3>Meds</h3>
+  <h3><%= t(".meds") %></h3>
   <div class="form-grid">
     <div>
-      <%= f.label :meds_name, "薬剤名" %>
+      <%= f.label :meds_name, t(".meds_name") %>
       <%= f.text_field :meds_name, value: md["name"], class: "input" %>
     </div>
     <div>
-      <%= f.label :meds_dose, "投与量" %>
+      <%= f.label :meds_dose, t(".meds_dose") %>
       <%= f.text_field :meds_dose, value: md["dose"], class: "input" %>
     </div>
   </div>
 
   <div class="form-grid" style="margin-top:8px;">
     <label class="checkbox">
-      <%= f.check_box :meds_given,  { checked: !!md["given"],  class: "exclusive-med" }, "true", "false" %> 投与済
+      <%= f.check_box :meds_given, { checked: !!md["given"], class: "exclusive-med" }, "true", "false" %> <%= t(".meds_given") %>
     </label>
     <label class="checkbox">
-      <%= f.check_box :meds_none,   { checked: !!md["none"],   class: "exclusive-med" }, "true", "false" %> 投与なし
+      <%= f.check_box :meds_none, { checked: !!md["none"], class: "exclusive-med" }, "true", "false" %> <%= t(".meds_none") %>
     </label>
     <label class="checkbox">
-      <%= f.check_box :vaccine_3rd, { checked: !!md["vaccine_3rd"] }, "true", "false" %> ワクチン3回目済
+      <%= f.check_box :vaccine_3rd, { checked: !!md["vaccine_3rd"] }, "true", "false" %> <%= t(".vaccine_3rd") %>
     </label>
   </div>
 
   <div class="stack" style="margin-top:16px;">
-    <%= link_to "キャンセル", 
-                stay_checkins_path(@stay), # 遷移先は Checkins一覧ページ
-                data: { turbo_frame: "_top" }, # ★ ターゲットをページ全体に変更
-                class: "btn" %>
-    
-    <%= f.submit (checkin.persisted?? "更新する" : "保存する"), class: "btn btn--primary" %>
-</div>
+    <%= link_to t(".cancel"), stay_checkins_path(@stay), data: { turbo_frame: "_top" }, class: "btn" %>
+    <%= f.submit (checkin.persisted? ? t(".update") : t(".create")), class: "btn btn--primary" %>
+  </div>
 <% end %>
 
 <!-- 相互排他＆入力無効化のちょい足しJS（Stimulusなしの素朴版） -->
