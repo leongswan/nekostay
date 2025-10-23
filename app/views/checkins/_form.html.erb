@@ -81,9 +81,13 @@
   </div>
 
   <div class="stack" style="margin-top:16px;">
-    <%= link_to "キャンセル", stay_checkins_path(@stay), data: { turbo_frame: "_self" }, class: "btn" %>
-    <%= f.submit (checkin.persisted? ? "更新する" : "保存する"), class: "btn btn--primary" %>
-  </div>
+    <%= link_to "キャンセル", 
+                stay_checkins_path(@stay), # 遷移先は Checkins一覧ページ
+                data: { turbo_frame: "_top" }, # ★ ターゲットをページ全体に変更
+                class: "btn" %>
+    
+    <%= f.submit (checkin.persisted?? "更新する" : "保存する"), class: "btn btn--primary" %>
+</div>
 <% end %>
 
 <!-- 相互排他＆入力無効化のちょい足しJS（Stimulusなしの素朴版） -->

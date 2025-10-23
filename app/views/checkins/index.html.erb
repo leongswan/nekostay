@@ -5,7 +5,7 @@
 </p>
 
 <div class="stack stack--end" style="margin: 8px 0 16px;">
-  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), turbo_frame: "modal", class: "btn btn--primary" %>
+  <%= link_to "新規チェックイン", new_stay_checkin_path(@stay), data: { turbo_frame: "modal", turbo: true }, class: "btn btn--primary" %>
   <%= link_to "Stay詳細へ", stay_path(@stay), class: "btn" %>
 </div>
 
@@ -26,7 +26,7 @@
     <tr>
       <td colspan="7" class="meta" style="text-align:center; padding:24px;">
         まだチェックインがありません。
-        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), turbo_frame: "modal", class: "btn btn--primary", style: "margin-left:8px;" %>
+        <%= link_to "最初のチェックインを作成", new_stay_checkin_path(@stay), data: { turbo_frame: "modal", turbo: true }, class: "btn btn--primary", style: "margin-left:8px;" %>
       </td>
     </tr>
   <% else %>

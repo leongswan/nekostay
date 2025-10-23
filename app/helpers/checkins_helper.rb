@@ -24,16 +24,16 @@ module CheckinsHelper
 
   # --- 追加：Meds を“ピル表示”で整形 ---
   def meds_badges(meds_or_checkin)
-    md = meds_or_checkin.is_a?(Hash) ? meds_or_checkin || {} : meds_or_checkin.meds || {}
-    return "-" if md.blank?
+    return "" if meds_or_checkin.nil?
+    med = meds_or_checkin.is_a?(Hash) ? meds_or_checkin : (meds_or_checkin.meds || {})
 
     pills = []
-    pills << pill("投与なし", :cancelled) if md["none"]
-    pills << pill("投与済",   :active)    if md["given"]
-    pills << pill("ワクチン3回目済", :active) if md["vaccine_3rd"]
+    pills << pill("投与なし", :cancelled) if med["none"]
+    pills << pill("投与済",   :active)    if med["given"]
+    pills << pill("ワクチン3回目済", :active) if med["vaccine_3rd"]
 
-    if md["name"].present? || md["dose"].present?
-      pills << pill([md["name"], md["dose"]].compact.join(" / "))
+    if med["name"].present? || med["dose"].present?
+      pills << pill([med["name"], med["dose"]].compact.join(" / "))
     end
 
     return "-" if pills.empty?
@@ -42,13 +42,13 @@ module CheckinsHelper
 
   # --- 従来の文字ラベル版（バックエンドやCSV向けなどに使用） ---
   def meds_label(meds)
-    md = meds || {}
+    med = meds || {}
     parts = []
-    parts << "投与なし" if md["none"]
-    parts << "投与済" if md["given"]
-    parts << "ワクチン3回目済" if md["vaccine_3rd"]
-    parts << "薬剤: #{md['name']}" if md['name'].present?
-    parts << "投与量: #{md['dose']}" if md['dose'].present?
+    parts << "投与なし" if med["none"]
+    parts << "投与済" if med["given"]
+    parts << "ワクチン3回目済" if med["vaccine_3rd"]
+    parts << "薬剤: #{med['name']}" if med['name'].present?
+    parts << "投与量: #{med['dose']}" if med['dose'].present?
     parts.present? ? parts.join(" / ") : "-"
   end
 

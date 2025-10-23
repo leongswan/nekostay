@@ -12,10 +12,10 @@ class CheckinsController < ApplicationController
   def show; end
 
   def new
-    @checkin = @stay.checkins.new(checked_at: Time.zone.now)
-    unless turbo_frame_request?
-    end
-  end
+  @checkin = @stay.checkins.build
+  # 【✅ 複雑な respond_to ブロックを削除し、シンプルに】
+  # new.turbo_frame.html.erb が自動的に選択されます。
+end
 
 # before_action :set_turbo_frame_variant は不要になりますので、削除またはコメントアウトしてください。
 
@@ -58,12 +58,13 @@ class CheckinsController < ApplicationController
   end
   
   def set_stay
-    @stay = Stay.find(params[:stay_id])
-    unless @stay.owner_id == current_user.id
-      head :forbidden 
-      return # 処理を終了
-    end
+  @stay = Stay.find(params[:stay_id])
+  # 【✅ 認可ロジックを復元】
+  unless @stay.owner_id == current_user.id
+    head :forbidden 
+    return # ★ return を追加して、indexなどのアクションへ進むのを防ぐ
   end
+end
 
   def set_checkin
     @checkin = @stay.checkins.find(params[:id])
