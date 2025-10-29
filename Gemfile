@@ -45,6 +45,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem "factory_bot_rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
 end
@@ -70,3 +71,5 @@ end
 gem "devise", "~> 4.9"
 gem "pagy", "~> 9.4"
 gem "dotenv-rails", "~> 3.1"
+
+gem "rspec-rails", "~> 7.1", :groups => [:development, :test]

@@ -15,12 +15,14 @@
     <%= link_to "Stays", stays_path %>
    </nav>
     <div class="container">
+      <div id="flash_messages">
       <% if notice.present? %>
         <p class="flash flash--notice"><%= notice %></p>
       <% end %>
       <% if alert.present? %>
         <p class="flash flash--alert"><%= alert %></p>
       <% end %>
+    </div>
 
       <%= yield %>
     </div>

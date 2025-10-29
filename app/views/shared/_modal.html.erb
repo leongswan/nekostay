@@ -1,10 +1,16 @@
-<div class="modal-overlay" data-action="click->modal#backdrop" aria-modal="true" role="dialog">
+<div class="modal-overlay" 
+     data-controller="modal" 
+     data-action="click->modal#backdrop" 
+     aria-modal="true" role="dialog">
+     
   <div class="modal-panel" data-modal-target="panel" data-action="click->modal#stop">
     <div class="modal-header">
       <h3 class="modal-title"><%= local_assigns[:title] || "" %></h3>
-                <button type="button"
+      
+      <button type="button"
               class="modal-close"
-              onclick="this.closest('turbo-frame').remove()" aria-label="閉じる">x</button>
+              data-action="click->modal#close" 
+              aria-label="閉じる">x</button>
       </div>
     <%= yield %>
   </div>

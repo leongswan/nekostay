@@ -1,5 +1,5 @@
 class CheckinsController < ApplicationController
-  before_action :set_turbo_frame_variant
+  # before_action :set_turbo_frame_variant
   before_action :authenticate_user!
   before_action :set_stay
   before_action :set_checkin, only: %i[show edit update destroy]
@@ -24,9 +24,9 @@ end
     merge_structured_json!(@checkin)
 
     if @checkin.save
-      redirect_to stay_checkins_path(@stay), notice: "チェックインを登録しました。"
+      redirect_to stay_checkins_path(@stay), notice: I18n.t("checkins.notices.created"), status: :see_other
     else
-      flash.now[:alert] = "保存に失敗しました。入力内容をご確認ください。"
+      flash.now[:alert] = I18n.t("checkins.notices.create_failed")
       render :new, status: :unprocessable_entity
     end
   end
@@ -37,16 +37,16 @@ end
     merge_structured_json!(@checkin)
 
     if @checkin.save
-      redirect_to stay_checkins_path(@stay), notice: "チェックインを更新しました。"
+      redirect_to stay_checkins_path(@stay), notice: I18n.t("checkins.notices.updated"), status: :see_other
     else
-      flash.now[:alert] = "更新に失敗しました。"
+      flash.now[:alert] = I18n.t("checkins.notices.update_failed")
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @checkin.destroy
-    redirect_to stay_checkins_path(@stay), notice: "チェックインを削除しました。", status: :see_other
+    redirect_to stay_checkins_path(@stay), notice: I18n.t("checkins.notices.destroyed"), status: :see_other
   end
 
   private

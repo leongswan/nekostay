@@ -58,59 +58,67 @@ ja:
         active: 滞在中
         completed: 完了
         cancelled: キャンセル
-    checkins:
-      index:
-        title: チェックイン一覧
-        period: 期間
-        new: 新規チェックイン
-        to_stay: Stay詳細へ
-        empty: まだチェックインがありません。
-        create_first: 最初のチェックインを作成
-        show: 詳細
-        edit: 編集
-        destroy: 削除
-        confirm_destroy: 削除してよろしいですか？
-        th:
-          time: 時刻
-          weight: 体重
-          meal: Meal
-          litter: Litter
-          meds: 投薬
-          memo: メモ
-          actions: 操作
-      show:
-        title: チェックイン詳細
-        period: 期間
-        back: 一覧へ戻る
-        edit: 編集
-        destroy: 削除
-        confirm_destroy: 削除してよろしいですか？
-        checked_at: 記録日時
-        weight: 体重
-        memo: メモ
-        details: 詳細記録
-      new:
-        title: 新規チェックイン
-      edit:
-        title: チェックインを編集
-        back: 一覧へ戻る
-      form:
-        form_title: チェックイン
-        checked_at: 記録日時
-        weight: 体重(kg)
-        memo: メモ
-        meal: 食事
-        meal_amount: 量
-        meal_brand: フード名
-        litter: トイレ
-        litter_clumps: 固まり数
-        litter_pee: おしっこ回数
-        meds: 薬
-        meds_name: 薬剤名
-        meds_dose: 投与量
-        meds_given: 投与済
-        meds_none: 投与なし
-        vaccine_3rd: ワクチン3回目済
-        cancel: キャンセル
-        update: 更新する
-        create: 保存する
+  checkins:
+    index:
+      title: "チェックイン一覧"
+      period: "期間"
+      new: "新規チェックイン"
+      to_stay: "Stay詳細へ"
+      th:
+        time: "時間"
+        weight: "体重"
+        meal: "食事"
+        litter: "トイレ"
+        meds: "投薬"
+        memo: "メモ"
+        actions: "操作"
+      empty: "まだチェックインがありません。"
+      create_first: "最初のチェックインを作成"
+      show: "詳細"
+      edit: "編集"
+      destroy: "削除"
+      confirm_destroy: "削除してよろしいですか？"
+    notices:
+      created: "チェックインを登録しました。"
+      updated: "チェックインを更新しました。"
+      destroyed: "チェックインを削除しました。"
+      create_failed: "保存に失敗しました。入力内容をご確認ください。"
+      update_failed: "更新に失敗しました。"
+    # --- 修正箇所 ---
+    # "notices:" から "show:" 以下のインデントを1段階浅く（左へ）ずらしました。
+    show:
+      title: チェックイン詳細
+      period: 期間
+      back: 一覧へ戻る
+      edit: 編集
+      destroy: 削除
+      confirm_destroy: 削除してよろしいですか？
+      checked_at: 記録日時
+      weight: 体重
+      memo: メモ
+      details: 詳細記録
+    new:
+      title: 新規チェックイン
+    edit:
+      title: チェックインを編集
+      back: 一覧へ戻る
+    form:
+      form_title: "チェックイン"
+      checked_at: "記録日時"
+      weight: "体重(kg)" # <- RSpecが参照するキー
+      memo: "メモ"
+      meal: "Meal"
+      meal_amount: "量"
+      meal_brand: "フード名"
+      litter: "Litter"
+      litter_clumps: "固まり数"
+      litter_pee: "おしっこ回数"
+      meds: "Meds"
+      meds_name: "薬剤名"
+      meds_dose: "投与量"
+      meds_given: "投与済"
+      meds_none: "投与なし"
+      vaccine_3rd: "ワクチン3回目済"
+      cancel: "キャンセル"
+      create: "保存する"
+      update: "更新する"

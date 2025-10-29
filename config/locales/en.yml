@@ -28,4 +28,15 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  checkins:
+    index:
+      title: "Checkins"
+      period: "Period: %{start} ~ %{end}"
+      new: "New checkin"
+      back_to_stay: "Stay detail"
+      empty_html: "No checkins yet. Create the first one."
+    show:
+      title: "Checkin detail"
+      back: "Back to list"
+      edit: "Edit"
+      destroy: "Delete"

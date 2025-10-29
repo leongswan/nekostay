@@ -5,6 +5,14 @@ export default class extends Controller {
   static targets = ["panel"]
 
   connect() {
+    // --- 修正 ---
+    //
+    // 'is-visible' クラスに依存するのをやめ、
+    // JSで直接スタイルを 'display: block' に書き換えて強制表示します。
+    // (モーダルのCSSが 'display: block' で表示されることを想定)
+    this.element.style.display = "block"
+    //
+    // --- 修正ここまで ---
     this._onKeydown = (e) => { if (e.key === "Escape") this.element.remove() } // remove()に修正
     document.addEventListener("keydown", this._onKeydown)
   }
