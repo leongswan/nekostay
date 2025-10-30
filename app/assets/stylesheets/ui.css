@@ -56,6 +56,21 @@ h3 { font-size: 16px; margin: 12px 0 6px; }
   overflow: hidden;
   box-shadow: var(--shadow);
 }
+
+/* --- 修正ここから --- */
+/*
+ * .card の中に .table が入った場合、
+ * テーブル自体の枠線や影を消します。
+ * (テーブルはカードの padding: 16px の内側に表示されます)
+ */
+.card .table {
+  border: none;
+  box-shadow: none;
+  border-radius: 0; /* カードの角丸があるのでテーブルの角丸は不要に */
+}
+/* --- 修正ここまで --- */
+
+
 .table th, .table td {
   text-align: left;
   padding: 12px 14px;

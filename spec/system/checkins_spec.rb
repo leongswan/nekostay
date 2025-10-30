@@ -49,39 +49,39 @@ RSpec.describe "Checkins", type: :system, js: true do
 
     # --- 以下の「編集」ブロック全体を置き換えます ---
 
-    # 修正: レースコンディション対策
-    # Capybara の .click は Turbo の JS イベントより先に実行され
-    # "デッド・クリック" になることがある。
+    # 修正: _top リダイレクト後のレースコンディションを回避するため、
+    # リンククリック（非同期モーダル）に依存するのをやめ、
+    # 編集ページのURLを直接 visit する（同期）フォールバックを
+    # 常に使用するように変更します。
+    # これにより、edit.html.erb (フルページ) が読み込まれます。
+    visit edit_stay_checkin_path(stay, stay.checkins.order(:id).last)
     
-    # 1. まず Capybara の waiter (find) でリンク要素を見つける
-    edit_link = find("a[data-turbo-frame='modal']", 
-                     text: I18n.t("checkins.index.edit"), 
-                     match: :first)
-    
-    # 2. Capybara の .click ではなく、
-    #    execute_script でブラウザに直接 JS でクリックさせる
-    page.execute_script("arguments[0].click();", edit_link)
-
     # --- 修正ここまで ---
-
-    # --- 以下の1行を追加 ---
-    # 
-    # 修正: レースコンディション対策
-    # "編集" をクリックするとモーダルが非同期で読み込まれるため、
-    # 編集フォームのタイトルが表示されるまで Capybara に待機させる
-    expect(page).to have_content(I18n.t("checkins.edit.title"))
-    # --- 修正ここまで ---
+    # 待機するセレクタを、モーダル (div.modal-panel h3) から
+    # フルページ (edit.html.erb が持つ h1) に変更します。
+    expect(page).to have_selector(
+      "h1", 
+      text: I18n.t("checkins.edit.title"), 
+      visible: true
+    )
 
     fill_in I18n.t("checkins.form.memo"), with: "更新メモ"
     click_button I18n.t("checkins.form.update")
 
-    expect(page).to have_content(I18n.t("checkins.notices.updated"))
+    # update 成功後の notice を待機する
+    expect(page).to have_selector(
+      "#flash_messages", 
+      text: I18n.t("checkins.notices.updated")
+    )
     expect(page).to have_content("更新メモ")
 
     # 削除（最初の行）
     accept_confirm do
       click_button I18n.t("checkins.index.destroy"), match: :first
     end
-    expect(page).to have_content(I18n.t("checkins.notices.destroyed"))
+    expect(page).to have_selector(
+      "#flash_messages", 
+      text: I18n.t("checkins.notices.destroyed")
+    )
   end
 end

@@ -10,7 +10,15 @@ export default class extends Controller {
     // 'is-visible' クラスに依存するのをやめ、
     // JSで直接スタイルを 'display: block' に書き換えて強制表示します。
     // (モーダルのCSSが 'display: block' で表示されることを想定)
-    this.element.style.display = "block"
+    if (this.element) {
+      this.element.style.display = "block";        // オーバーレイ
+    }
+    
+    if (this.hasPanelTarget) {
+      this.panelTarget.style.display = "block";      // パネル
+      this.panelTarget.style.opacity = "1";          // 強制
+      this.panelTarget.style.visibility = "visible"; // 強制
+    }
     //
     // --- 修正ここまで ---
     this._onKeydown = (e) => { if (e.key === "Escape") this.element.remove() } // remove()に修正
