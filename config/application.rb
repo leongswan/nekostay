@@ -16,6 +16,13 @@ module Nekostay
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
+
+    # --- 以下の1行を追加 ---
+    # デフォルトのロケールを :ja (日本語) に設定する
+    config.i18n.default_locale = :ja
+    # --- 追加ここまで ---
+
+    config.autoload_paths << Rails.root.join("lib")
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

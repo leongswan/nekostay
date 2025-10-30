@@ -15,11 +15,11 @@ ja:
   views:
     stays:
       index:
-        title: Stays
+        title: "滞在一覧" # <- 修正
         subtitle: 自分の滞在一覧（最新順）
         th:
           id: ID
-          pet: Pet
+          pet: "ペット" # <- 修正
           period: 期間
           place: 場所
           status: ステータス
@@ -28,11 +28,11 @@ ja:
         empty: まだ滞在データがありません。
         action:
           show: 詳細
-          checkins: Checkins
-          new_checkin: 新規Checkin
+          checkins: チェックイン
+          new_checkin: 新規チェックイン
       show:
-        title: "Stay #%{id}"
-        pet: Pet
+        title: "滞在 #%{id}" # <- 修正
+        pet: "ペット" # <- 修正
         place: 場所
         period: 期間
         status: ステータス
@@ -41,13 +41,13 @@ ja:
         recent_checkins: 最近の Checkins
         no_checkins: まだチェックインがありません。
         table:
-          time: Time
-          weight: Weight
-          meal: Meal
-          litter: Litter
-          meds: Meds
-          memo: Memo
-          actions: Actions
+          time: 時間
+          weight: 体重
+          meal: 食事
+          litter: トイレ
+          meds: 投薬
+          memo: メモ
+          actions: 操作
         action:
           to_index: 一覧へ
           new_checkin: 新規チェックイン
@@ -84,8 +84,6 @@ ja:
       destroyed: "チェックインを削除しました。"
       create_failed: "保存に失敗しました。入力内容をご確認ください。"
       update_failed: "更新に失敗しました。"
-    # --- 修正箇所 ---
-    # "notices:" から "show:" 以下のインデントを1段階浅く（左へ）ずらしました。
     show:
       title: チェックイン詳細
       period: 期間
@@ -105,15 +103,15 @@ ja:
     form:
       form_title: "チェックイン"
       checked_at: "記録日時"
-      weight: "体重(kg)" # <- RSpecが参照するキー
+      weight: "体重(kg)"
       memo: "メモ"
-      meal: "Meal"
+      meal: "食事" # <- 修正
       meal_amount: "量"
       meal_brand: "フード名"
-      litter: "Litter"
+      litter: "トイレ" # <- 修正
       litter_clumps: "固まり数"
       litter_pee: "おしっこ回数"
-      meds: "Meds"
+      meds: "投薬" # <- 修正
       meds_name: "薬剤名"
       meds_dose: "投与量"
       meds_given: "投与済"
@@ -122,3 +120,47 @@ ja:
       cancel: "キャンセル"
       create: "保存する"
       update: "更新する"
+  devise:
+    failure:
+      user:
+        unauthenticated: 'ログインしてください。' # <- 修正：これが今回のエラー
+        not_found_in_database: 'メールアドレスまたはパスワードが違います。'
+        invalid: 'メールアドレスまたはパスワードが違います。'
+      unauthenticated: 'ログインしてください。'
+    sessions:
+      user:
+        signed_in: 'ログインしました。'
+        signed_out: 'ログアウトしました。'
+        already_signed_out: 'すでにログアウトしています。'
+      new:
+        sign_in: "ログイン"
+        remember_me: "ログイン状態を保存する"
+    shared:
+      links:
+        sign_in: "ログイン"
+        sign_up: "アカウントを作成"
+        forgot_your_password: "パスワードを忘れましたか？"
+        confirmation_instructions: "本人確認メールが届いていませんか？"
+        unlock_instructions: "アカウントロック解除メールが届いていませんか？"
+        sign_in_with_provider: "%{provider} でログイン"
+
+    # app/views/devise/shared/_links.html.erb 用 (推奨)
+    shared:
+      email: "メールアドレス"
+      password: "パスワード"
+      links:
+        sign_up: "アカウントを作成"
+        forgot_your_password: "パスワードを忘れましたか？"
+    registrations:
+      user:
+        signed_up: 'アカウント登録が完了しました。'
+        updated: 'アカウント情報を更新しました。'
+        destroyed: 'アカウントを削除しました。'
+  
+  # deviseのエラーメッセージを "errors.messages" に合わせる (推奨)
+  errors:
+    messages:
+      not_found: "は見つかりませんでした"
+      already_confirmed: "はすでに確認済みです"
+      not_locked: "はロックされていません"
+      # ... (devise-i18n gem からコピーするのが一番です)
