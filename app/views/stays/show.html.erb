@@ -1,7 +1,12 @@
+<%# 
+  app/views/stays/show.html.erb
+  Handoff へのリンクを追加し、UIを .card と .stack に統一
+%>
+
 <h1><%= t(".title", id: @stay.id) %></h1>
 
 <div class="card" style="margin-bottom:16px;">
-  <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+  <div class="form-grid">
     <p><span class="meta"><%= t(".pet") %></span><br><%= @stay.pet&.name || "-" %></p>
     <p><span class="meta"><%= t(".place") %></span><br><%= @stay.place %></p>
     <p><span class="meta"><%= t(".period") %></span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
@@ -9,41 +14,85 @@
   </div>
 
   <% if @stay.notes.present? %>
-    <p class="meta" style="margin-top:8px;"><%= t(".notes") %></p>
-    <p><%= simple_format(@stay.notes) %></p>
+    <hr> <p class="meta"><%= t(".notes") %></p>
+    <p style="margin:0;"><%= simple_format(@stay.notes) %></p>
+  </div>
   <% end %>
 </div>
+
 
 <%# 子分割の一覧（ある場合） %>
 <% if @stay.children.exists? %>
   <div class="card" style="margin-bottom:16px;">
     <h3 style="margin-top:0;"><%= t(".children_title", count: @stay.children.count) %></h3>
-    <ul style="margin:0; padding-left:18px;">
-      <% @stay.children.order(:start_on).each do |child| %>
-        <li>
-          #<%= child.id %> … <%= child.start_on %>〜<%= child.end_on %>
-          <%= link_to t(".action.checkins"), stay_checkins_path(child), class: "btn btn--ghost", style: "margin-left:8px;" %>
-        </li>
-      <% end %>
-    </ul>
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>期間</th>
+          <th>チェックイン</th>
+          <th>引継ぎ (Handoff)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%# 
+          子ステイをループ処理
+          .with_attached_handoffs のようなN+1対策スコープがモデルにあると尚良い
+        %>
+        <% @stay.children.order(:start_on).each do |child| %>
+          <tr>
+            <td>#<%= child.id %></td>
+            <td class="nowrap"><%= child.start_on %> 〜 <%= child.end_on %></td>
+            <td>
+              <%= link_to t(".action.checkins"), 
+                          stay_checkins_path(child), 
+                          class: "btn" %>
+            </td>
+            <td>
+              <%# 
+                🔹 追加：
+                このステイが「引継ぎ先 (to_stay)」となっている Handoff を探す
+                (例: Stay B は、Stay A -> Stay B の Handoff を持つ)
+              %>
+              <% handoff = child.incoming_handoff %>
+              <% if handoff %>
+                <%= link_to edit_handoff_path(handoff), class: "btn" do %>
+                  <%# Handoff が完了済みかチェック %>
+                  <% if handoff.completed_at? %>
+                    <span style="color: green;">✔</span> 完了
+                  <% else %>
+                    <span style="color: red;">!</span> メモ編集
+                  <% end %>
+                <% end %>
+              <% else %>
+                <span class="meta">---</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
   </div>
 <% end %>
 
+
 <%# 最近の Checkins %>
-<div class="card" style="margin-top:16px;">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="margin:0;"><%= t(".recent_checkins") %></h3>
-    <div class="stack stack--end">
-      <%= link_to t(".action.to_index"), stay_checkins_path(@stay), class: "btn" %>
-      <%= link_to t(".action.new_checkin"), new_stay_checkin_path(@stay), class: "btn btn--primary" %>
-    </div>
+<div class="card"> <div class="stack stack--end" style="width:100%; margin-bottom:12px;">
+    
+    <h3 style="margin:0; margin-right: auto;"><%= t(".recent_checkins") %></h3>
+
+    <%= link_to "引継ぎ一覧", handoffs_path, class: "btn btn--ghost" %>
+    
+    <%= link_to t(".action.to_index"), stay_checkins_path(@stay), class: "btn" %>
+    <%= link_to t(".action.new_checkin"), new_stay_checkin_path(@stay), class: "btn btn--primary" %>
   </div>
 
   <% if @recent_checkins.blank? %>
-    <p class="meta" style="margin-top:12px;"><%= t(".no_checkins") %></p>
+    <p class="meta"><%= t(".no_checkins") %></p>
   <% else %>
-    <table class="table" style="margin-top:12px;">
-      <thead>
+    <table class="table"> <thead>
         <tr>
           <th><%= t(".table.time") %></th>
           <th><%= t(".table.weight") %></th>
@@ -57,7 +106,7 @@
       <tbody>
         <% @recent_checkins.each do |c| %>
           <tr>
-            <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkin_path(@stay, c) %></td>
+            <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkins_path(@stay, c) %></td>
             <td class="col-right"><%= weight_label(c.weight) %></td>
             <td><%= meal_label(c.meal) %></td>
             <td><%= litter_label(c.litter) %></td>
@@ -75,7 +124,5 @@
     </table>
   <% end %>
 </div>
-
-
 
 <turbo-frame id="modal"></turbo-frame>

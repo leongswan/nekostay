@@ -1,0 +1,15 @@
+<%# 
+  Handoff 画面（引継ぎメモ）の編集
+%>
+<div class="container">
+  
+  <h1>引継ぎメモの編集</h1>
+  <p class="meta">
+    Stay: <%= @handoff.from_stay.start_on %> 〜 
+    <%= @handoff.to_stay.end_on %>
+  </p>
+
+  <%# フォーム本体 (_form.html.erb) を呼び出す %>
+  <%= render "form", handoff: @handoff %>
+
+</div>

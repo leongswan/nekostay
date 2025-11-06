@@ -1,15 +1,29 @@
+# config/routes.rb
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :stays, only: [:index, :show] do
-    resources :checkins, only: [:index, :new, :create, :show, :edit, :update, :destroy]
+  # --- 修正 ---
+  #
+  # :only を削除し、Stays の標準的なルーティング
+  # (index, show, new, create, edit, update, destroy) を
+  # すべて許可します。
+  #
+  resources :stays do
+  #
+  # --- 修正ここまで ---
+    resources :checkins
   end
 
-  resources :handoffs, only: [:index] do
+  # --- Handoffs の修正 ---
+  
+  # 修正: :index に加えて :edit, :update を許可
+  resources :handoffs, only: [:index, :edit, :update] do
     member do
-      get :complete
+      # 修正: 'GET' (データを取得) ではなく 'PATCH' (データを更新) に変更
+      patch :complete
     end
   end
+  # --- 修正ここまで ---
 
   root "stays#index"
 end

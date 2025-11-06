@@ -1,0 +1,60 @@
+<%# 
+  app/views/stays/_form.html.erb
+  StaySplitter を動かすための最小限のフォーム
+%>
+<%= form_with model: stay, class: "card" do |f| %>
+
+  <%# エラー表示 (もしあれば) %>
+  <% if stay.errors.any? %>
+    <div class="flash flash--alert">
+      <strong><%= stay.errors.count %>件のエラー:</strong>
+      <ul>
+        <% stay.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-grid">
+    <div>
+      <%= f.label :pet_id, t(".pet") %>
+      <%# 
+        (注: Pet の選択肢を @pets から読み込みます) 
+        (ステップ3でコントローラーを修正します)
+      %>
+      <%= f.collection_select :pet_id, @pets, :id, :name, 
+            { prompt: "ペットを選択してください" }, 
+            { class: "input" } %>
+    </div>
+    
+    <div>
+      <%= f.label :place, t(".place") %>
+      <%# Stay モデルの enum (owner_home/sitter_home) から選択肢を作成 %>
+      <%= f.select :place, 
+            Stay.places.keys.map { |k| [t("enums.stay.place.#{k}"), k] }, 
+            { prompt: "場所を選択してください" }, 
+            { class: "input" } %>
+    </div>
+
+    <div>
+      <%= f.label :start_on, t(".start_on") %>
+      <%= f.date_field :start_on, class: "input" %>
+    </div>
+    
+    <div>
+      <%= f.label :end_on, t(".end_on") %>
+      <%= f.date_field :end_on, class: "input" %>
+    </div>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :notes, t(".notes") %>
+    <%= f.text_area :notes, rows: 4, class: "textarea" %>
+  </div>
+
+  <div class="stack stack--end" style="margin-top: 16px;">
+    <%= link_to t(".cancel"), stays_path, class: "btn" %>
+    <%= f.submit t(".save"), class: "btn btn--primary" %>
+  </div>
+<% end %>

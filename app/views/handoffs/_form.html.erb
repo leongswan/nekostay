@@ -1,0 +1,41 @@
+<%# 
+  Handoff フォーム（checklist:text 用）
+  ui.css の .card, .textarea, .btn を使用
+%>
+<%= form_with model: handoff, class: "card mt-16" do |f| %>
+  
+  <%# エラー表示 (もしあれば) %>
+  <% if handoff.errors.any? %>
+    <div class="flash flash--alert">
+      <strong><%= handoff.errors.count %>件のエラー:</strong>
+      <ul>
+        <% handoff.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :checklist, "引継ぎチェックリスト (鍵, 餌, 薬, トイレ砂, 説明書など)" %>
+    <%= f.text_area :checklist, 
+                    rows: 10, 
+                    class: "textarea", 
+                    placeholder: "例:\n・鍵を受け取りました。\n・お薬（朝晩1錠）の説明を受けました。\n・トイレ砂の場所を確認しました。" %>
+  </div>
+  
+  <%# (完了時刻のチェックボックス - 任意) %>
+  <div class="checkbox mt-16">
+    <%= f.check_box :completed_at, { checked: @handoff.completed_at.present? }, Time.current, nil %>
+    <%= f.label :completed_at, "引継ぎを完了する" %>
+  </div>
+
+  <div class="stack stack--end mt-16">
+    <%# 戻るボタン (親ステイの詳細画面に戻る) %>
+    <%= link_to "キャンセル", 
+                stay_path(handoff.from_stay.parent_stay || handoff.from_stay), 
+                class: "btn" %>
+    <%= f.submit "更新する", class: "btn btn--primary" %>
+  </div>
+
+<% end %>

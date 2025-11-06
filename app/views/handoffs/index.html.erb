@@ -1,23 +1,52 @@
-<h1>Handoffs</h1>
-<table>
-  <thead>
-    <tr>
-      <th>From</th><th>To</th><th>Scheduled</th><th>Status</th><th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @handoffs.each do |h| %>
-      <tr>
-        <td><%= [h.from_stay.start_on, h.from_stay.end_on].join(" ~ ") %></td>
-        <td><%= [h.to_stay.start_on,   h.to_stay.end_on].join(" ~ ") %></td>
-        <td><%= h.scheduled_at&.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= h.completed_at ? "完了" : "未完了" %></td>
-        <td>
-          <% unless h.completed_at %>
-            <%= button_to "完了にする", complete_handoff_path(h), method: :patch %>
+<div class="container">
+  
+  <h1><%= t(".title") %></h1>
+  
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= t(".th.from") %></th>
+          <th><%= t(".th.to") %></th>
+          <th><%= t(".th.scheduled") %></th>
+          <th><%= t(".th.status") %></th>
+          <th><%= t(".th.checklist") %></th> <th><%= t(".th.actions") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @handoffs.empty? %>
+          <tr>
+            <td colspan="6" class="meta" style="text-align:center; padding:24px;">
+              <%= t(".empty") %>
+            </td>
+          </tr>
+        <% else %>
+          <% @handoffs.each do |h| %>
+            <tr>
+              <td class="nowrap"><%= h.from_stay.start_on %> ~ <%= h.from_stay.end_on %></td>
+              <td class="nowrap"><%= h.to_stay.start_on %> ~ <%= h.to_stay.end_on %></td>
+              <td class="nowrap"><%= h.scheduled_at&.strftime("%Y-%m-%d %H:%M") %></td>
+              
+              <td><%= h.completed_at ? t(".status.completed") : t(".status.pending") %></td>
+              
+              <td class="truncate"><%= h.checklist.presence || "---" %></td>
+              
+              <td>
+                <div class="stack">
+                  
+                  <%= link_to t(".action.edit"), edit_handoff_path(h), class: "btn" %>
+                  
+                  <% unless h.completed_at %>
+                    <%= button_to t(".action.complete"), complete_handoff_path(h), 
+                                  method: :patch, 
+                                  class: "btn btn--primary" %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
           <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
