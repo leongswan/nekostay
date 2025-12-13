@@ -21,6 +21,11 @@ Rails.application.routes.draw do
     # URL例: /stays/1/contract (GET)
     resource :contract, only: [:show]
   # --- 追加ここまで ---
+
+  # --- 追加: 決済機能 ---
+    # URL: /stays/:stay_id/payments (POST)
+    resources :payments, only: [:create]
+    # --- 追加ここまで ---
   end
 
 

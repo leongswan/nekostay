@@ -88,6 +88,36 @@
   </div>
 </div>
 
+<%# ▼▼▼ ここに追加してください ▼▼▼ %>
+
+<%# 契約書ダウンロード %>
+<div class="card mb-4">
+  <div class="stack stack--between">
+    <div>
+      <h3 style="margin:0;">契約書</h3>
+      <p class="meta" style="margin:4px 0 0;">滞在内容の契約書(PDF)を確認</p>
+    </div>
+    <%= link_to "契約書を表示", stay_contract_path(@stay), class: "btn btn--ghost", target: "_blank" %>
+  </div>
+</div>
+
+<%# お支払い (Stripe) %>
+<div class="card mb-4" style="background-color: #f0fff4; border: 1px solid #c6f6d5;">
+  <div class="stack stack--between">
+    <div>
+      <h3 style="margin:0; color: #276749;">お支払い</h3>
+      <p class="meta" style="margin:4px 0 0;">クレジットカードで安全に決済できます</p>
+    </div>
+    
+    <%= button_to "カードで支払う (¥5,000)", stay_payments_path(@stay), 
+          method: :post, 
+          data: { turbo: false }, 
+          class: "btn btn--primary" %>
+  </div>
+</div>
+
+<%# ▲▲▲ ここまで追加 ▲▲▲ %>
+
 
 <%# 最近の Checkins %>
 <div class="card"> <div class="stack stack--end" style="width:100%; margin-bottom:12px;">

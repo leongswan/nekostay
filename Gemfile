@@ -76,3 +76,6 @@ gem "rspec-rails", "~> 7.1", :groups => [:development, :test]
 
 gem 'prawn'
 gem 'prawn-table'
+
+gem 'stripe'
+
