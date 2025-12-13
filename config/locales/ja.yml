@@ -147,12 +147,12 @@ ja:
         status: "状態"
         checklist: "メモ"
         actions: "操作"
-    status:
-      completed: "完了"
-      pending: "未完了"
-    action:
-      edit: "メモ編集"
-      complete: "完了にする"
+      status:
+        completed: "完了"
+        pending: "未完了"
+      action:
+        edit: "メモ編集"
+        complete: "完了にする"
     edit:
       title: "引継ぎメモの編集"
     notices:
