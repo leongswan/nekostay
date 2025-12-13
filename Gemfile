@@ -73,3 +73,6 @@ gem "pagy", "~> 9.4"
 gem "dotenv-rails", "~> 3.1"
 
 gem "rspec-rails", "~> 7.1", :groups => [:development, :test]
+
+gem 'prawn'
+gem 'prawn-table'

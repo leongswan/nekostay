@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   # --- 追加: メッセージのルーティング (一覧と作成のみ) ---
     resources :messages, only: [:index, :create]
   # --- 追加ここまで ---
+
+  # --- 追加: 契約書のダウンロード用URL ---
+    # URL例: /stays/1/contract (GET)
+    resource :contract, only: [:show]
+  # --- 追加ここまで ---
   end
 
 
