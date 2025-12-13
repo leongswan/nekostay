@@ -77,6 +77,17 @@
   </div>
 <% end %>
 
+<%# メッセージへのリンク %>
+<div class="card mb-4" style="background-color: #f0f8ff; border-color: #bee3f8;">
+  <div class="stack stack--between">
+    <div>
+      <h3 style="margin:0; color: #2b6cb0;">メッセージ</h3>
+      <p class="meta" style="margin: 4px 0 0;">シッターとチャットで連絡を取る</p>
+    </div>
+    <%= link_to "メッセージを見る", stay_messages_path(@stay), class: "btn btn--primary" %>
+  </div>
+</div>
+
 
 <%# 最近の Checkins %>
 <div class="card"> <div class="stack stack--end" style="width:100%; margin-bottom:12px;">

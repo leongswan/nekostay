@@ -10,6 +10,8 @@ class Stay < ApplicationRecord
              foreign_key: :parent_stay_id,
              dependent: :destroy   # 🔹 子も削除される
   has_many :checkins, dependent: :destroy
+
+  has_many :messages, dependent: :destroy
   
   # --- 修正: has_many -> has_one ---
   #

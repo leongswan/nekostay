@@ -12,7 +12,13 @@ Rails.application.routes.draw do
   #
   # --- 修正ここまで ---
     resources :checkins
+
+  # --- 追加: メッセージのルーティング (一覧と作成のみ) ---
+    resources :messages, only: [:index, :create]
+  # --- 追加ここまで ---
   end
+
+
 
   # --- Handoffs の修正 ---
   
