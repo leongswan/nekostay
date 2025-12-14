@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # (index, show, new, create, edit, update, destroy) を
   # すべて許可します。
   #
-  resources :stays do
+   resources :stays do
   #
   # --- 修正ここまで ---
     resources :checkins
@@ -22,10 +22,11 @@ Rails.application.routes.draw do
     resource :contract, only: [:show]
   # --- 追加ここまで ---
 
-  # --- 追加: 決済機能 ---
-    # URL: /stays/:stay_id/payments (POST)
-    resources :payments, only: [:create]
-    # --- 追加ここまで ---
+  # --- 修正: success アクションを追加 ---
+    resources :payments, only: [:create] do
+      get 'success', on: :collection
+     end
+  # ----------------------------------
   end
 
 

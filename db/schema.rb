@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_13_073944) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_14_024011) do
   create_table "addresses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "postal_code", null: false
     t.string "prefecture", null: false
@@ -143,6 +143,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_073944) do
     t.date "start_on", null: false
     t.date "end_on", null: false
     t.bigint "parent_stay_id"
+    t.datetime "paid_at"
     t.index ["owner_id"], name: "index_stays_on_owner_id"
     t.index ["parent_stay_id"], name: "index_stays_on_parent_stay_id"
     t.index ["pet_id"], name: "index_stays_on_pet_id"

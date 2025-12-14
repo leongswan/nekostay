@@ -106,13 +106,29 @@
   <div class="stack stack--between">
     <div>
       <h3 style="margin:0; color: #276749;">お支払い</h3>
-      <p class="meta" style="margin:4px 0 0;">クレジットカードで安全に決済できます</p>
+      <%# --- 条件分岐を追加 --- %>
+      <% if @stay.paid_at? %>
+        <p class="meta" style="margin:4px 0 0; color: #276749;">
+          決済完了日: <%= @stay.paid_at.strftime("%Y年%m月%d日 %H:%M") %>
+        </p>
+      <% else %>
+        <p class="meta" style="margin:4px 0 0;">クレジットカードで安全に決済できます</p>
+      <% end %>
+      <%# --------------------- %>
     </div>
     
-    <%= button_to "カードで支払う (¥5,000)", stay_payments_path(@stay), 
-          method: :post, 
-          data: { turbo: false }, 
-          class: "btn btn--primary" %>
+    <%# --- ボタンの出し分け --- %>
+    <% if @stay.paid_at? %>
+      <div style="background: #276749; color: white; padding: 10px 20px; border-radius: 99px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+        <span>✔</span> 支払い済み
+      </div>
+    <% else %>
+      <%= button_to "カードで支払う (¥5,000)", stay_payments_path(@stay), 
+            method: :post, 
+            data: { turbo: false }, 
+            class: "btn btn--primary" %>
+    <% end %>
+    <%# --------------------- %>
   </div>
 </div>
 
