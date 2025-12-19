@@ -1,0 +1,43 @@
+<section class="hero-section">
+  <div class="hero-content">
+    <p class="hero-sub-copy">離れていても、心はそばに。<br>愛猫のための優しい見守りアプリ。</p>
+    <h1 class="hero-main-copy">いつものお家で、<br>いつもの安心を。<br>Nekostay.</h1>
+    <% unless user_signed_in? %>
+      <%= link_to "無料で始めてみる", new_user_registration_path, class: "hero-button" %>
+    <% else %>
+      <%= link_to "マイページへ", stays_path, class: "hero-button" %>
+    <% end %>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="container features-container">
+    <div class="feature-item">
+      <div class="feature-icon-circle">
+        <i class="fa-solid fa-camera-retro feature-icon"></i>
+      </div>
+      <h2 class="feature-title">毎日の様子が見える</h2>
+      <p class="feature-desc">『今どうしてるかな？』が写真付きで届くから、外出先でも安心。</p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-icon-circle">
+        <i class="fa-solid fa-file-contract feature-icon"></i>
+      </div>
+      <h2 class="feature-title">約束をカタチに</h2>
+      <p class="feature-desc">口約束だけでなく、しっかりとした契約書を。大切な家族を守ります。</p>
+    </div>
+
+    <div class="feature-item">
+      <div class="feature-icon-circle">
+        <i class="fa-solid fa-handshake-simple feature-icon"></i>
+      </div>
+      <h2 class="feature-title">困った時もスムーズに</h2>
+      <p class="feature-desc">面倒なお金のやり取りや、シッター間の連絡もアプリにお任せ。</p>
+    </div>
+  </div>
+</section>
+
+<section class="footer-action-section">
+  <p>難しい操作はいりません。スマホひとつで、今日から始められます。</p>
+</section>

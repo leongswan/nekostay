@@ -1,0 +1,120 @@
+/* 全体の設定 */
+:root {
+  --primary-cream: #FFF9F0; /* 背景のクリーム色 */
+  --accent-orange: #D98E63; /* ボタンのオレンジ色 */
+  --text-brown: #5A4A42;    /* 文字の茶色 */
+}
+
+/* ヒーローセクション */
+.hero-section {
+  /* 背景画像の設定 */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), image-url('top_hero_bg.png');
+  background-size: cover;
+  background-position: center;
+  height: 500px; /* 高さは調整可能 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* 文字を読みやすくする影 */
+}
+
+.hero-sub-copy {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.hero-main-copy {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+/* ボタンのデザイン */
+.hero-button {
+  display: inline-block;
+  background-color: var(--accent-orange);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 99px; /* 丸い形 */
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #c17d55; /* ホバー時の色を少し濃く */
+  text-decoration: none;
+}
+
+/* 特徴セクション */
+.features-section {
+  background-color: var(--primary-cream);
+  padding: 4rem 1rem;
+  color: var(--text-brown);
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem; /* アイテム間の隙間 */
+  flex-wrap: wrap; /* スマホなどで折り返す */
+}
+
+.feature-item {
+  text-align: center;
+  max-width: 300px;
+}
+
+/* アイコンの丸い背景 */
+.feature-icon-circle {
+  background-color: #F2E6D8; /* 薄い茶色の円 */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem; /* 中央寄せと下の余白 */
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: var(--accent-orange);
+}
+
+.feature-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.feature-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* フッターアクション */
+.footer-action-section {
+  background-color: #F2E6D8; /* 少し濃いクリーム色 */
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-brown);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* スマホ向けの調整 */
+@media (max-width: 768px) {
+  .hero-main-copy {
+    font-size: 2rem;
+  }
+  .features-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+}

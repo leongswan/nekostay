@@ -1,5 +1,6 @@
 # config/routes.rb
 Rails.application.routes.draw do
+  root 'static_pages#home'
   devise_for :users
 
   # --- 修正 ---
@@ -42,5 +43,4 @@ Rails.application.routes.draw do
   end
   # --- 修正ここまで ---
 
-  root "stays#index"
 end
