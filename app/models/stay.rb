@@ -5,6 +5,9 @@ class Stay < ApplicationRecord
   belongs_to :sitter, class_name: "User", optional: true
 
   belongs_to :parent_stay, class_name: "Stay", optional: true
+  # ↓ これを追加（"report_images" という名前で複数の画像を扱えるようにする）
+  has_many_attached :report_images
+  # ----------------
   has_many   :children,
              class_name: "Stay",
              foreign_key: :parent_stay_id,

@@ -134,6 +134,54 @@
 
 <%# ▲▲▲ ここまで追加 ▲▲▲ %>
 
+<%# 日報（写真）エリア %>
+<div class="card mb-4" style="border-top: 4px solid #D98E63;">
+  <div class="stack stack--between" style="margin-bottom: 20px;">
+    <div>
+      <h3 style="margin:0; color: #5A4A42;">
+        <i class="fa-solid fa-camera"></i> 今日の様子 (日報)
+      </h3>
+      <p class="meta" style="margin: 4px 0 0;">シッターからの写真報告</p>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+    <% if @stay.report_images.attached? %>
+      <% @stay.report_images.each do |image| %>
+        
+        <div style="position: relative; width: 120px; height: 120px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          
+          <%= link_to image, target: "_blank", style: "display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 8px;" do %>
+            <%= image_tag image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+          <% end %>
+
+          <%= link_to delete_image_stay_path(@stay, image_id: image.id), 
+              data: { turbo_method: :delete, turbo_confirm: "この写真を削除しますか？" },
+              style: "position: absolute; top: -8px; right: -8px; background: #ff4d4d; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;" do %>
+            <i class="fa-solid fa-trash"></i>
+          <% end %>
+          </div>
+      <% end %>
+    <% else %>
+      <div style="padding: 20px; background: #f9f9f9; border-radius: 8px; width: 100%; text-align: center; color: #999;">
+        <i class="fa-regular fa-images" style="font-size: 24px; margin-bottom: 8px;"></i><br>
+        まだ写真はありません
+      </div>
+    <% end %>
+  </div>
+
+  <div style="background-color: #FFF9F0; padding: 16px; border-radius: 8px; border: 1px dashed #D98E63;">
+    <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #D98E63;">📸 写真を追加する</h4>
+    
+    <%= form_with(model: @stay, local: true, class: "stack stack--start") do |form| %>
+      <div style="flex-grow: 1;">
+        <%= form.file_field :report_images, multiple: true, style: "width: 100%;" %>
+      </div>
+      
+      <%= form.submit "アップロード", class: "btn", style: "background-color: #D98E63; color: white; border: none;" %>
+    <% end %>
+  </div>
+</div>
 
 <%# 最近の Checkins %>
 <div class="card"> <div class="stack stack--end" style="width:100%; margin-bottom:12px;">

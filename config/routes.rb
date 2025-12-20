@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   # すべて許可します。
   #
    resources :stays do
+
+    # ↓ これを追加：特定の画像の削除URLを作ります
+    member do
+      delete :delete_image
+    end
+    # ----------------
   #
   # --- 修正ここまで ---
     resources :checkins
