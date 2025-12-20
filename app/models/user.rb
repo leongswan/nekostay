@@ -6,6 +6,10 @@ class User < ApplicationRecord
 
   enum role: { owner: 0, sitter: 1, admin: 2 }, _prefix: true
 
+  # ↓ ここに追加
+  has_one_attached :avatar
+  # ----------------
+
   # --- 修正 ---
 
   # 1. 曖昧な :stays を削除
