@@ -34,7 +34,12 @@ Rails.application.routes.draw do
       get 'success', on: :collection
      end
   # ----------------------------------
+
   end
+
+  # ↓↓↓ この行を追加してください ↓↓↓
+   resources :pets
+  # --------------------------------
 
 
 

@@ -1,0 +1,24 @@
+<div style="max-width: 500px; margin: 40px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+  <h2 style="text-align: center; color: #5A4A42; margin-bottom: 25px;">新しい家族を登録 🐈</h2>
+
+  <%= form_with(model: @pet, local: true) do |f| %>
+    
+    <% if @pet.errors.any? %>
+      <div style="background: #ffe6e6; color: #d63031; padding: 10px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
+        入力内容を確認してください
+      </div>
+    <% end %>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :name, "お名前", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
+      <%= f.text_field :name, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;", placeholder: "例：ミケ" %>
+    </div>
+
+    <%= f.submit "登録する", style: "width: 100%; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold;" %>
+    
+  <% end %>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <%= link_to "キャンセル", pets_path, style: "color: #999; text-decoration: none; font-size: 0.9rem;" %>
+  </div>
+</div>
