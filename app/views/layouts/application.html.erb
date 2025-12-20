@@ -12,28 +12,37 @@
   </head>
 
   <body>
-    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
-      
-      <%= link_to "Nekostay", root_path, style: "font-size: 1.5rem; font-weight: bold; color: #5A4A42; text-decoration: none;" %>
-
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <% if user_signed_in? %>
-          <% if current_user.avatar.attached? %>
-            <%= image_tag current_user.avatar, style: "width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd;" %>
-          <% else %>
-            <i class="fa-solid fa-circle-user" style="font-size: 36px; color: #ccc;"></i>
-          <% end %>
-
-          <%= link_to "設定", edit_user_registration_path, style: "color: #5A4A42; text-decoration: none; font-weight: bold;" %>
-
-          <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, style: "color: #d9534f; text-decoration: none; font-size: 0.9rem;" %>
-
-        <% else %>
-          <%= link_to "ログイン", new_user_session_path, style: "color: #5A4A42; text-decoration: none; margin-right: 10px;" %>
-          <%= link_to "新規登録", new_user_registration_path, style: "background-color: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold;" %>
+    <header style="background: white; border-bottom: 1px solid #eee; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+      <div style="font-size: 1.5rem; font-weight: bold; color: #D98E63; display: flex; align-items: center; gap: 10px;">
+        <%= link_to root_path, style: "text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;" do %>
+          <i class="fa-solid fa-cat"></i>
+          <span>Nekostay</span>
         <% end %>
       </div>
-    </nav>
+
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <% if user_signed_in? %>
+          <%= link_to edit_user_registration_path, style: "text-decoration: none; color: #555; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 0.9rem;" do %>
+            <% if current_user.avatar.attached? %>
+              <%= image_tag current_user.avatar, style: "width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;" %>
+            <% else %>
+              <div style="width: 35px; height: 35px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                <i class="fa-solid fa-user"></i>
+              </div>
+            <% end %>
+            <span style="display: none; sm:inline;"><%= current_user.name %></span>
+          <% end %>
+
+          <%= button_to destroy_user_session_path, method: :delete, style: "background: none; border: none; cursor: pointer; color: #999; font-size: 1.2rem; padding: 5px;", title: "ログアウト" do %>
+            <i class="fa-solid fa-right-from-bracket"></i>
+          <% end %>
+
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path, style: "color: #555; text-decoration: none; font-weight: bold;" %>
+          <%= link_to "新規登録", new_user_registration_path, style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" %>
+        <% end %>
+      </div>
+    </header>
     <div class="container">
       <div id="flash_messages">
         <% if notice.present? %>

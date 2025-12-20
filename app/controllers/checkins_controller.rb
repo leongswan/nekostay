@@ -31,15 +31,20 @@ end
     end
   end
 
-  def edit; end
+  def edit
+    # URLから「どの予約」の「どの日」かを特定します
+    @stay = Stay.find(params[:stay_id])
+    @checkin = @stay.checkins.find(params[:id])
+  end
 
   def update
-    merge_structured_json!(@checkin)
+    @stay = Stay.find(params[:stay_id])
+    @checkin = @stay.checkins.find(params[:id])
 
-    if @checkin.save
-      redirect_to stay_checkins_path(@stay), notice: I18n.t("checkins.notices.updated"), status: :see_other
+    # 報告内容（テキストと画像）を更新
+    if @checkin.update(checkin_params)
+      redirect_to stay_path(@stay), notice: "日報を送信しました！✨"
     else
-      flash.now[:alert] = I18n.t("checkins.notices.update_failed")
       render :edit, status: :unprocessable_entity
     end
   end
@@ -72,12 +77,8 @@ end
 
   # 画面から受け取る“フラットな”入力
   def checkin_params
-    params.require(:checkin).permit(
-      :checked_at, :weight, :memo,
-      :meal_amount, :meal_brand,
-      :litter_clumps, :litter_pee,
-      :meds_name, :meds_dose, :meds_given, :meds_none, :vaccine_3rd
-    )
+    # report: 本文, images: 写真（複数可）
+    params.require(:checkin).permit(:report, images: [])
   end
 
   # Strong Params → JSON カラムへ詰め替え

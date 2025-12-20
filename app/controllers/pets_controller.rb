@@ -24,10 +24,30 @@ class PetsController < ApplicationController
     end
   end
 
+  # ↓↓↓ ここから追加してください ↓↓↓
+
+  def edit
+    # 編集したいペットのデータを探してくる
+    # current_user.pets から探すことで、他人のペットを編集できないようにします
+    @pet = current_user.pets.find(params[:id])
+  end
+
+  def update
+    @pet = current_user.pets.find(params[:id])
+    
+    if @pet.update(pet_params)
+      redirect_to pets_path, notice: "ペット情報を更新しました！✨"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  # ↑↑↑ ここまで追加 ↑↑↑
+
   private
 
   def pet_params
     # 今は「名前」だけ許可します（後で種類や年齢も追加できます）
-    params.require(:pet).permit(:name)
+    params.require(:pet).permit(:name, :image)
   end
 end

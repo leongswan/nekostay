@@ -1,5 +1,4 @@
 # --- 修正：キャッシュを回避するため、ファイルを直接読み込む ---
-require_relative '../../lib/services/stay_splitter'
 # --- 修正ここまで ---
 
 class StaysController < ApplicationController
@@ -41,23 +40,29 @@ class StaysController < ApplicationController
   # --- 修正ここまで ---
 
   def edit
-    # @stay は set_stay が実行
+    # 編集画面のドロップダウン用に、ペット一覧を取得します
+    @pets = current_user.pets.order(:name)
   end
 
   def update
-    respond_to do |format|
-      # 1. まず、画像「以外」のデータ（メモなど）を更新します
-      #    (画像データをここで渡すと上書きされてしまうため、exceptで除外します)
-      if @stay.update(stay_params.except(:report_images))
-        
-        # 2. もし新しい画像が送られてきていたら、既存リストに「追加 (attach)」します
-        if stay_params[:report_images].present?
-          @stay.report_images.attach(stay_params[:report_images])
-        end
+    # 1. データ更新を試みる
+    if @stay.update(stay_params)
+      
+      # ★重要: 日付が変わった場合、スケジュール(Checkin)を作り直す機能
+      StaySplitter.split!(@stay)
 
-        format.html { redirect_to stay_url(@stay), notice: "滞在情報を更新しました！" }
+      # 成功時の処理
+      respond_to do |format|
+        format.html { redirect_to stay_path(@stay), notice: "予約内容を更新しました！", status: :see_other }
         format.json { render :show, status: :ok, location: @stay }
-      else
+      end
+
+    else
+      # ★重要: エラー時にペットの選択肢を再読み込みする（これがないとクラッシュします）
+      @pets = current_user.pets.order(:name)
+      
+      # 失敗時の処理
+      respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @stay.errors, status: :unprocessable_entity }
       end

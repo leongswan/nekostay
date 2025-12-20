@@ -1,233 +1,95 @@
-<%# 
-  app/views/stays/show.html.erb
-  Handoff へのリンクを追加し、UIを .card と .stack に統一
-%>
-
-<h1><%= t(".title", id: @stay.id) %></h1>
-
-<div class="card" style="margin-bottom:16px;">
-  <div class="form-grid">
-    <p><span class="meta"><%= t(".pet") %></span><br><%= @stay.pet&.name || "-" %></p>
-    <p><span class="meta"><%= t(".place") %></span><br><%= @stay.place %></p>
-    <p><span class="meta"><%= t(".period") %></span><br><%= @stay.start_on %> 〜 <%= @stay.end_on %></p>
-    <p><span class="meta"><%= t(".status") %></span><br><%= status_badge(@stay) %></p>
-  </div>
-
-  <% if @stay.notes.present? %>
-    <hr> <p class="meta"><%= t(".notes") %></p>
-    <p style="margin:0;"><%= simple_format(@stay.notes) %></p>
-  </div>
-  <% end %>
-</div>
-
-
-<%# 子分割の一覧（ある場合） %>
-<% if @stay.children.exists? %>
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="margin-top:0;"><%= t(".children_title", count: @stay.children.count) %></h3>
+<div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  
+  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 40px;">
     
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>期間</th>
-          <th>チェックイン</th>
-          <th>引継ぎ (Handoff)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%# 
-          子ステイをループ処理
-          .with_attached_handoffs のようなN+1対策スコープがモデルにあると尚良い
-        %>
-        <% @stay.children.order(:start_on).each do |child| %>
-          <tr>
-            <td>#<%= child.id %></td>
-            <td class="nowrap"><%= child.start_on %> 〜 <%= child.end_on %></td>
-            <td>
-              <%= link_to t(".action.checkins"), 
-                          stay_checkins_path(child), 
-                          class: "btn" %>
-            </td>
-            <td>
-              <%# 
-                🔹 追加：
-                このステイが「引継ぎ先 (to_stay)」となっている Handoff を探す
-                (例: Stay B は、Stay A -> Stay B の Handoff を持つ)
-              %>
-              <% handoff = child.incoming_handoff %>
-              <% if handoff %>
-                <%= link_to edit_handoff_path(handoff), class: "btn" do %>
-                  <%# Handoff が完了済みかチェック %>
-                  <% if handoff.completed_at? %>
-                    <span style="color: green;">✔</span> 完了
-                  <% else %>
-                    <span style="color: red;">!</span> メモ編集
-                  <% end %>
-                <% end %>
-              <% else %>
-                <span class="meta">---</span>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-  </div>
-<% end %>
-
-<%# メッセージへのリンク %>
-<div class="card mb-4" style="background-color: #f0f8ff; border-color: #bee3f8;">
-  <div class="stack stack--between">
-    <div>
-      <h3 style="margin:0; color: #2b6cb0;">メッセージ</h3>
-      <p class="meta" style="margin: 4px 0 0;">シッターとチャットで連絡を取る</p>
-    </div>
-    <%= link_to "メッセージを見る", stay_messages_path(@stay), class: "btn btn--primary" %>
-  </div>
-</div>
-
-<%# ▼▼▼ ここに追加してください ▼▼▼ %>
-
-<%# 契約書ダウンロード %>
-<div class="card mb-4">
-  <div class="stack stack--between">
-    <div>
-      <h3 style="margin:0;">契約書</h3>
-      <p class="meta" style="margin:4px 0 0;">滞在内容の契約書(PDF)を確認</p>
-    </div>
-    <%= link_to "契約書を表示", stay_contract_path(@stay), class: "btn btn--ghost", target: "_blank" %>
-  </div>
-</div>
-
-<%# お支払い (Stripe) %>
-<div class="card mb-4" style="background-color: #f0fff4; border: 1px solid #c6f6d5;">
-  <div class="stack stack--between">
-    <div>
-      <h3 style="margin:0; color: #276749;">お支払い</h3>
-      <%# --- 条件分岐を追加 --- %>
-      <% if @stay.paid_at? %>
-        <p class="meta" style="margin:4px 0 0; color: #276749;">
-          決済完了日: <%= @stay.paid_at.strftime("%Y年%m月%d日 %H:%M") %>
-        </p>
-      <% else %>
-        <p class="meta" style="margin:4px 0 0;">クレジットカードで安全に決済できます</p>
+    <div style="background: #D98E63; height: 100px; position: relative;">
+      <%= link_to root_path, style: "position: absolute; top: 20px; left: 20px; color: white; text-decoration: none; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px;" do %>
+        <i class="fa-solid fa-arrow-left"></i> ダッシュボードへ
       <% end %>
-      <%# --------------------- %>
     </div>
-    
-    <%# --- ボタンの出し分け --- %>
-    <% if @stay.paid_at? %>
-      <div style="background: #276749; color: white; padding: 10px 20px; border-radius: 99px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-        <span>✔</span> 支払い済み
+
+    <div style="padding: 20px 40px; position: relative;">
+      <div style="position: absolute; top: -50px; left: 40px; width: 100px; height: 100px; border-radius: 50%; border: 5px solid white; background: white; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+        <% if @stay.pet.image.attached? %>
+          <%= image_tag @stay.pet.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+        <% else %>
+          <span style="font-size: 50px;">🐱</span>
+        <% end %>
       </div>
-    <% else %>
-      <%= button_to "カードで支払う (¥5,000)", stay_payments_path(@stay), 
-            method: :post, 
-            data: { turbo: false }, 
-            class: "btn btn--primary" %>
-    <% end %>
-    <%# --------------------- %>
-  </div>
-</div>
 
-<%# ▲▲▲ ここまで追加 ▲▲▲ %>
-
-<%# 日報（写真）エリア %>
-<div class="card mb-4" style="border-top: 4px solid #D98E63;">
-  <div class="stack stack--between" style="margin-bottom: 20px;">
-    <div>
-      <h3 style="margin:0; color: #5A4A42;">
-        <i class="fa-solid fa-camera"></i> 今日の様子 (日報)
-      </h3>
-      <p class="meta" style="margin: 4px 0 0;">シッターからの写真報告</p>
-    </div>
-  </div>
-
-  <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-    <% if @stay.report_images.attached? %>
-      <% @stay.report_images.each do |image| %>
+      <div style="margin-left: 120px; display: flex; justify-content: space-between; align-items: end; margin-bottom: 20px;">
+        <div>
+          <h1 style="margin: 0; color: #5A4A42; font-size: 1.8rem;"><%= @stay.pet.name %>ちゃんのお留守番</h1>
+          <p style="color: #999; margin: 5px 0 0 0;">
+            <i class="fa-regular fa-calendar"></i> <%= @stay.start_on.strftime('%Y年%m月%d日') %> 〜 <%= @stay.end_on.strftime('%m月%d日') %>
+          </p>
+        </div>
         
-        <div style="position: relative; width: 120px; height: 120px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="display: flex; gap: 10px;">
+          <%= link_to edit_stay_path(@stay), style: "color: #D98E63; border: 1px solid #D98E63; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold;" do %>
+            <i class="fa-solid fa-pen"></i> 編集
+          <% end %>
           
-          <%= link_to image, target: "_blank", style: "display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 8px;" do %>
-            <%= image_tag image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+          <%= button_to stay_path(@stay), method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, style: "background: none; border: 1px solid #ddd; color: #999; padding: 8px 16px; border-radius: 8px; cursor: pointer;" do %>
+            <i class="fa-solid fa-trash"></i> 削除
           <% end %>
+        </div>
+      </div>
 
-          <%= link_to delete_image_stay_path(@stay, image_id: image.id), 
-              data: { turbo_method: :delete, turbo_confirm: "この写真を削除しますか？" },
-              style: "position: absolute; top: -8px; right: -8px; background: #ff4d4d; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;" do %>
-            <i class="fa-solid fa-trash"></i>
-          <% end %>
+      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <h3 style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">📍 お世話する場所</h3>
+          <p style="margin: 0; font-weight: bold; color: #333;">
+            <i class="fa-solid fa-house-chimney" style="color: #D98E63;"></i> 
+            <%= @stay.place == 'sitter_home' ? 'シッターの自宅' : '飼い主の自宅' %>
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">📝 シッターへのメモ</h3>
+          <p style="margin: 0; color: #555; white-space: pre-wrap;"><%= @stay.notes.presence || "特になし" %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-size: 1.4rem; color: #5A4A42; margin-bottom: 20px; border-left: 5px solid #D98E63; padding-left: 15px;">
+    📅 お世話のスケジュール & 日報
+  </h2>
+
+  <% if @stay.checkins.any? %>
+    <div style="display: grid; gap: 15px;">
+      <% @stay.checkins.order(:checked_at).each do |checkin| %>
+        <div style="background: white; padding: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid #eee;">
+          
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="text-align: center; background: #f9f9f9; padding: 10px; border-radius: 8px; min-width: 60px;">
+              <div style="font-size: 0.8rem; color: #999;"><%= checkin.checked_at.strftime('%m/%d') %></div>
+              <div style="font-weight: bold; font-size: 1.1rem; color: #5A4A42;"><%= checkin.checked_at.strftime('%a') %></div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #333;">お世話レポート</div>
+              <div style="font-size: 0.9rem; color: #999;">まだ報告はありません</div>
+            </div>
           </div>
+
+          <% if checkin.report.present? %>
+            <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: white; border: 1px solid #D98E63; color: #D98E63; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+              <i class="fa-solid fa-check"></i> 報告済み
+            <% end %>
+          <% else %>
+            <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+              <i class="fa-solid fa-pen"></i> 報告する
+            <% end %>
+          <% end %>
+        </div>
       <% end %>
-    <% else %>
-      <div style="padding: 20px; background: #f9f9f9; border-radius: 8px; width: 100%; text-align: center; color: #999;">
-        <i class="fa-regular fa-images" style="font-size: 24px; margin-bottom: 8px;"></i><br>
-        まだ写真はありません
-      </div>
-    <% end %>
-  </div>
-
-  <div style="background-color: #FFF9F0; padding: 16px; border-radius: 8px; border: 1px dashed #D98E63;">
-    <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #D98E63;">📸 写真を追加する</h4>
-    
-    <%= form_with(model: @stay, local: true, class: "stack stack--start") do |form| %>
-      <div style="flex-grow: 1;">
-        <%= form.file_field :report_images, multiple: true, style: "width: 100%;" %>
-      </div>
-      
-      <%= form.submit "アップロード", class: "btn", style: "background-color: #D98E63; color: white; border: none;" %>
-    <% end %>
-  </div>
-</div>
-
-<%# 最近の Checkins %>
-<div class="card"> <div class="stack stack--end" style="width:100%; margin-bottom:12px;">
-    
-    <h3 style="margin:0; margin-right: auto;"><%= t(".recent_checkins") %></h3>
-
-    <%= link_to "引継ぎ一覧", handoffs_path, class: "btn btn--ghost" %>
-    
-    <%= link_to t(".action.to_index"), stay_checkins_path(@stay), class: "btn" %>
-    <%= link_to t(".action.new_checkin"), new_stay_checkin_path(@stay), class: "btn btn--primary" %>
-  </div>
-
-  <% if @recent_checkins.blank? %>
-    <p class="meta"><%= t(".no_checkins") %></p>
+    </div>
   <% else %>
-    <table class="table"> <thead>
-        <tr>
-          <th><%= t(".table.time") %></th>
-          <th><%= t(".table.weight") %></th>
-          <th><%= t(".table.meal") %></th>
-          <th><%= t(".table.litter") %></th>
-          <th><%= t(".table.meds") %></th>
-          <th><%= t(".table.memo") %></th>
-          <th style="width:120px;"><%= t(".table.actions") %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @recent_checkins.each do |c| %>
-          <tr>
-            <td class="nowrap"><%= link_to dt_label(c.checked_at), stay_checkins_path(@stay, c) %></td>
-            <td class="col-right"><%= weight_label(c.weight) %></td>
-            <td><%= meal_label(c.meal) %></td>
-            <td><%= litter_label(c.litter) %></td>
-            <td><%= meds_badges(c.meds) %></td>
-            <td class="truncate"><%= simple_format(c.memo) %></td>
-            <td>
-              <div class="stack">
-                <%= link_to t(".action.show"), stay_checkin_path(@stay, c), class: "btn btn--ghost" %>
-                <%= link_to t(".action.edit"), edit_stay_checkin_path(@stay, c), class: "btn" %>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 12px; color: #999;">
+      スケジュールがまだ作成されていません
+    </div>
   <% end %>
-</div>
 
-<turbo-frame id="modal"></turbo-frame>
+</div>
