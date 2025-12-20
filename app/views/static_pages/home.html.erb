@@ -15,6 +15,10 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h2 style="font-size: 1.2rem; border-left: 4px solid #D98E63; padding-left: 10px; margin: 0;">📅 あなたの予約</h2>
+      <div style="display: flex; gap: 10px;">
+        <%= link_to pets_path, style: "background: #fff; border: 1px solid #D98E63; color: #D98E63; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px;" do %>
+          <i class="fa-solid fa-paw"></i> うちの子リスト
+        <% end %>
       <%= link_to "+ 新規予約", new_stay_path, style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.9rem; font-weight: bold;" %>
     </div>
 

@@ -1,48 +1,47 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<div style="max-width: 500px; margin: 40px auto; padding: 20px;">
+  <h2 style="color: #5A4A42; border-bottom: 2px solid #D98E63; padding-bottom: 10px; margin-bottom: 30px;">⚙️ プロフィール設定</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+    <div style="margin-bottom: 20px; text-align: center;">
+      <% if resource.avatar.attached? %>
+        <%= image_tag resource.avatar, style: "width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #eee;" %><br>
+      <% end %>
+      <%= f.label :avatar, "アイコン画像", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.file_field :avatar, style: "font-size: 0.9rem;" %>
+    </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :name, "お名前 (ニックネーム可)", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.text_field :name, autofocus: true, style: "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" %>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :email, "メールアドレス", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+      <%= f.email_field :email, autocomplete: "email", style: "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" %>
+    </div>
+
+    <div style="margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+      <small style="color: #666; display: block; margin-bottom: 10px;">パスワードを変更しない場合は空欄のままにしてください</small>
+      
+      <%= f.label :password, "新しいパスワード", style: "font-weight: bold;" %>
+      <%= f.password_field :password, autocomplete: "new-password", style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;" %>
+
+      <%= f.label :password_confirmation, "新しいパスワード(確認)", style: "font-weight: bold;" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <%= f.label :current_password, "現在のパスワード (変更には必須です)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #D98E63;" %>
+      <%= f.password_field :current_password, autocomplete: "current-password", style: "width: 100%; padding: 10px; border: 1px solid #D98E63; border-radius: 6px;" %>
+    </div>
+
+    <div style="text-align: center;">
+      <%= f.submit "更新する", style: "background: #D98E63; color: white; padding: 12px 30px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 1rem;" %>
+    </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :avatar, "プロフィール画像" %><br />
-    <%= f.file_field :avatar %>
+  <div style="margin-top: 40px; text-align: center;">
+    <%= link_to "トップに戻る", root_path, style: "color: #999; text-decoration: none;" %>
   </div>
-
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+</div>
