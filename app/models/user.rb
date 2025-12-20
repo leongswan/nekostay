@@ -9,6 +9,9 @@ class User < ApplicationRecord
   # ↓ ここに追加
   has_one_attached :avatar
   # ----------------
+  # ↓↓↓ この1行を追加してください！ ↓↓↓
+  has_many :stays
+  # ------------------------------------
 
   # --- 修正 ---
 

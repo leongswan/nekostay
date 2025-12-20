@@ -21,7 +21,10 @@ class StaysController < ApplicationController
 
   # --- 修正：StaySplitter::MAX_DAYS エラーを回避 ---
   def create
-    @stay = current_user.owned_stays.new(stay_params)
+    @stay = current_user.stays.build(stay_params)
+    # ★★★ この1行を追加！ ★★★
+    # 「この予約の飼い主(owner)は、ログインしている私(current_user)です」と明記する
+    @stay.owner = current_user
     
     if @stay.save
       # StaySplitter.split! を無条件で呼び出す

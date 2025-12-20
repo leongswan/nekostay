@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_19_123645) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_20_045748) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -85,13 +85,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_19_123645) do
   end
 
   create_table "handoffs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.datetime "scheduled_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "from_stay_id", null: false
     t.bigint "to_stay_id", null: false
     t.text "checklist"
+    t.datetime "scheduled_at"
     t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["from_stay_id"], name: "index_handoffs_on_from_stay_id"
     t.index ["to_stay_id"], name: "index_handoffs_on_to_stay_id"
   end
@@ -172,10 +172,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_19_123645) do
     t.date "end_on", null: false
     t.bigint "parent_stay_id"
     t.datetime "paid_at"
+    t.bigint "user_id", null: false
     t.index ["owner_id"], name: "index_stays_on_owner_id"
     t.index ["parent_stay_id"], name: "index_stays_on_parent_stay_id"
     t.index ["pet_id"], name: "index_stays_on_pet_id"
     t.index ["sitter_id"], name: "index_stays_on_sitter_id"
+    t.index ["user_id"], name: "index_stays_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -220,6 +222,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_19_123645) do
   add_foreign_key "reviews", "users", column: "rater_id"
   add_foreign_key "stays", "pets", name: "fk_stays_pet_id"
   add_foreign_key "stays", "stays", column: "parent_stay_id"
+  add_foreign_key "stays", "users"
   add_foreign_key "stays", "users", column: "owner_id", name: "fk_stays_owner_id"
   add_foreign_key "stays", "users", column: "sitter_id", name: "fk_stays_sitter_id"
   add_foreign_key "vets", "addresses"
