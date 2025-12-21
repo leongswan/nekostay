@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_21_151247) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_21_165459) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_21_151247) do
     t.bigint "stay_id", null: false
     t.datetime "checked_at"
     t.decimal "weight", precision: 6, scale: 2
-    t.string "mood"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -63,6 +62,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_21_151247) do
     t.text "memo"
     t.bigint "user_id"
     t.text "report"
+    t.integer "food"
+    t.integer "pee_count"
+    t.integer "poop_count"
+    t.integer "mood"
     t.index ["checked_at"], name: "index_checkins_on_checked_at"
     t.index ["stay_id"], name: "index_checkins_on_stay_id"
     t.index ["user_id"], name: "index_checkins_on_user_id"

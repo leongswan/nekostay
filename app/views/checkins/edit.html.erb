@@ -1,44 +1,91 @@
-<div style="max-width: 600px; margin: 40px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-  <h2 style="text-align: center; color: #5A4A42; margin-bottom: 25px;">
+<div style="max-width: 600px; margin: 40px auto; padding: 0 20px;">
+  <h2 style="color: #5A4A42; border-bottom: 2px solid #D98E63; padding-bottom: 10px; margin-bottom: 30px;">
     📝 お世話レポートの作成
   </h2>
-  
-  <p style="text-align: center; color: #999; margin-bottom: 30px;">
-    <%= @checkin.checked_at.strftime('%Y年%m月%d日') %> の報告
-  </p>
 
   <%= form_with(model: [@stay, @checkin], local: true) do |f| %>
     
     <% if @checkin.errors.any? %>
-      <div style="background: #ffe6e6; color: #d63031; padding: 10px; border-radius: 6px; margin-bottom: 20px;">
-        エラーが発生しました
+      <div style="background: #ffe6e6; color: #cc0000; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <ul>
+          <% @checkin.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
 
-    <div style="margin-bottom: 20px;">
-      <%= f.label :report, "報告メッセージ", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
-      <%= f.text_area :report, rows: 5, placeholder: "ご飯完食しました！トイレも問題ありません。", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" %>
+    <div style="margin-bottom: 30px;">
+      <%= f.label :report, "📋 メッセージ・様子", style: "display: block; font-weight: bold; margin-bottom: 10px; color: #5A4A42;" %>
+      <%= f.text_area :report, rows: 5, placeholder: "例：元気に遊んでいました！ごはんは完食です。", style: "width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box;" %>
+    </div>
+
+    <div style="background: #fff8f0; padding: 20px; border-radius: 12px; border: 1px solid #ffead1; margin-bottom: 30px;">
+      <h3 style="margin-top: 0; color: #D98E63; font-size: 1.1rem; border-bottom: 1px solid #ffead1; padding-bottom: 10px;">
+        🩺 健康チェック
+      </h3>
+
+      <div style="margin-bottom: 20px;">
+        <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #555;">🍽️ ごはんの様子</label>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <% Checkin.foods.keys.each do |key| %>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; background: white; padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd;">
+              <%= f.radio_button :food, key %>
+              <% label_text = case key
+                 when 'no_food' then 'なし/まだ'
+                 when 'little_left' then '少し食べた'
+                 when 'half_eaten' then '半分くらい'
+                 when 'finished' then '完食！'
+                 end %>
+              <%= label_text %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #555;">😺 今日のご機嫌</label>
+        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+          <% Checkin.moods.keys.each do |key| %>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; background: white; padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; white-space: nowrap;">
+              <%= f.radio_button :mood, key %>
+              <% label_text = case key
+                 when 'normal' then '普通'
+                 when 'happy' then '元気いっぱい'
+                 when 'cuddly' then '甘えん坊'
+                 when 'hiding' then '隠れてる'
+                 when 'angry' then '怒ってる'
+                 end %>
+              <%= label_text %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 20px;">
+        <div style="flex: 1;">
+          <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #555;">💧 おしっこ (回)</label>
+          <%= f.number_field :pee_count, min: 0, style: "width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; font-size: 1.2rem;" %>
+        </div>
+        <div style="flex: 1;">
+          <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #555;">💩 うんち (回)</label>
+          <%= f.number_field :poop_count, min: 0, style: "width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; font-size: 1.2rem;" %>
+        </div>
+      </div>
     </div>
 
     <div style="margin-bottom: 30px;">
-      <%= f.label :images, "写真 (複数選択可)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
-      
-      <% if @checkin.images.attached? %>
-        <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-          <% @checkin.images.each do |image| %>
-            <%= image_tag image, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <%= f.file_field :images, multiple: true, style: "font-size: 0.9rem;" %>
+      <%= f.label :images, "📸 写真を追加する", style: "display: block; font-weight: bold; margin-bottom: 10px; color: #5A4A42;" %>
+      <%= f.file_field :images, multiple: true, style: "display: block; width: 100%; padding: 10px; background: #f9f9f9; border-radius: 8px;" %>
     </div>
 
-    <%= f.submit "報告を送る", style: "width: 100%; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold;" %>
-    
-  <% end %>
+    <div style="text-align: center; margin-top: 40px; display: flex; gap: 20px; justify-content: center;">
+      <%= link_to "キャンセル", stay_path(@stay), style: "padding: 12px 30px; color: #999; text-decoration: none;" %>
+      
+      <%= button_tag type: "submit", style: "background: #D98E63; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 10px rgba(217, 142, 99, 0.4);" do %>
+        報告する ✅
+      <% end %>
+    </div>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <%= link_to "キャンセル", stay_path(@stay), style: "color: #999; text-decoration: none;" %>
-  </div>
+  <% end %>
 </div>

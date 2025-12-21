@@ -1,42 +1,104 @@
-<div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+<div style="max-width: 600px; margin: 40px auto; padding: 20px;">
+  
   <div style="margin-bottom: 20px;">
-    <%= link_to stay_path(@stay), style: "color: #999; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 5px;" do %>
+    <%= link_to stay_path(@stay), style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
       <i class="fa-solid fa-arrow-left"></i> スケジュールに戻る
     <% end %>
   </div>
 
-  <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-    <h2 style="text-align: center; color: #5A4A42; margin-bottom: 10px;">
-      📸 お世話レポート
-    </h2>
-    <p style="text-align: center; color: #999; margin-bottom: 30px;">
-      <%= @checkin.checked_at.strftime('%Y年%m月%d日') %>
-    </p>
-
-    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 30px; color: #555; line-height: 1.8;">
-      <%= simple_format(@checkin.report) %>
+  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eee;">
+    
+    <div style="background: #D98E63; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="font-weight: bold; font-size: 1.1rem;">
+        <i class="fa-regular fa-clipboard"></i> お世話レポート
+      </div>
+      <div style="font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px;">
+        <%= @checkin.checked_at.strftime('%Y年%m月%d日') %>
+      </div>
     </div>
 
     <% if @checkin.images.attached? %>
-      <h3 style="color: #D98E63; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
-        <i class="fa-solid fa-images"></i> 届いた写真 (<%= @checkin.images.count %>枚)
-      </h3>
-      
-      <div style="display: grid; gap: 30px;">
+      <div style="background: #000;">
         <% @checkin.images.each do |image| %>
-          <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+          <div style="margin-bottom: 2px;">
             <%= image_tag image, style: "width: 100%; height: auto; display: block;" %>
           </div>
         <% end %>
       </div>
-    <% else %>
-      <p style="text-align: center; color: #ccc; margin-top: 30px;">写真はまだありません</p>
+    <% end %>
+    <div style="padding: 30px;">
+      
+      <div style="background: #fff8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; border: 2px solid #ffead1;">
+        <h3 style="margin: 0 0 15px 0; color: #D98E63; font-size: 1rem; border-bottom: 1px dashed #D98E63; padding-bottom: 10px;">
+          🩺 健康状態
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">🍽️ ごはん</div>
+            <div style="font-size: 1.1rem; font-weight: bold; color: #5A4A42;">
+              <% 
+                food_text = case @checkin.food
+                            when 'no_food' then '🍚 なし/まだ'
+                            when 'little_left' then '🥣 少し食べた'
+                            when 'half_eaten' then '🍛 半分くらい'
+                            when 'finished' then '✨ 完食！'
+                            else '-'
+                            end
+              %>
+              <%= food_text %>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">😺 ご機嫌</div>
+            <div style="font-size: 1.1rem; font-weight: bold; color: #5A4A42;">
+              <% 
+                mood_text = case @checkin.mood
+                            when 'normal' then '🙂 普通'
+                            when 'happy' then '😆 元気いっぱい'
+                            when 'cuddly' then '🥰 甘えん坊'
+                            when 'hiding' then '🫣 隠れてる'
+                            when 'angry' then '😾 怒ってる'
+                            else '-'
+                            end
+              %>
+              <%= mood_text %>
+            </div>
+          </div>
+          
+          <div>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">💧 おしっこ</div>
+            <div style="font-size: 1.1rem; font-weight: bold; color: #5A4A42;">
+              <%= @checkin.pee_count %> 回
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">💩 うんち</div>
+            <div style="font-size: 1.1rem; font-weight: bold; color: #5A4A42;">
+              <%= @checkin.poop_count %> 回
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 1rem; color: #999; margin-bottom: 10px;">📝 シッターからのメッセージ</h3>
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; line-height: 1.8; color: #333;">
+          <%= simple_format(@checkin.report) %>
+        </div>
+      </div>
+
+    </div>
+
+    <% if current_user == @stay.sitter %>
+      <div style="background: #f5f5f5; padding: 15px; text-align: right; border-top: 1px solid #eee;">
+        <%= link_to edit_stay_checkin_path(@stay, @checkin), style: "color: #D98E63; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+          <i class="fa-solid fa-pen"></i> 内容を修正する
+        <% end %>
+      </div>
     <% end %>
 
-    <div style="margin-top: 50px; text-align: center;">
-      <%= link_to edit_stay_checkin_path(@stay, @checkin), style: "color: #D98E63; text-decoration: none; font-weight: bold; border: 1px solid #D98E63; padding: 10px 25px; border-radius: 30px;" do %>
-        <i class="fa-solid fa-pen"></i> 内容を修正する
-      <% end %>
-    </div>
   </div>
 </div>
