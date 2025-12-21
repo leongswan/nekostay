@@ -23,8 +23,8 @@
       <div style="display: flex; align-items: center; gap: 20px;">
         <% if user_signed_in? %>
           <%= link_to edit_user_registration_path, style: "text-decoration: none; color: #555; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 0.9rem;" do %>
-            <% if current_user.avatar.attached? %>
-              <%= image_tag current_user.avatar, style: "width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;" %>
+            <% if current_user.image.attached? %>
+              <%= image_tag current_user.image, style: "width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;" %>
             <% else %>
               <div style="width: 35px; height: 35px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
                 <i class="fa-solid fa-user"></i>
