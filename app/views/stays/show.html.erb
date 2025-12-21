@@ -70,7 +70,20 @@
             </div>
             <div>
               <div style="font-weight: bold; color: #333;">お世話レポート</div>
-              <div style="font-size: 0.9rem; color: #999;">まだ報告はありません</div>
+              
+              <% if checkin.report.present? %>
+                <div style="font-size: 0.9rem; color: #555; margin-top: 3px;">
+                  <%= truncate(checkin.report, length: 20) %>
+                  
+                  <% if checkin.images.attached? %>
+                    <span style="color: #D98E63; margin-left: 8px; font-weight: bold;">
+                      <i class="fa-solid fa-camera"></i> <%= checkin.images.count %>
+                    </span>
+                  <% end %>
+                </div>
+              <% else %>
+                <div style="font-size: 0.9rem; color: #999;">まだ報告はありません</div>
+              <% end %>
             </div>
           </div>
 
