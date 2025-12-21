@@ -1,54 +1,42 @@
-<!-- app/views/checkins/show.html.erb -->
-<h1><%= t(".title") %> <span class="meta">(Stay #<%= @stay.id %>)</span></h1>
+<div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+  <div style="margin-bottom: 20px;">
+    <%= link_to stay_path(@stay), style: "color: #999; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 5px;" do %>
+      <i class="fa-solid fa-arrow-left"></i> スケジュールに戻る
+    <% end %>
+  </div>
 
-<p class="meta">
-  <%= t(".period") %>: <%= @stay.start_on %> 〜 <%= @stay.end_on %>
-</p>
+  <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <h2 style="text-align: center; color: #5A4A42; margin-bottom: 10px;">
+      📸 お世話レポート
+    </h2>
+    <p style="text-align: center; color: #999; margin-bottom: 30px;">
+      <%= @checkin.checked_at.strftime('%Y年%m月%d日') %>
+    </p>
 
-<div class="stack stack--end" style="margin: 8px 0 16px;">
-  <%= link_to t(".back"), stay_checkins_path(@stay), class: "btn" %>
-  <%= link_to t(".edit"), edit_stay_checkin_path(@stay, @checkin),
-        data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
-  <%= button_to t(".destroy"), stay_checkin_path(@stay, @checkin),
-        method: :delete,
-        form: { data: { turbo_confirm: t(".confirm_destroy") }, class: "inline" },
-        class: "btn btn--danger" %>
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 30px; color: #555; line-height: 1.8;">
+      <%= simple_format(@checkin.report) %>
+    </div>
+
+    <% if @checkin.images.attached? %>
+      <h3 style="color: #D98E63; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+        <i class="fa-solid fa-images"></i> 届いた写真 (<%= @checkin.images.count %>枚)
+      </h3>
+      
+      <div style="display: grid; gap: 30px;">
+        <% @checkin.images.each do |image| %>
+          <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <%= image_tag image, style: "width: 100%; height: auto; display: block;" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p style="text-align: center; color: #ccc; margin-top: 30px;">写真はまだありません</p>
+    <% end %>
+
+    <div style="margin-top: 50px; text-align: center;">
+      <%= link_to edit_stay_checkin_path(@stay, @checkin), style: "color: #D98E63; text-decoration: none; font-weight: bold; border: 1px solid #D98E63; padding: 10px 25px; border-radius: 30px;" do %>
+        <i class="fa-solid fa-pen"></i> 内容を修正する
+      <% end %>
+    </div>
+  </div>
 </div>
-
-<div class="card" style="margin-bottom:16px;">
-  <dl class="def">
-    <dt><%= t(".checked_at") %></dt>
-    <dd><strong><%= dt_label(@checkin.checked_at) %></strong></dd>
-
-    <dt><%= t(".weight") %></dt>
-    <dd><%= weight_label(@checkin.weight) %></dd>
-
-    <dt><%= t(".memo") %></dt>
-    <dd><%= simple_format(@checkin.memo.presence || "—") %></dd>
-  </dl>
-</div>
-
-<div class="card">
-  <h3 style="margin-top:0;"><%= t(".details") %></h3>
-  <dl class="def">
-    <dt>Meal</dt>
-    <dd><%= meal_label(@checkin.meal) %></dd>
-
-    <dt>Litter</dt>
-    <dd><%= litter_label(@checkin.litter) %></dd>
-
-    <dt>Meds</dt>
-    <dd><%= meds_badges(@checkin) %></dd>
-  </dl>
-</div>
-
-<div class="stack" style="margin-top:16px;">
-  <%= link_to t(".back"), stay_checkins_path(@stay), class: "btn" %>
-  <%= link_to t(".edit"), edit_stay_checkin_path(@stay, @checkin),
-        data: { turbo_frame: "modal" }, class: "btn btn--primary" %>
-  <%= button_to t(".destroy"), stay_checkin_path(@stay, @checkin),
-        method: :delete,
-        form: { data: { turbo_confirm: t(".confirm_destroy") }, class: "inline" },
-        class: "btn btn--danger" %>
-</div>
-

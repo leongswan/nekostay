@@ -7,6 +7,10 @@ class StaysController < ApplicationController
 
   def index
     @stays = Stay.where(owner_id: current_user.id).order(start_on: :desc)
+
+    # ↓↓↓ この行を追加（自分がシッターとして指名されている予約を取得） ↓↓↓
+    @assigned_stays = Stay.where(sitter_id: current_user.id).order(start_on: :asc)
+    # ---------------------------------------------------------------
   end
 
   def show
@@ -92,7 +96,10 @@ class StaysController < ApplicationController
 
   def set_stay
     @stay = Stay.find(params[:id])
-    head :forbidden unless @stay.owner_id == current_user.id
+    # 修正：飼い主(owner) または シッター(sitter) ならアクセスOKにする
+    unless @stay.owner_id == current_user.id || @stay.sitter_id == current_user.id
+      head :forbidden
+    end
   end
   
   def stay_params

@@ -15,10 +15,9 @@
     </div>
 
     <div style="margin-bottom: 20px;">
-      <%= f.label :image, "写真 (任意)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
+      <%= f.label :image, "プロフィール写真 (任意)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
       <%= f.file_field :image, accept: "image/*", style: "font-size: 0.9rem;" %>
     </div>
-
     <%= f.submit "登録する", style: "width: 100%; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold;" %>
     
   <% end %>

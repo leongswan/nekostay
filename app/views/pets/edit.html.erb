@@ -15,18 +15,17 @@
     </div>
 
     <div style="margin-bottom: 20px;">
-      <%= f.label :image, "写真 (変更する場合のみ)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
+      <%= f.label :image, "プロフィール写真", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #555;" %>
       
       <% if @pet.image.attached? %>
-        <div style="margin-bottom: 10px;">
-          <%= image_tag @pet.image, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" %>
+        <div style="margin-bottom: 10px; text-align: center;">
+          <%= image_tag @pet.image, style: "width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #eee;" %>
           <p style="font-size: 0.8rem; color: #888; margin: 5px 0;">現在の写真</p>
         </div>
       <% end %>
 
       <%= f.file_field :image, accept: "image/*", style: "font-size: 0.9rem;" %>
     </div>
-
     <%= f.submit "更新する", style: "width: 100%; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold;" %>
     
   <% end %>

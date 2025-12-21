@@ -48,6 +48,19 @@
     </div>
   </div>
 
+  <div style="margin-top: 20px; background: #f0f0f0; padding: 15px; border-radius: 8px;">
+    <%= f.label :sitter_id, "担当シッター (テスト用)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #5A4A42;" %>
+    
+    <%# 全ユーザーから名前で選べるようにします %>
+    <%= f.collection_select :sitter_id, User.all, :id, :name, 
+          { include_blank: "指名なし" }, 
+          { style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" } %>
+    
+    <p style="font-size: 0.8rem; color: #d63031; margin-top: 5px;">
+      ※ テストのために「自分」を選んで更新してください
+    </p>
+  </div>
+
   <div style="margin-top: 12px;">
     <%= f.label :notes, t(".notes") %>
     <%= f.text_area :notes, rows: 4, class: "textarea" %>

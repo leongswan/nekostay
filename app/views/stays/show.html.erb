@@ -26,14 +26,16 @@
         </div>
         
         <div style="display: flex; gap: 10px;">
-          <%= link_to edit_stay_path(@stay), style: "color: #D98E63; border: 1px solid #D98E63; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold;" do %>
-            <i class="fa-solid fa-pen"></i> 編集
+          <% if current_user == @stay.owner %>
+            <%= link_to edit_stay_path(@stay), style: "color: #D98E63; border: 1px solid #D98E63; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold;" do %>
+              <i class="fa-solid fa-pen"></i> 編集
+            <% end %>
+            
+            <%= button_to stay_path(@stay), method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, style: "background: none; border: 1px solid #ddd; color: #999; padding: 8px 16px; border-radius: 8px; cursor: pointer;" do %>
+              <i class="fa-solid fa-trash"></i> 削除
+            <% end %>
           <% end %>
-          
-          <%= button_to stay_path(@stay), method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, style: "background: none; border: 1px solid #ddd; color: #999; padding: 8px 16px; border-radius: 8px; cursor: pointer;" do %>
-            <i class="fa-solid fa-trash"></i> 削除
-          <% end %>
-        </div>
+          </div>
       </div>
 
       <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
@@ -76,10 +78,10 @@
                   <%= truncate(checkin.report, length: 20) %>
                   
                   <% if checkin.images.attached? %>
-                    <span style="color: #D98E63; margin-left: 8px; font-weight: bold;">
+                    <%= link_to stay_checkin_path(@stay, checkin), style: "color: #D98E63; margin-left: 8px; font-weight: bold; text-decoration: none;" do %>
                       <i class="fa-solid fa-camera"></i> <%= checkin.images.count %>
-                    </span>
-                  <% end %>
+                    <% end %>
+                    <% end %>
                 </div>
               <% else %>
                 <div style="font-size: 0.9rem; color: #999;">まだ報告はありません</div>
@@ -88,14 +90,17 @@
           </div>
 
           <% if checkin.report.present? %>
-            <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: white; border: 1px solid #D98E63; color: #D98E63; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
-              <i class="fa-solid fa-check"></i> 報告済み
+            <%= link_to stay_checkin_path(@stay, checkin), style: "background: white; border: 1px solid #D98E63; color: #D98E63; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+              <i class="fa-solid fa-book-open"></i> 報告を見る
             <% end %>
           <% else %>
-            <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
-              <i class="fa-solid fa-pen"></i> 報告する
+            
+            <% if current_user == @stay.sitter %>
+              <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+                <i class="fa-solid fa-pen"></i> 報告する
+              <% end %>
             <% end %>
-          <% end %>
+            <% end %>
         </div>
       <% end %>
     </div>
