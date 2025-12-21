@@ -22,16 +22,16 @@ class StaysController < ApplicationController
     @pets = current_user.pets.order(:name)
   end
 
-  # --- 修正：StaySplitter::MAX_DAYS エラーを回避 ---
   def create
+    # current_user.stays.build で owner_id は自動セットされます
     @stay = current_user.stays.build(stay_params)
-    # ★★★ この1行を追加！ ★★★
-    # 「この予約の飼い主(owner)は、ログインしている私(current_user)です」と明記する
-    @stay.owner = current_user
+    
+    # ↓↓↓ ★★★ この1行が絶対に必要です！ ★★★
+    @stay.user_id = current_user.id
+    # -------------------------------------
     
     if @stay.save
       # StaySplitter.split! を無条件で呼び出す
-      # (分割が必要かは StaySplitter 内部が判断する)
       StaySplitter.split!(@stay)
       
       redirect_to stay_path(@stay), notice: "滞在を登録しました。", status: :see_other
@@ -41,7 +41,6 @@ class StaysController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-  # --- 修正ここまで ---
 
   def edit
     # 編集画面のドロップダウン用に、ペット一覧を取得します
