@@ -1,15 +1,53 @@
-<%# 
-  Handoff 画面（引継ぎメモ）の編集
-%>
-<div class="container">
+<div style="max-width: 600px; margin: 40px auto; padding: 20px;">
   
-  <h1>引継ぎメモの編集</h1>
-  <p class="meta">
-    Stay: <%= @handoff.from_stay.start_on %> 〜 
-    <%= @handoff.to_stay.end_on %>
-  </p>
+  <div style="margin-bottom: 20px;">
+    <%= link_to handoffs_path, style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
+      <i class="fa-solid fa-arrow-left"></i> 一覧に戻る
+    <% end %>
+  </div>
 
-  <%# フォーム本体 (_form.html.erb) を呼び出す %>
-  <%= render "form", handoff: @handoff %>
+  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 30px; border: 1px solid #eee;">
+    
+    <h2 style="color: #5A4A42; margin-top: 0; margin-bottom: 20px;">
+      📝 引継ぎチェックリスト
+    </h2>
 
+    <%= form_with(model: @handoff, local: true) do |f| %>
+      
+      <div style="margin-bottom: 25px;">
+        <%= f.label :scheduled_at, "📅 引継ぎ予定日時", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+        <%= f.datetime_field :scheduled_at, style: "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;" %>
+      </div>
+
+      <div style="margin-bottom: 30px;">
+        <%= f.label :checklist, "✅ チェック項目・メモ", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+        <p style="font-size: 0.85rem; color: #999; margin-top: 0;">
+          鍵の受け渡し方法、フードの保管場所、緊急連絡先などを記入しましょう。
+        </p>
+        <%= f.text_area :checklist, rows: 8, placeholder: "例：\n- [ ] 鍵はキーボックスへ\n- [ ] かかりつけ医の診察券を確認\n- [ ] フードの計量カップの場所", style: "width: 100%; padding: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; line-height: 1.6; box-sizing: border-box;" %>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 20px;">
+        <%= f.submit "内容を保存する", style: "background: #5A4A42; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;" %>
+      </div>
+
+    <% end %>
+
+    <hr style="border: 0; border-top: 1px dashed #ddd; margin: 30px 0;">
+
+    <div style="text-align: center;">
+      <p style="color: #888; margin-bottom: 15px;">引継ぎがすべて終わったら押してください</p>
+      
+      <% if @handoff.completed_at.present? %>
+        <div style="background: #e6fffa; color: #00b894; padding: 15px; border-radius: 8px; font-weight: bold;">
+          🎉 <%= @handoff.completed_at.strftime('%Y/%m/%d') %> に完了しました！
+        </div>
+      <% else %>
+        <%= button_to complete_handoff_path(@handoff), method: :patch, style: "background: #D98E63; color: white; border: none; padding: 15px 50px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer; width: 100%; display: block;", data: { confirm: "引継ぎを完了にしますか？" } do %>
+          引継ぎを完了にする ✅
+        <% end %>
+      <% end %>
+    </div>
+
+  </div>
 </div>

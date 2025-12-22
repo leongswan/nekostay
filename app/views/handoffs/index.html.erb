@@ -1,52 +1,49 @@
-<div class="container">
-  
-  <h1><%= t(".title") %></h1>
-  
-  <div class="card">
-    <table class="table">
-      <thead>
-        <tr>
-          <th><%= t(".th.from") %></th>
-          <th><%= t(".th.to") %></th>
-          <th><%= t(".th.scheduled") %></th>
-          <th><%= t(".th.status") %></th>
-          <th><%= t(".th.checklist") %></th> <th><%= t(".th.actions") %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if @handoffs.empty? %>
-          <tr>
-            <td colspan="6" class="meta" style="text-align:center; padding:24px;">
-              <%= t(".empty") %>
-            </td>
-          </tr>
-        <% else %>
-          <% @handoffs.each do |h| %>
-            <tr>
-              <td class="nowrap"><%= h.from_stay.start_on %> ~ <%= h.from_stay.end_on %></td>
-              <td class="nowrap"><%= h.to_stay.start_on %> ~ <%= h.to_stay.end_on %></td>
-              <td class="nowrap"><%= h.scheduled_at&.strftime("%Y-%m-%d %H:%M") %></td>
-              
-              <td><%= h.completed_at ? t(".status.completed") : t(".status.pending") %></td>
-              
-              <td class="truncate"><%= h.checklist.presence || "---" %></td>
-              
-              <td>
-                <div class="stack">
-                  
-                  <%= link_to t(".action.edit"), edit_handoff_path(h), class: "btn" %>
-                  
-                  <% unless h.completed_at %>
-                    <%= button_to t(".action.complete"), complete_handoff_path(h), 
-                                  method: :patch, 
-                                  class: "btn btn--primary" %>
-                  <% end %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+<div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+  <h2 style="color: #5A4A42; border-bottom: 2px solid #D98E63; padding-bottom: 10px; margin-bottom: 30px;">
+    🔑 引継ぎ・鍵の受け渡しリスト
+  </h2>
+
+  <% if @handoffs.any? %>
+    <div style="display: grid; gap: 20px;">
+      <% @handoffs.each do |handoff| %>
+        <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+          
+          <div>
+            <div style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">
+              予定日: <%= handoff.scheduled_at ? handoff.scheduled_at.strftime('%Y/%m/%d %H:%M') : '未定' %>
+            </div>
+            <div style="font-weight: bold; color: #5A4A42;">
+              <% if handoff.checklist.present? %>
+                📝 メモあり
+              <% else %>
+                まだメモはありません
+              <% end %>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <% if handoff.completed_at.present? %>
+              <span style="background: #e6fffa; color: #00b894; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;">
+                ✅ 完了済み
+              </span>
+            <% else %>
+              <span style="background: #fff5f5; color: #ff7675; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;">
+                ⏳ 未完了
+              </span>
+            <% end %>
+
+            <%= link_to edit_handoff_path(handoff), style: "text-decoration: none; background: #D98E63; color: white; padding: 8px 20px; border-radius: 30px; font-weight: bold;" do %>
+              詳細へ <i class="fa-solid fa-chevron-right"></i>
+            <% end %>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div style="text-align: center; padding: 50px; background: #f9f9f9; border-radius: 12px; color: #999;">
+      <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 20px;"></i>
+      <p>現在、予定されている引継ぎはありません。</p>
+    </div>
+  <% end %>
 </div>
