@@ -4,6 +4,10 @@ class Stay < ApplicationRecord
   belongs_to :owner,  class_name: "User"
   belongs_to :sitter, class_name: "User", optional: true
 
+  # ↓↓↓ ★★★ この1行を追加！ ★★★
+  has_one :review, dependent: :destroy
+  # ----------------------------------
+
   belongs_to :parent_stay, class_name: "Stay", optional: true
   # ↓ これを追加（"report_images" という名前で複数の画像を扱えるようにする）
   has_many_attached :report_images

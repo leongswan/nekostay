@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
+  # 削除：get 'reviews/new'
+  # 削除：get 'reviews/create'
+
   # トップページをダッシュボードに設定
   root 'stays#index'
   
-  # 以前のトップページ（将来のために残しておく）
-  # root 'static_pages#home'
-
   devise_for :users
 
   resources :stays do
@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     end
     
     resources :checkins
+
+    # ↓↓↓ ★★★ ここに追加します！（staysの中に書くのがポイント） ★★★
+    resources :reviews, only: [:new, :create, :destroy]
+    # -------------------------------------------------------------
 
     # 契約書のダウンロード用URL
     resource :contract, only: [:show]
@@ -23,9 +27,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # ★★★ 修正ポイント：ここに置くのが正解です！（staysの外） ★★★
   resources :messages, only: [:create]
-  # -------------------------------------------------------
 
   resources :pets
 

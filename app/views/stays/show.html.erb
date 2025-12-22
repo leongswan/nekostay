@@ -59,6 +59,44 @@
     <% end %>
   </div>
 
+  <% if Date.current > @stay.end_on && @stay.review.nil? && current_user == @stay.owner %>
+    <div style="margin-bottom: 30px; text-align: center;">
+      <div style="background: #fff8f0; border: 2px dashed #D98E63; padding: 20px; border-radius: 16px;">
+        <h3 style="color: #D98E63; margin: 0 0 10px 0;">お世話は無事に終わりましたか？</h3>
+        <p style="color: #666; margin-bottom: 15px; font-size: 0.9rem;">シッターさんへの感謝の気持ちや、評価を送りましょう！</p>
+        <%= link_to new_stay_review_path(@stay), style: "display: inline-block; background: #D98E63; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold;" do %>
+          <i class="fa-regular fa-star"></i> レビューを書く
+        <% end %>
+      </div>
+    </div>
+  <% elsif @stay.review.present? %>
+    <div style="margin-bottom: 30px; text-align: center; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative;">
+      
+      <div style="color: #D98E63; font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 10px;">
+        <%= "★" * @stay.review.score %><%= "☆" * (5 - @stay.review.score) %>
+      </div>
+
+      <div style="color: #555; font-size: 1rem; line-height: 1.6; margin-bottom: 10px;">
+        <% if @stay.review.comment.present? %>
+          「<%= @stay.review.comment %>」
+        <% else %>
+          <span style="color: #ccc; font-size: 0.8rem;">(コメントなし)</span>
+        <% end %>
+      </div>
+
+      <div style="font-size: 0.8rem; color: #999;">
+        投稿日: <%= @stay.review.created_at.strftime('%Y/%m/%d') %>
+      </div>
+
+      <% if current_user == @stay.owner %>
+        <%= button_to stay_review_path(@stay, @stay.review), method: :delete, style: "position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ccc; cursor: pointer;", data: { confirm: "レビューを削除して書き直しますか？" } do %>
+          <i class="fa-solid fa-trash"></i>
+        <% end %>
+      <% end %>
+
+    </div>
+  <% end %>
+
   <div style="margin-bottom: 20px; border-left: 5px solid #D98E63; padding-left: 15px;">
     <h3 style="margin: 0; color: #5A4A42;">🗓 お世話のスケジュール & 日報</h3>
   </div>
