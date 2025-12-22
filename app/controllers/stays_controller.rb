@@ -26,15 +26,23 @@ class StaysController < ApplicationController
     # current_user.stays.build で owner_id は自動セットされます
     @stay = current_user.stays.build(stay_params)
     
-    # ↓↓↓ ★★★ この1行が絶対に必要です！ ★★★
+    # この1行が絶対に必要です！
     @stay.user_id = current_user.id
-    # -------------------------------------
     
     if @stay.save
+      # ↓↓↓ ★★★ 追加：引継ぎリストを自動作成する ★★★ ↓↓↓
+      Handoff.create!(
+        from_stay: @stay,
+        to_stay: @stay,
+        # 引継ぎ時間は、予約開始日の「朝9時」に自動設定
+        scheduled_at: @stay.start_on.in_time_zone.change(hour: 9, min: 0)
+      )
+      # ----------------------------------------------------
+      
       # StaySplitter.split! を無条件で呼び出す
       StaySplitter.split!(@stay)
       
-      redirect_to stay_path(@stay), notice: "滞在を登録しました。", status: :see_other
+      redirect_to stay_path(@stay), notice: "滞在を登録しました。引継ぎリストも作成されました！", status: :see_other
     else
       @pets = current_user.pets.order(:name) 
       flash.now[:alert] = "保存に失敗しました。入力内容をご確認ください。"

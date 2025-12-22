@@ -1,14 +1,8 @@
-<%# 
-  app/views/stays/_form.html.erb
-  StaySplitter を動かすための最小限のフォーム
-%>
-<%= form_with model: stay, class: "card" do |f| %>
+<%= form_with(model: stay, local: true) do |f| %>
 
-  <%# エラー表示 (もしあれば) %>
   <% if stay.errors.any? %>
-    <div class="flash flash--alert">
-      <strong><%= stay.errors.count %>件のエラー:</strong>
-      <ul>
+    <div style="background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
+      <ul style="margin: 0; padding-left: 20px;">
         <% stay.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
@@ -16,58 +10,53 @@
     </div>
   <% end %>
 
-  <div class="form-grid">
-    <div>
-      <%= f.label :pet_id, t(".pet") %>
-      <%# 
-        (注: Pet の選択肢を @pets から読み込みます) 
-        (ステップ3でコントローラーを修正します)
-      %>
-      <%= f.collection_select :pet_id, @pets, :id, :name, 
-            { prompt: "ペットを選択してください" }, 
-            { class: "input" } %>
-    </div>
-    
-    <div>
-      <%= f.label :place, t(".place") %>
-      <%# Stay モデルの enum (owner_home/sitter_home) から選択肢を作成 %>
-      <%= f.select :place, 
-            Stay.places.keys.map { |k| [t("enums.stay.place.#{k}"), k] }, 
-            { prompt: "場所を選択してください" }, 
-            { class: "input" } %>
-    </div>
-
-    <div>
-      <%= f.label :start_on, t(".start_on") %>
-      <%= f.date_field :start_on, class: "input" %>
-    </div>
-    
-    <div>
-      <%= f.label :end_on, t(".end_on") %>
-      <%= f.date_field :end_on, class: "input" %>
+  <div style="margin-bottom: 25px;">
+    <%= f.label :pet_id, "🐱 お留守番するペット", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+    <div style="position: relative;">
+      <%= f.collection_select :pet_id, current_user.pets, :id, :name, { prompt: "ペットを選択してください" }, { style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; appearance: none; background: #fff; cursor: pointer;" } %>
+      <i class="fa-solid fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; pointer-events: none;"></i>
     </div>
   </div>
 
-  <div style="margin-top: 20px; background: #f0f0f0; padding: 15px; border-radius: 8px;">
-    <%= f.label :sitter_id, "担当シッター (テスト用)", style: "display: block; font-weight: bold; margin-bottom: 5px; color: #5A4A42;" %>
-    
-    <%# 全ユーザーから名前で選べるようにします %>
-    <%= f.collection_select :sitter_id, User.all, :id, :name, 
-          { include_blank: "指名なし" }, 
-          { style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" } %>
-    
-    <p style="font-size: 0.8rem; color: #d63031; margin-top: 5px;">
-      ※ テストのために「自分」を選んで更新してください
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+    <div>
+      <%= f.label :start_on, "📅 開始日", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+      <%= f.date_field :start_on, style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; color: #555;" %>
+    </div>
+    <div>
+      <%= f.label :end_on, "📅 終了日", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+      <%= f.date_field :end_on, style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; color: #555;" %>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 25px;">
+    <%= f.label :sitter_id, "👤 担当シッター", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+    <div style="position: relative;">
+      <%= f.collection_select :sitter_id, User.all, :id, :name, { prompt: "シッターを選択してください" }, { style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; appearance: none; background: #fff; cursor: pointer;" } %>
+      <i class="fa-solid fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; pointer-events: none;"></i>
+    </div>
+    <p style="font-size: 0.8rem; color: #999; margin-top: 5px;">
+      ※ 登録済みのユーザーから選択してください
     </p>
   </div>
 
-  <div style="margin-top: 12px;">
-    <%= f.label :notes, t(".notes") %>
-    <%= f.text_area :notes, rows: 4, class: "textarea" %>
+  <div style="margin-bottom: 25px;">
+    <%= f.label :place, "📍 お世話する場所", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+    <div style="position: relative;">
+      <%= f.select :place, [['🏠 シッターの自宅', 'sitter_home'], ['🏡 飼い主の自宅', 'owner_home']], {}, { style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; appearance: none; background: #fff; cursor: pointer;" } %>
+      <i class="fa-solid fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; pointer-events: none;"></i>
+    </div>
   </div>
 
-  <div class="stack stack--end" style="margin-top: 16px;">
-    <%= link_to t(".cancel"), stays_path, class: "btn" %>
-    <%= f.submit t(".save"), class: "btn btn--primary" %>
+  <div style="margin-bottom: 30px;">
+    <%= f.label :notes, "📝 シッターへのメモ", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
+    <%= f.text_area :notes, rows: 4, placeholder: "ご飯のあげ方や、特に注意してほしいことなど...", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; line-height: 1.6; box-sizing: border-box;" %>
   </div>
+
+  <div style="display: flex; gap: 15px;">
+    <%= link_to "キャンセル", (stay.new_record? ? root_path : stay_path(stay)), style: "flex: 1; text-align: center; background: #f0f0f0; color: #666; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: bold;" %>
+    
+    <%= f.button (stay.new_record? ? "予約を保存する" : "内容を更新する"), type: "submit", style: "flex: 2; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;" %>
+  </div>
+
 <% end %>

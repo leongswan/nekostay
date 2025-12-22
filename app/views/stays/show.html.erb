@@ -1,166 +1,126 @@
-<div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
   
-  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 40px;">
-    
-    <div style="background: #D98E63; height: 100px; position: relative;">
-      <%= link_to root_path, style: "position: absolute; top: 20px; left: 20px; color: white; text-decoration: none; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px;" do %>
-        <i class="fa-solid fa-arrow-left"></i> ダッシュボードへ
-      <% end %>
-    </div>
-
-    <div style="padding: 20px 40px; position: relative;">
-      <div style="position: absolute; top: -50px; left: 40px; width: 100px; height: 100px; border-radius: 50%; border: 5px solid white; background: white; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
-        <% if @stay.pet.image.attached? %>
-          <%= image_tag @stay.pet.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
-        <% else %>
-          <span style="font-size: 50px;">🐱</span>
-        <% end %>
-      </div>
-
-      <div style="margin-left: 120px; display: flex; justify-content: space-between; align-items: end; margin-bottom: 20px;">
-        <div>
-          <h1 style="margin: 0; color: #5A4A42; font-size: 1.8rem;"><%= @stay.pet.name %>ちゃんのお留守番</h1>
-          <p style="color: #999; margin: 5px 0 0 0;">
-            <i class="fa-regular fa-calendar"></i> <%= @stay.start_on.strftime('%Y年%m月%d日') %> 〜 <%= @stay.end_on.strftime('%m月%d日') %>
-          </p>
-        </div>
-        
-        <div style="display: flex; gap: 10px;">
-          <% if current_user == @stay.owner %>
-            <%= link_to edit_stay_path(@stay), style: "color: #D98E63; border: 1px solid #D98E63; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold;" do %>
-              <i class="fa-solid fa-pen"></i> 編集
-            <% end %>
-            
-            <%= button_to stay_path(@stay), method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, style: "background: none; border: 1px solid #ddd; color: #999; padding: 8px 16px; border-radius: 8px; cursor: pointer;" do %>
-              <i class="fa-solid fa-trash"></i> 削除
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-
-      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div>
-          <h3 style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">📍 お世話する場所</h3>
-          <p style="margin: 0; font-weight: bold; color: #333;">
-            <i class="fa-solid fa-house-chimney" style="color: #D98E63;"></i> 
-            <%= @stay.place == 'sitter_home' ? 'シッターの自宅' : '飼い主の自宅' %>
-          </p>
-        </div>
-        <div>
-          <h3 style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">📝 シッターへのメモ</h3>
-          <p style="margin: 0; color: #555; white-space: pre-wrap;"><%= @stay.notes.presence || "特になし" %></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <h2 style="font-size: 1.4rem; color: #5A4A42; margin-bottom: 20px; border-left: 5px solid #D98E63; padding-left: 15px;">
-    📅 お世話のスケジュール & 日報
-  </h2>
-
-  <% if @stay.checkins.any? %>
-    <div style="display: grid; gap: 15px;">
-      <% @stay.checkins.order(:checked_at).each do |checkin| %>
-        <div style="background: white; padding: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid #eee;">
-          
-          <div style="display: flex; align-items: center; gap: 15px;">
-            <div style="text-align: center; background: #f9f9f9; padding: 10px; border-radius: 8px; min-width: 60px;">
-              <div style="font-size: 0.8rem; color: #999;"><%= checkin.checked_at.strftime('%m/%d') %></div>
-              <div style="font-weight: bold; font-size: 1.1rem; color: #5A4A42;"><%= checkin.checked_at.strftime('%a') %></div>
-            </div>
-            <div>
-              <div style="font-weight: bold; color: #333;">お世話レポート</div>
-              
-              <% if checkin.report.present? %>
-                <div style="font-size: 0.9rem; color: #555; margin-top: 3px;">
-                  <%= truncate(checkin.report, length: 20) %>
-                  
-                  <% if checkin.images.attached? %>
-                    <%= link_to stay_checkin_path(@stay, checkin), style: "color: #D98E63; margin-left: 8px; font-weight: bold; text-decoration: none;" do %>
-                      <i class="fa-solid fa-camera"></i> <%= checkin.images.count %>
-                    <% end %>
-                  <% end %>
-                </div>
-              <% else %>
-                <div style="font-size: 0.9rem; color: #999;">まだ報告はありません</div>
-              <% end %>
-            </div>
-          </div>
-
-          <% if checkin.report.present? %>
-            <%= link_to stay_checkin_path(@stay, checkin), style: "background: white; border: 1px solid #D98E63; color: #D98E63; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
-              <i class="fa-solid fa-book-open"></i> 報告を見る
-            <% end %>
-          <% else %>
-            <% if current_user == @stay.sitter %>
-              <%= link_to edit_stay_checkin_path(@stay, checkin), style: "background: #D98E63; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
-                <i class="fa-solid fa-pen"></i> 報告する
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <div style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 12px; color: #999;">
-      スケジュールがまだ作成されていません
+  <% if notice %>
+    <div style="background: #e6fffa; color: #00b894; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #b2f5ea;">
+      <%= notice %>
     </div>
   <% end %>
 
+  <div style="margin-bottom: 20px;">
+    <%= link_to stays_path, style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
+      <i class="fa-solid fa-arrow-left"></i> ダッシュボードへ
+    <% end %>
+  </div>
 
-  <div style="margin-top: 50px; background-color: #f0f4f8; padding: 30px; border-radius: 16px; border: 2px solid #e1e8ed;">
-    <h3 style="color: #5A4A42; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
-      <i class="fa-regular fa-comments" style="color: #D98E63;"></i> 連絡ノート
-    </h3>
-
-    <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; max-height: 400px; overflow-y: auto; padding-right: 10px;">
-      <% if @stay.messages.any? %>
-        <% @stay.messages.order(:created_at).each do |message| %>
-          <% is_me = (message.user_id == current_user.id) %>
-          
-          <div style="display: flex; flex-direction: column; align-items: <%= is_me ? 'flex-end' : 'flex-start' %>;">
-            <div style="font-size: 0.75rem; color: #888; margin-bottom: 4px; padding: 0 5px;">
-              <%= message.user.name %> • <%= message.created_at.strftime('%m/%d %H:%M') %>
-            </div>
-            <div style="
-              background: <%= is_me ? '#D98E63' : 'white' %>;
-              color: <%= is_me ? 'white' : '#333' %>;
-              padding: 12px 18px;
-              border-radius: 18px;
-              border-top-<%= is_me ? 'right' : 'left' %>-radius: 4px;
-              max-width: 80%;
-              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-              line-height: 1.6;
-              font-size: 0.95rem;
-            ">
-              <%= simple_format(message.body) %>
-            </div>
-          </div>
-        <% end %>
+  <div style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; align-items: center; gap: 30px;">
+    <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; background: #eee;">
+      <% if @stay.pet&.image&.attached? %>
+        <%= image_tag @stay.pet.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
       <% else %>
-        <div style="text-align: center; padding: 30px; color: #999; background: rgba(255,255,255,0.5); border-radius: 8px;">
-          <p style="margin: 0;">まだメッセージはありません 🕊️</p>
-          <p style="margin: 5px 0 0; font-size: 0.85rem;">「ごはんの場所」や「お世話のポイント」など、<br>気になることがあれば書いてみましょう！</p>
-        </div>
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:40px;">🐱</div>
       <% end %>
     </div>
+    
+    <div style="flex-grow: 1;">
+      <h1 style="margin: 0 0 10px 0; color: #5A4A42; font-size: 1.5rem;">
+        <%= @stay.pet&.name %>ちゃんのお留守番
+      </h1>
+      <div style="color: #888; margin-bottom: 15px;">
+        <i class="fa-regular fa-calendar"></i> 
+        <%= @stay.start_on.strftime('%Y年%m月%d日') %> 〜 <%= @stay.end_on.strftime('%m月%d日') %>
+      </div>
 
-    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-      <%= form_with model: Message.new, local: true do |f| %>
-        <%= f.hidden_field :stay_id, value: @stay.id %>
-        
-        <div style="margin-bottom: 15px;">
-          <%= f.text_area :body, rows: 3, placeholder: "メッセージを入力してください...", style: "width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; outline: none; transition: border-color 0.2s;", class: "message-input" %>
+      <div style="display: flex; gap: 20px; font-size: 0.9rem; color: #666;">
+        <div>
+          <span style="color: #D98E63; font-weight: bold;">📍 お世話する場所</span><br>
+          <%= @stay.place == 'sitter_home' ? 'シッターの自宅' : '飼い主の自宅' %>
         </div>
+        <div>
+          <span style="color: #D98E63; font-weight: bold;">📝 シッターへのメモ</span><br>
+          <%= @stay.notes.presence || '特になし' %>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <%= link_to edit_stay_path(@stay), style: "text-decoration: none; color: #D98E63; border: 1px solid #D98E63; padding: 8px 20px; border-radius: 8px; text-align: center; font-weight: bold;" do %>
+        <i class="fa-solid fa-pen"></i> 編集
+      <% end %>
+      
+      <%= button_to stay_path(@stay), method: :delete, data: { confirm: "本当に削除しますか？" }, style: "background: none; border: none; color: #999; cursor: pointer; text-decoration: underline; font-size: 0.8rem;" do %>
+        <i class="fa-solid fa-trash"></i> 削除
+      <% end %>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 30px; text-align: center;">
+    <%= link_to handoffs_path, style: "display: inline-block; background: white; border: 2px solid #D98E63; color: #D98E63; padding: 12px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(217, 142, 99, 0.2);" do %>
+      <i class="fa-solid fa-key"></i> このお留守番の引継ぎリストを確認する
+    <% end %>
+  </div>
+
+  <div style="margin-bottom: 20px; border-left: 5px solid #D98E63; padding-left: 15px;">
+    <h3 style="margin: 0; color: #5A4A42;">🗓 お世話のスケジュール & 日報</h3>
+  </div>
+
+  <div style="display: grid; gap: 15px;">
+    <% (@stay.start_on..@stay.end_on).each do |date| %>
+      <% checkin = @stay.checkins.find_by(checked_at: date.all_day) %>
+      
+      <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; display: flex; align-items: center; justify-content: space-between;">
         
-        <div style="text-align: right;">
-          <%= button_tag type: "submit", style: "background: #5A4A42; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;" do %>
-            <i class="fa-regular fa-paper-plane"></i> 送信する
+        <div style="text-align: center; min-width: 60px;">
+          <div style="font-size: 0.8rem; color: #999;"><%= date.strftime('%m/%d') %></div>
+          <div style="font-weight: bold; font-size: 1.2rem; color: #5A4A42;"><%= date.strftime('%a') %></div>
+        </div>
+
+        <div style="flex-grow: 1; padding: 0 20px;">
+          <% if checkin %>
+            <div style="color: #5A4A42; font-weight: bold; margin-bottom: 5px;">お世話レポート</div>
+            <div style="font-size: 0.9rem; color: #666;">
+              <%# ↓↓↓ 文言を修正しました！ ↓↓↓ %>
+              <%= truncate(checkin.report, length: 30) || "📸 写真による報告" %>
+            </div>
+          <% else %>
+            <div style="color: #ccc;">まだ報告はありません</div>
           <% end %>
         </div>
-      <% end %>
-    </div>
+
+        <% if checkin %>
+          <%= link_to "報告を見る", stay_checkin_path(@stay, checkin), style: "background: #D98E63; color: white; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem;" %>
+        <% else %>
+          <% if current_user.id == @stay.sitter_id %>
+            <%= link_to "📝 報告する", new_stay_checkin_path(@stay), style: "background: #D98E63; color: white; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem;" %>
+          <% else %>
+            <span style="color: #ccc; font-size: 0.9rem;">報告待ち</span>
+          <% end %>
+        <% end %>
+
+      </div>
+    <% end %>
   </div>
+
+  <div style="margin-top: 50px; background: #f0f4f8; padding: 20px; border-radius: 16px;">
+    <h3 style="color: #5A4A42; margin-top: 0;">
+      <i class="fa-regular fa-comments"></i> 連絡ノート
+    </h3>
+    
+    <div id="messages" style="height: 300px; overflow-y: auto; background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #ddd;">
+      </div>
+
+    <%= form_with(model: Message.new, url: messages_path, local: true, data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" }) do |f| %>
+      <%= f.hidden_field :stay_id, value: @stay.id %>
+      
+      <div style="margin-bottom: 10px;">
+        <%= f.text_area :body, rows: 3, placeholder: "メッセージを入力してください...", style: "width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box;" %>
+      </div>
+      
+      <div style="text-align: right;">
+        <%= button_tag type: "submit", style: "background: #5A4A42; color: white; border: none; padding: 10px 30px; border-radius: 30px; font-weight: bold; cursor: pointer;" do %>
+          <i class="fa-solid fa-paper-plane"></i> 送信する
+        <% end %>
+      </div>
+    <% end %>
   </div>
+
+</div>

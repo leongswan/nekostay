@@ -1,9 +1,18 @@
-<div style="max-width: 600px; margin: 40px auto; padding: 0 20px;">
+<div style="max-width: 600px; margin: 40px auto; padding: 20px;">
   
-  <h1 style="text-align: center; color: #5A4A42; margin-bottom: 30px;">
-    予約内容の編集 <i class="fa-solid fa-pen" style="color: #D98E63;"></i>
-  </h1>
+  <div style="margin-bottom: 20px;">
+    <%= link_to stay_path(@stay), style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
+      <i class="fa-solid fa-arrow-left"></i> 詳細に戻る
+    <% end %>
+  </div>
 
-  <%= render "form", stay: @stay %>
+  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 30px; border: 1px solid #eee;">
+    
+    <h2 style="color: #5A4A42; margin-top: 0; margin-bottom: 25px; text-align: center;">
+      <i class="fa-solid fa-pen-to-square" style="color: #D98E63;"></i> 予約内容の編集
+    </h2>
 
+    <%= render 'form', stay: @stay %>
+
+  </div>
 </div>

@@ -1,106 +1,103 @@
-<div style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+<div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
 
-  <div style="margin-bottom: 40px;">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      
-      <div style="width: 60px; height: 60px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 30px;">😊</div>
-      
-      <div>
-        <h1 style="margin: 0; font-size: 1.5rem; color: #5A4A42;">おかえりなさい、<%= current_user.name %>さん！</h1>
-        <p style="margin: 5px 0 0; color: #999;">シッターさんからの報告や、予約の状況を確認しましょう。</p>
+  <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+      <% if current_user.image.attached? %>
+        <%= image_tag current_user.image, style: "width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" %>
+      <% else %>
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 30px;">😊</div>
+      <% end %>
+      <div style="text-align: left;">
+        <h2 style="margin: 0; color: #5A4A42; font-size: 1.5rem;">おかえりなさい、<%= current_user.name %>さん！</h2>
+        <p style="margin: 5px 0 0 0; color: #999; font-size: 0.9rem;">シッターさんからの報告や、予約の状況を確認しましょう。</p>
       </div>
     </div>
   </div>
 
   <% if @assigned_stays.present? %>
-    <div style="margin-bottom: 50px; background: #fff8f0; padding: 25px; border-radius: 16px; border: 2px solid #D98E63;">
-      <h2 style="font-size: 1.2rem; color: #D98E63; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; margin-top: 0;">
-        <i class="fa-solid fa-user-check"></i> シッター依頼が届いています (お仕事リスト)
-      </h2>
-
+    <div style="margin-bottom: 40px; background: #fff8f0; padding: 20px; border-radius: 16px; border: 1px solid #ffead1;">
+      <h3 style="color: #D98E63; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        <i class="fa-solid fa-user-check"></i> シッター依頼が届いています
+      </h3>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
         <% @assigned_stays.each do |stay| %>
-          <%= link_to stay_path(stay), style: "text-decoration: none; color: inherit;" do %>
-            <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(217, 142, 99, 0.2); transition: transform 0.2s; border: 1px solid #ffead1;">
-              
-              <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-                <div style="width: 50px; height: 50px; border-radius: 50%; background: #eee; overflow: hidden; flex-shrink: 0;">
-                  <% if stay.pet.image.attached? %>
-                    <%= image_tag stay.pet.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
-                  <% else %>
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🐱</div>
-                  <% end %>
-                </div>
-                <div>
-                  <div style="font-weight: bold; color: #5A4A42; font-size: 1.1rem;"><%= stay.pet.name %>ちゃん</div>
-                  <div style="font-size: 0.85rem; color: #888;">飼い主: <%= stay.owner.name %>さん</div>
-                </div>
+          <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: #eee; border: 1px solid #ddd;">
+                <% if stay.pet&.image&.attached? %>
+                  <%= image_tag stay.pet.image, style: "width:100%; height:100%; object-fit:cover;" %>
+                <% else %>
+                  <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">🐱</div>
+                <% end %>
               </div>
-
-              <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; font-size: 0.9rem; color: #555; display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-                 <i class="fa-regular fa-calendar" style="color: #D98E63;"></i>
-                 <%= stay.start_on.strftime('%m/%d') %> 〜 <%= stay.end_on.strftime('%m/%d') %>
-              </div>
-
-              <div style="text-align: center; background: #D98E63; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;">
-                報告画面へ
+              <div>
+                <div style="font-weight: bold; font-size: 1.1rem; color: #5A4A42;"><%= stay.pet&.name || "猫ちゃん" %></div>
+                <div style="font-size: 0.85rem; color: #888;">飼い主: <%= stay.owner.name %>さん</div>
               </div>
             </div>
-          <% end %>
+            
+            <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 15px; color: #666;">
+              <i class="fa-regular fa-calendar"></i> <%= stay.start_on.strftime('%m/%d') %> 〜 <%= stay.end_on.strftime('%m/%d') %>
+            </div>
+
+            <%= link_to stay_path(stay), style: "display: block; text-align: center; background: #D98E63; color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold;" do %>
+              報告画面へ
+            <% end %>
+          </div>
         <% end %>
       </div>
     </div>
   <% end %>
 
-  <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-    <h2 style="font-size: 1.4rem; color: #5A4A42; margin: 0; border-left: 5px solid #D98E63; padding-left: 15px;">
-      📅 あなたの予約
-    </h2>
+  <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+    <h3 style="color: #5A4A42; border-left: 5px solid #D98E63; padding-left: 15px; margin: 0;">
+      <i class="fa-regular fa-calendar-check"></i> あなたの予約
+    </h3>
     
-    <div style="margin-left: auto; display: flex; gap: 10px;">
-      <%= link_to pets_path, style: "background: white; border: 1px solid #D98E63; color: #D98E63; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+    <div style="display: flex; gap: 10px;">
+      <%= link_to handoffs_path, style: "text-decoration: none; color: #5A4A42; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; font-weight: bold; background: white; display: inline-flex; align-items: center; gap: 5px;" do %>
+        <i class="fa-solid fa-key"></i> 引継ぎリスト
+      <% end %>
+
+      <%= link_to pets_path, style: "text-decoration: none; color: #D98E63; border: 1px solid #D98E63; padding: 8px 16px; border-radius: 20px; font-weight: bold; background: white; display: inline-flex; align-items: center; gap: 5px;" do %>
         <i class="fa-solid fa-paw"></i> うちの子リスト
       <% end %>
 
-      <%= link_to new_stay_path, style: "background: #D98E63; color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" do %>
+      <%= link_to new_stay_path, style: "text-decoration: none; background: #D98E63; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px;" do %>
         <i class="fa-solid fa-plus"></i> 新規予約
       <% end %>
     </div>
   </div>
 
   <% if @stays.any? %>
-    <div style="display: grid; gap: 20px;">
+    <div style="display: grid; gap: 15px;">
       <% @stays.each do |stay| %>
-        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee;">
-          
+        <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
           <div style="display: flex; align-items: center; gap: 20px;">
-             <div style="width: 60px; height: 60px; border-radius: 12px; overflow: hidden; background: #f0f0f0;">
-               <% if stay.pet.image.attached? %>
-                 <%= image_tag stay.pet.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+            <div style="width: 60px; height: 60px; border-radius: 12px; background: #eee; overflow: hidden; border: 1px solid #eee;">
+               <% if stay.pet&.image&.attached? %>
+                 <%= image_tag stay.pet.image, style: "width:100%; height:100%; object-fit:cover;" %>
                <% else %>
-                 <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 30px;">🐱</div>
+                 <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px;">🐱</div>
                <% end %>
-             </div>
-
-             <div>
-               <h3 style="margin: 0; color: #5A4A42; font-size: 1.2rem;"><%= stay.pet.name %></h3>
-               <p style="margin: 5px 0 0; color: #999; font-size: 0.9rem;">
-                 <%= stay.start_on.strftime('%Y年%m月%d日') %> 〜 <%= stay.end_on.strftime('%m月%d日') %>
-               </p>
-             </div>
+            </div>
+            <div>
+              <div style="font-weight: bold; font-size: 1.1rem; color: #5A4A42; margin-bottom: 5px;">
+                <%= stay.pet&.name %>
+              </div>
+              <div style="color: #999; font-size: 0.9rem;">
+                <%= stay.start_on.strftime('%Y年%m月%d日') %> 〜 <%= stay.end_on.strftime('%m月%d日') %>
+              </div>
+            </div>
           </div>
-
-          <%= link_to stay_path(stay), style: "border: 1px solid #ddd; color: #666; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;" do %>
-            詳細を見る
-          <% end %>
-
+          
+          <%= link_to "詳細を見る", stay_path(stay), style: "border: 1px solid #ddd; color: #666; text-decoration: none; padding: 8px 20px; border-radius: 30px; font-size: 0.9rem;" %>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div style="text-align: center; padding: 60px; background: #f9f9f9; border-radius: 12px; color: #999;">
-      <p>まだ予約はありません。</p>
-      <p>「新規予約」ボタンからお留守番を登録しましょう！</p>
+    <div style="text-align: center; padding: 50px; background: #f9f9f9; border-radius: 12px; color: #999;">
+      <p>まだ予約はありません。<br>「新規予約」ボタンから作成してみましょう！</p>
     </div>
   <% end %>
 
