@@ -59,6 +59,37 @@
     <% end %>
   </div>
 
+  <% if current_user == @stay.owner %>
+    <div style="margin-bottom: 30px; text-align: center;">
+      
+      <% if @stay.paid_at.present? %>
+        <div style="background: #e6fffa; border: 2px solid #00b894; padding: 20px; border-radius: 16px; color: #00b894; display: inline-block;">
+          <h3 style="margin: 0; font-size: 1.2rem;">
+            <i class="fa-solid fa-circle-check"></i> お支払い完了済み
+          </h3>
+          <p style="margin: 5px 0 0 0; font-size: 0.9rem;">
+            決済日時: <%= @stay.paid_at.strftime('%Y/%m/%d %H:%M') %>
+          </p>
+        </div>
+
+      <% else %>
+        <div style="background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+          <h3 style="margin: 0 0 10px 0; color: #5A4A42;">💳 お支払い</h3>
+          <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">
+            シッター代金のお支払いが可能です。<br>
+            <span style="font-weight: bold; color: #D98E63; font-size: 1.2rem;">¥3,000</span>
+          </p>
+          
+          <%= button_to stay_payments_path(@stay), method: :post, style: "background: #6772e5; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;", data: { turbo: false } do %>
+            <i class="fa-regular fa-credit-card"></i> クレジットカードで支払う
+          <% end %>
+          <p style="font-size: 0.8rem; color: #999; margin-top: 10px;">※ Stripeの安全な決済画面へ移動します</p>
+        </div>
+      <% end %>
+
+    </div>
+  <% end %>
+
   <% if Date.current > @stay.end_on && @stay.review.nil? && current_user == @stay.owner %>
     <div style="margin-bottom: 30px; text-align: center;">
       <div style="background: #fff8f0; border: 2px dashed #D98E63; padding: 20px; border-radius: 16px;">
@@ -116,7 +147,6 @@
           <% if checkin %>
             <div style="color: #5A4A42; font-weight: bold; margin-bottom: 5px;">お世話レポート</div>
             <div style="font-size: 0.9rem; color: #666;">
-              <%# ↓↓↓ 文言を修正しました！ ↓↓↓ %>
               <%= truncate(checkin.report, length: 30) || "📸 写真による報告" %>
             </div>
           <% else %>
