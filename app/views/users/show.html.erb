@@ -1,0 +1,96 @@
+<div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+  
+  <div style="margin-bottom: 20px;">
+    <%= link_to root_path, style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
+      <i class="fa-solid fa-arrow-left"></i> ダッシュボードに戻る
+    <% end %>
+  </div>
+
+  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 40px; text-align: center; margin-bottom: 40px; border: 1px solid #eee;">
+    
+    <div style="width: 120px; height: 120px; border-radius: 50%; background: #eee; margin: 0 auto 20px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+      <% if @user.image.attached? %>
+        <%= image_tag @user.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+      <% else %>
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 60px;">👤</div>
+      <% end %>
+    </div>
+
+    <h1 style="color: #5A4A42; margin: 0 0 10px 0;">
+      <%= @user.name %>
+    </h1>
+
+    <div style="margin-bottom: 20px;">
+      <% if @user.role_sitter? %>
+        <span style="background: #e6fffa; color: #00b894; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+          <i class="fa-solid fa-user-check"></i> シッター
+        </span>
+      <% else %>
+        <span style="background: #fff8f0; color: #D98E63; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+          <i class="fa-solid fa-user"></i> 飼い主
+        </span>
+      <% end %>
+      </div>
+
+    <div style="color: #666; max-width: 600px; margin: 0 auto 30px; line-height: 1.8; text-align: left; background: #fafafa; padding: 20px; border-radius: 12px;">
+      <%= simple_format(@user.introduction.presence || "自己紹介はまだ設定されていません。") %>
+    </div>
+
+    <% if current_user == @user %>
+      <%= link_to edit_user_path(@user), style: "display: inline-block; border: 2px solid #D98E63; color: #D98E63; padding: 10px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: all 0.2s; background: white;" do %>
+        <i class="fa-solid fa-pen"></i> プロフィールを編集する
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <div style="display: grid; gap: 30px;">
+    
+    <% if @sitter_jobs.present? %>
+      <div>
+        <h3 style="color: #5A4A42; border-left: 5px solid #00b894; padding-left: 15px; margin-bottom: 15px;">
+          <i class="fa-solid fa-user-check"></i> シッターとしてのお仕事履歴
+        </h3>
+        <div style="display: grid; gap: 15px;">
+          <% @sitter_jobs.each do |stay| %>
+            <%= link_to stay_path(stay), style: "text-decoration: none;" do %>
+              <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; color: #555; hover: { background: #f9f9f9; }">
+                <div>
+                  <span style="font-weight: bold;"><%= stay.pet&.name %>ちゃん</span> のお世話
+                  <span style="font-size: 0.85rem; color: #999; margin-left: 10px;">
+                    (<%= stay.start_on.strftime('%Y/%m/%d') %> 〜)
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color: #ddd;"></i>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @my_stays.present? %>
+      <div>
+        <h3 style="color: #5A4A42; border-left: 5px solid #D98E63; padding-left: 15px; margin-bottom: 15px;">
+          <i class="fa-solid fa-paw"></i> 飼い主としての依頼履歴
+        </h3>
+        <div style="display: grid; gap: 15px;">
+          <% @my_stays.each do |stay| %>
+            <%= link_to stay_path(stay), style: "text-decoration: none;" do %>
+              <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; color: #555;">
+                <div>
+                  <span style="font-weight: bold;"><%= stay.pet&.name %>ちゃん</span> のお留守番
+                  <span style="font-size: 0.85rem; color: #999; margin-left: 10px;">
+                    (<%= stay.start_on.strftime('%Y/%m/%d') %> 〜)
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color: #ddd;"></i>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

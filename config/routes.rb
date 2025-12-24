@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'users/show'
+  get 'users/edit'
+  get 'users/update'
   # 削除：get 'reviews/new'
   # 削除：get 'reviews/create'
 
@@ -6,6 +9,10 @@ Rails.application.routes.draw do
   root 'stays#index'
   
   devise_for :users
+
+  # ↓↓↓ ★★★ これを追加！ ★★★
+  resources :users, only: [:show, :edit, :update]
+  # ---------------------------
 
   resources :stays do
     member do

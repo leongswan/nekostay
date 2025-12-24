@@ -2,13 +2,18 @@
 
   <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
-      <% if current_user.image.attached? %>
-        <%= image_tag current_user.image, style: "width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" %>
-      <% else %>
-        <div style="width: 60px; height: 60px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 30px;">😊</div>
+      
+      <%= link_to user_path(current_user), style: "text-decoration: none;" do %>
+        <% if current_user.image.attached? %>
+          <%= image_tag current_user.image, style: "width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.2s;", onmouseover: "this.style.transform='scale(1.1)'", onmouseout: "this.style.transform='scale(1)'" %>
+        <% else %>
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 30px; transition: transform 0.2s;" onmouseover: "this.style.transform='scale(1.1)'" onmouseout: "this.style.transform='scale(1)'">😊</div>
+        <% end %>
       <% end %>
       <div style="text-align: left;">
-        <h2 style="margin: 0; color: #5A4A42; font-size: 1.5rem;">おかえりなさい、<%= current_user.name %>さん！</h2>
+        <%= link_to user_path(current_user), style: "text-decoration: none; color: inherit;" do %>
+           <h2 style="margin: 0; color: #5A4A42; font-size: 1.5rem;">おかえりなさい、<%= current_user.name %>さん！</h2>
+        <% end %>
         <p style="margin: 5px 0 0 0; color: #999; font-size: 0.9rem;">シッターさんからの報告や、予約の状況を確認しましょう。</p>
       </div>
     </div>

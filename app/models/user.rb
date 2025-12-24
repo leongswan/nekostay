@@ -3,29 +3,31 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # 権限設定
+  # 権限設定（そのまま残します）
   enum role: { owner: 0, sitter: 1, admin: 2 }, _prefix: true
 
-  # プロフィール画像（ビューで image を使っているので image に統一します）
+  # プロフィール画像
   has_one_attached :image
 
   # --- 関連付け（リレーション） ---
 
-  # 1. ペットとの関連
+  # 1. ペット
   has_many :pets, dependent: :destroy
 
   # 2. 予約（自分が飼い主として作成したもの）
-  #    Stayモデルは owner_id で飼い主を管理しているため、設定が必要です
   has_many :stays, foreign_key: :owner_id, dependent: :destroy
 
-  # 3. シッタープロフィール（自分がシッターの場合）
+  # 3. シッターとしてのお仕事（★今回追加：マイページでお仕事履歴を表示するため）
+  #    ※ 元のコードではコメントアウトされていましたが、今回使います！名前を sitter_stays にしました。
+  has_many :sitter_stays, class_name: 'Stay', foreign_key: :sitter_id
+
+  # 4. シッタープロフィール（そのまま残します）
   has_one :sitter_profile, dependent: :destroy
 
-  # 4. メッセージ（今回追加する機能！）
-  #    さっき作ったモデルの通り、user_id で紐付けます
+  # 5. メッセージ（そのまま残します）
   has_many :messages, dependent: :destroy
 
-  # --- (以下はまだ使いませんが、将来のために残しておいてもOKな設定) ---
-  # has_many :sitting_stays, class_name: "Stay", foreign_key: :sitter_id, dependent: :nullify
-  # has_many :received_reviews, class_name: "Review", foreign_key: "ratee_id", dependent: :nullify
+  # --- バリデーション（★今回追加） ---
+  validates :name, presence: true # 名前は必須
+  validates :introduction, length: { maximum: 500 } # 自己紹介は500文字まで
 end
