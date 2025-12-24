@@ -18,12 +18,15 @@ class EvolveStaysForV1 < ActiveRecord::Migration[7.1]
 
     reversible do |dir|
       dir.up do
-        execute <<~SQL.squish
-          UPDATE stays
-             SET owner_id = COALESCE(owner_id, user_id),
-                 start_on = COALESCE(start_on, start_date),
-                 end_on   = COALESCE(end_on,   end_date)
-        SQL
+        # ↓↓↓ ★★★ 修正箇所：ここからコメントアウト（#をつける）してください ★★★
+        # execute <<~SQL.squish
+        #   UPDATE stays
+        #      SET owner_id = COALESCE(owner_id, user_id),
+        #          start_on = COALESCE(start_on, start_date),
+        #          end_on   = COALESCE(end_on,   end_date)
+        # SQL
+        # ↑↑↑ ★★★ ここまで ★★★
+
         change_column_null :stays, :start_on, false if column_exists?(:stays, :start_on)
         change_column_null :stays, :end_on,   false if column_exists?(:stays, :end_on)
       end
