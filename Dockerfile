@@ -30,6 +30,11 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# ↓↓↓ ★★★ 【重要】これを追加しました！ ★★★ ↓↓↓
+# Windows環境などで実行権限が消えてしまうのを防ぐため、強制的に付与します
+RUN chmod +x bin/*
+# ------------------------------------------------
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
