@@ -174,7 +174,12 @@
     </h3>
     
     <div id="messages" style="height: 300px; overflow-y: auto; background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #ddd;">
-      </div>
+      
+      <%= turbo_stream_from @stay %>
+
+      <%= render @stay.messages.order(:created_at) %>
+
+    </div>
 
     <%= form_with(model: Message.new, url: messages_path, local: true, data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" }) do |f| %>
       <%= f.hidden_field :stay_id, value: @stay.id %>

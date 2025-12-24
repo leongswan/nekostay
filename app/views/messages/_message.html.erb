@@ -1,0 +1,7 @@
+<div id="<%= dom_id(message) %>" style="margin-bottom: 15px; padding: 10px 15px; background: #fafafa; border-radius: 12px; border: 1px solid #eee;">
+  <div style="font-size: 0.8rem; color: #999; margin-bottom: 5px; display: flex; justify-content: space-between;">
+    <strong><%= message.user.name %></strong>
+    <span><%= message.created_at.strftime('%m/%d %H:%M') %></span>
+  </div>
+  <div style="color: #444; line-height: 1.5; white-space: pre-wrap;"><%= message.body %></div>
+</div>
