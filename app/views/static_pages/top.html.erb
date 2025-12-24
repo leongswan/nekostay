@@ -1,0 +1,69 @@
+<%# LPではヘッダーを非表示にするための設定 %>
+<% content_for :hide_header, true %>
+
+<div style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #5A4A42; line-height: 1.6; margin-top: -60px;">
+  
+  <div style="position: relative; height: 600px; background: url('<%= asset_path('top_hero_bg.png') %>') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; color: white;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
+
+    <div style="position: relative; z-index: 1; padding: 20px;">
+      <h2 style="font-size: 1.5rem; font-weight: normal; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+        離れていても、心はそばに。<br>
+        愛猫のための優しい見守りアプリ。
+      </h2>
+      <h1 style="font-size: 2.5rem; font-weight: bold; margin: 0 0 30px 0; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">
+        いつものお家で、いつもの安心を。<br>
+        Nekostay.
+      </h1>
+      
+      <%= link_to "無料で始めてみる", new_user_registration_path, style: "display: inline-block; background: #D98E63; color: white; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(217, 142, 99, 0.4); transition: transform 0.2s; border: none; cursor: pointer;", onmouseover: "this.style.transform='translateY(-2px)'", onmouseout: "this.style.transform='translateY(0)'" %>
+    </div>
+  </div>
+
+  <div style="background: #fffbf0; padding: 60px 20px; text-align: center;">
+    <div style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
+      
+      <div>
+        <div style="width: 80px; height: 80px; background: #ffeeda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+          <i class="fa-solid fa-camera-retro" style="font-size: 35px; color: #D98E63;"></i>
+        </div>
+        <h3 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: bold;">毎日の様子が見える</h3>
+        <p style="font-size: 0.9rem; color: #777;">
+          『今どうしてるかな？』が写真付きで届くから、外出先でも安心。
+        </p>
+      </div>
+
+      <div>
+        <div style="width: 80px; height: 80px; background: #ffeeda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+          <i class="fa-solid fa-file-contract" style="font-size: 35px; color: #D98E63;"></i>
+        </div>
+        <h3 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: bold;">約束をカタチに</h3>
+        <p style="font-size: 0.9rem; color: #777;">
+          口約束だけでなく、しっかりとした契約書を。大切な家族を守ります。
+        </p>
+      </div>
+
+      <div>
+        <div style="width: 80px; height: 80px; background: #ffeeda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+          <i class="fa-solid fa-handshake-angle" style="font-size: 35px; color: #D98E63;"></i>
+        </div>
+        <h3 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: bold;">困った時もスムーズに</h3>
+        <p style="font-size: 0.9rem; color: #777;">
+          面倒なお金のやり取りや、シッター間の連絡もアプリにお任せ。
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="background: #fdf6e9; padding: 40px 20px; text-align: center;">
+    <h3 style="font-size: 1.1rem; margin: 0; color: #5A4A42; font-weight: bold;">
+      <i class="fa-solid fa-wand-magic-sparkles" style="color: #D98E63;"></i> 難しい操作はいりません。スマホひとつで、今日から始められます。
+    </h3>
+  </div>
+
+  <div style="background: #5A4A42; color: white; padding: 30px 20px; text-align: center; font-size: 0.8rem;">
+    <p style="margin: 0;">© 2025 Nekostay. All rights reserved.</p>
+  </div>
+
+</div>

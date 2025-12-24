@@ -17,12 +17,23 @@ module Nekostay
     config.autoload_lib(ignore: %w(assets tasks))
 
 
-    # --- 以下の1行を追加 ---
-    # デフォルトのロケールを :ja (日本語) に設定する
+    # --- ★★★ 修正・追加箇所 ★★★ ---
+    
+    # 1. アプリの言葉を日本語にする
     config.i18n.default_locale = :ja
-    # --- 追加ここまで ---
+    
+    # 2. 時計を日本時間 (JST) に合わせる
+    # これがないと、日記やチャットの時間が9時間ずれてしまいます
+    config.time_zone = 'Tokyo'
+    
+    # 3. データベースに保存する時間はUTC（世界標準時）のままにする（Railsの推奨設定）
+    config.active_record.default_timezone = :utc
+
+    # --- ここまで ---
+
 
     config.autoload_paths << Rails.root.join("lib")
+    
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

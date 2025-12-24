@@ -1,29 +1,55 @@
-<h2>Sign up</h2>
+<div style="max-width: 400px; margin: 60px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.05); text-align: center; border: 1px solid #f0f0f0;">
+  
+  <h2 style="color: #D98E63; margin-top: 0; margin-bottom: 30px; font-weight: bold;">
+    <i class="fa-solid fa-user-plus"></i> 新規登録
+  </h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    
+    <% if resource.errors.any? %>
+      <div style="background: #fff5f5; color: #c0392b; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 0.9rem; border: 1px solid #feb2b2;">
+        <div style="font-weight: bold; margin-bottom: 5px;">
+          <i class="fa-solid fa-circle-exclamation"></i> 入力内容を確認してください
+        </div>
+        <ul style="margin: 0; padding-left: 20px;">
+          <% resource.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <div style="margin-bottom: 20px; text-align: left;">
+      <%= f.label :name, "お名前（ニックネーム）", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 8px;" %>
+      <%= f.text_field :name, autofocus: true, placeholder: "例：ねこ好き太郎", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; background: #fafafa;" %>
+    </div>
+    
+    <div style="margin-bottom: 20px; text-align: left;">
+      <%= f.label :email, "メールアドレス", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 8px;" %>
+      <%= f.email_field :email, autocomplete: "email", placeholder: "sample@example.com", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; background: #fafafa;" %>
+    </div>
+
+    <div style="margin-bottom: 20px; text-align: left;">
+      <%= f.label :password, "パスワード", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 8px;" %>
+      <% if @minimum_password_length %>
+        <span style="font-size: 0.8rem; color: #888;">(<%= @minimum_password_length %>文字以上)</span>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; background: #fafafa;" %>
+    </div>
+
+    <div style="margin-bottom: 30px; text-align: left;">
+      <%= f.label :password_confirmation, "パスワード（確認用）", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 8px;" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "もう一度入力してください", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; background: #fafafa;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.submit "登録してはじめる", style: "width: 100%; background: #D98E63; color: white; border: none; padding: 15px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(217, 142, 99, 0.3); transition: transform 0.2s;", onmouseover: "this.style.transform='translateY(-2px)'", onmouseout: "this.style.transform='translateY(0)'" %>
+    </div>
+  <% end %>
+
+  <div style="border-top: 1px solid #eee; padding-top: 20px; font-size: 0.9rem;">
+    すでにアカウントをお持ちの方は<br>
+    <%= link_to "こちらからログイン", new_session_path(resource_name), style: "color: #D98E63; font-weight: bold; text-decoration: none;" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

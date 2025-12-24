@@ -1,59 +1,55 @@
-<div style="max-width: 600px; margin: 40px auto; padding: 20px;">
+<div style="max-width: 600px; margin: 40px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
   
-  <div style="margin-bottom: 20px;">
-    <%= link_to user_path(@user), style: "text-decoration: none; color: #999; display: inline-flex; align-items: center; gap: 5px;" do %>
-      <i class="fa-solid fa-arrow-left"></i> マイページに戻る
-    <% end %>
-  </div>
+  <h2 style="text-align: center; color: #5A4A42; margin-bottom: 30px;">
+    <i class="fa-solid fa-user-pen"></i> プロフィールの編集
+  </h2>
 
-  <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 30px; border: 1px solid #eee;">
+  <%= form_with(model: @user, local: true) do |f| %>
     
-    <h2 style="color: #5A4A42; margin-top: 0; margin-bottom: 25px; text-align: center;">
-      <i class="fa-solid fa-user-pen" style="color: #D98E63;"></i> プロフィールの編集
-    </h2>
-
-    <%= form_with(model: @user, local: true) do |f| %>
-
-      <% if @user.errors.any? %>
-        <div style="background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
-          <ul style="margin: 0; padding-left: 20px;">
-            <% @user.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <div style="margin-bottom: 25px; text-align: center;">
-        <div style="width: 100px; height: 100px; border-radius: 50%; background: #eee; margin: 0 auto 10px; overflow: hidden; border: 1px solid #ddd;">
-          <% if @user.image.attached? %>
-            <%= image_tag @user.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
-          <% else %>
-            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px;">👤</div>
+    <% if @user.errors.any? %>
+      <div style="color: red; margin-bottom: 20px; background: #fff0f0; padding: 10px; border-radius: 8px;">
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
           <% end %>
-        </div>
-        <%= f.label :image, "📷 画像を変更する", style: "cursor: pointer; color: #D98E63; font-weight: bold; font-size: 0.9rem; display: inline-block; padding: 5px 10px; border: 1px solid #D98E63; border-radius: 20px;" %>
-        <%= f.file_field :image, style: "display: none;", onchange: "alert('画像が選択されました！保存ボタンを押して確定してください。')" %>
+        </ul>
       </div>
-
-      <div style="margin-bottom: 25px;">
-        <%= f.label :name, "お名前 (ニックネーム可)", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
-        <%= f.text_field :name, style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box;" %>
-      </div>
-
-      <div style="margin-bottom: 30px;">
-        <%= f.label :introduction, "自己紹介", style: "display: block; font-weight: bold; margin-bottom: 8px; color: #555;" %>
-        <%= f.text_area :introduction, rows: 6, placeholder: "はじめまして！猫が大好きで、これまでに3匹の猫と暮らしてきました。丁寧なお世話を心がけます。", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; line-height: 1.6; box-sizing: border-box;" %>
-        <p style="font-size: 0.8rem; color: #999; text-align: right; margin-top: 5px;">※500文字以内で入力してください</p>
-      </div>
-
-      <div style="display: flex; gap: 15px;">
-        <%= link_to "キャンセル", user_path(@user), style: "flex: 1; text-align: center; background: #f0f0f0; color: #666; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: bold;" %>
-        
-        <%= f.button "変更を保存する", type: "submit", style: "flex: 2; background: #D98E63; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;" %>
-      </div>
-
     <% end %>
 
-  </div>
+    <div style="margin-bottom: 25px; text-align: center;">
+      <div style="width: 100px; height: 100px; border-radius: 50%; background: #eee; margin: 0 auto 10px; overflow: hidden; border: 3px solid #D98E63;">
+        <% if @user.image.attached? %>
+          <%= image_tag @user.image, style: "width: 100%; height: 100%; object-fit: cover;" %>
+        <% else %>
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #ccc;">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        <% end %>
+      </div>
+      <%= f.label :image, "写真を変更する", style: "display: inline-block; cursor: pointer; color: #D98E63; font-weight: bold; font-size: 0.9rem;" %>
+      <%= f.file_field :image, style: "display: none;", onchange: "this.form.submit()" %> 
+      <div style="margin-top: 5px;">
+        <%= f.file_field :image, class: "form-control" %>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :name, "お名前（ニックネーム可）", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 5px;" %>
+      <%= f.text_field :name, placeholder: "例：ねこ好き太郎", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <%= f.label :introduction, "自己紹介・シッター経験など", style: "display: block; font-weight: bold; color: #5A4A42; margin-bottom: 5px;" %>
+      <%= f.text_area :introduction, rows: 6, placeholder: "はじめまして！猫を2匹飼っています。シッター経験はありませんが、丁寧にお世話させていただきます。", style: "width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; line-height: 1.6;" %>
+    </div>
+
+    <div style="text-align: center; gap: 10px; display: flex; justify-content: center;">
+      <%= link_to "キャンセル", user_path(@user), style: "padding: 12px 30px; border-radius: 30px; background: #eee; color: #666; text-decoration: none; font-weight: bold;" %>
+      
+      <%= f.button type: "submit", style: "padding: 12px 50px; border-radius: 30px; background: #D98E63; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 1rem;" do %>
+        <i class="fa-solid fa-save"></i> 保存する
+      <% end %>
+    </div>
+
+  <% end %>
 </div>

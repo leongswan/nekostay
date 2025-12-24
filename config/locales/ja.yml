@@ -1,4 +1,30 @@
 ja:
+  # --- 1. 標準的なRailsのエラーメッセージ設定 (ここが重要！) ---
+  activerecord:
+    errors:
+      messages:
+        record_invalid: '入力内容に誤りがあります。'
+        taken: "はすでに使用されています。"
+        blank: "を入力してください。"
+        too_short: "は%{count}文字以上にしてください。"
+        confirmation: "が一致しません。"
+    attributes:
+      user:
+        name: "お名前"
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
+
+  errors:
+    messages:
+      not_saved:
+        one: "1件のエラーがあります。"
+        other: "%{count}件のエラーがあります。"
+      not_found: "は見つかりませんでした"
+      already_confirmed: "はすでに確認済みです"
+      not_locked: "はロックされていません"
+
+  # --- 2. アプリケーション固有の設定 ---
   enums:
     stay:
       status:
@@ -9,14 +35,14 @@ ja:
       place:
         owner_home: "飼い主の自宅"
         sitter_home: "シッターの自宅"
+  
   helpers:
     pills:
       meds:
         none: 投与なし
         given: 投与済
         vaccine_3rd: ワクチン3回目済
-  
-  # --- 修正: "views:" キーを削除し、インデントを浅くする ---
+
   stays:
     new:
       title: "新規滞在の作成"
@@ -158,8 +184,8 @@ ja:
     notices:
       updated: "引継ぎメモを更新しました。"
       completed: "引き継ぎを完了にしました。"
-  # --- 修正ここまで ---
 
+  # --- 3. Devise (ログイン機能) の設定 ---
   devise:
     failure:
       user:
@@ -190,10 +216,3 @@ ja:
         signed_up: 'アカウント登録が完了しました。'
         updated: 'アカウント情報を更新しました。'
         destroyed: 'アカウントを削除しました。'
-  
-  errors:
-    messages:
-      not_found: "は見つかりませんでした"
-      already_confirmed: "はすでに確認済みです"
-      not_locked: "はロックされていません"
-      # ...
