@@ -2,25 +2,28 @@ class MessagesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    # 1. どの予約(Stay)に対するメッセージか特定する
     @stay = Stay.find(params[:message][:stay_id])
+    @message = @stay.messages.new(message_params)
+    @message.user = current_user
 
-    # 2. セキュリティチェック: 飼い主かシッター以外は書き込めないようにする
-    unless @stay.owner_id == current_user.id || @stay.sitter_id == current_user.id
-      redirect_to root_path, alert: "権限がありません"
-      return
+    # ★★★ ここを追加：受信者を自動設定する ★★★
+    # もし自分が飼い主なら、相手はシッター。自分がシッターなら、相手は飼い主。
+    if current_user.id == @stay.owner_id
+      @message.receiver_id = @stay.sitter_id
+    else
+      @message.receiver_id = @stay.owner_id
     end
-
-    # 3. メッセージを作成する
-    @message = @stay.messages.build(message_params)
-    @message.user = current_user # 「誰が書いたか」をセット
+    # ------------------------------------------
 
     if @message.save
-      # 成功したら、元の画面（予約詳細）に戻る
-      redirect_to stay_path(@stay), notice: "メッセージを送信しました 💌"
+      # 成功時の処理（Turbo Streamで画面更新）
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to stay_path(@stay) }
+      end
     else
-      # 失敗したら（空送信など）、エラーを表示して戻る
-      redirect_to stay_path(@stay), alert: "メッセージを入力してください"
+      # 失敗時の処理
+      redirect_to stay_path(@stay), alert: "メッセージの送信に失敗しました。"
     end
   end
 
