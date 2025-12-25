@@ -10,8 +10,8 @@ class Checkin < ApplicationRecord
   # 以下のenum定義を有効にすると本番環境で500エラーになります。
   # カラム追加のマイグレーションを行うまではコメントアウトしておきます。
   
-  # enum food: { no_food: 0, little_left: 1, half_eaten: 2, finished: 3 }, _prefix: true
-  # enum mood: { normal: 0, happy: 1, cuddly: 2, hiding: 3, angry: 4 }, _prefix: true
+  enum food: { no_food: 0, little_left: 1, half_eaten: 2, finished: 3 }, _prefix: true
+  enum mood: { normal: 0, happy: 1, cuddly: 2, hiding: 3, angry: 4 }, _prefix: true
   
   # --------------------------------------------------
 

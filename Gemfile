@@ -89,3 +89,5 @@ gem 'stripe'
 
 
 gem "sassc-rails", "~> 2.1"
+
+gem 'redis'
