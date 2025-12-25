@@ -5,24 +5,24 @@ class Checkin < ApplicationRecord
 
   has_many_attached :images
 
-  # --- ★★★ 今回の追加機能（ここが一番大事！） ★★★ ---
+  # --- ★★★ エラー対策：一時的に無効化 ★★★ ---
+  # DBに food / mood カラムがまだ存在しないため、
+  # 以下のenum定義を有効にすると本番環境で500エラーになります。
+  # カラム追加のマイグレーションを行うまではコメントアウトしておきます。
   
-  # ごはんの状況（DBには 0, 1, 2... の数字で保存されます）
-  enum food: { no_food: 0, little_left: 1, half_eaten: 2, finished: 3 }, _prefix: true
-
-  # ご機嫌の状況
-  enum mood: { normal: 0, happy: 1, cuddly: 2, hiding: 3, angry: 4 }, _prefix: true
+  # enum food: { no_food: 0, little_left: 1, half_eaten: 2, finished: 3 }, _prefix: true
+  # enum mood: { normal: 0, happy: 1, cuddly: 2, hiding: 3, angry: 4 }, _prefix: true
   
   # --------------------------------------------------
 
   # バリデーション
   validates :checked_at, presence: true
   
-  # ※もし weight カラムがDBにない場合はエラーになるので、一旦コメントアウトしておきます
+  # ※ weight カラムなどもDBにない場合はエラーになるので、コメントアウトのままでOKです
   # validates :weight, numericality: { greater_than: 0 }, allow_nil: true
 
-  # スコープ（便利なので残しておきます）
+  # スコープ
   scope :recent,         -> { order(checked_at: :desc) }
   scope :on_day,         ->(date) { where(checked_at: date.all_day) }
-  scope :for_stay,       ->(stay_id) { where(stay_id: stay_id) } # Rubyのバージョンによっては stay_id: stay_id と書くほうが安全です
+  scope :for_stay,       ->(stay_id) { where(stay_id: stay_id) }
 end
