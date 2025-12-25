@@ -20,17 +20,17 @@ Nekostayは、猫の飼い主とシッターを繋ぐ、安心・安全な見守
 
 ## 📸 画面イメージ (Screen Shots)
 
-![Top Page](https://i.gyazo.com/56a8c0e7de46b59922e4d1b393f098d2.png)
+![Top Page](https://i.gyazo.com/56a8c0e7de46b59922e4d1b393f098d2/raw)
 
 ### 📱 リアルタイムなコミュニケーション
 Hotwire (Turbo/Stimulus) を活用し、シッターと飼い主がリアルタイムに会話できるチャット機能を実装。
 
-![Chat Demo](https://gyazo.com/83124150b3def37113ee0106fff1b245.gif)
+![Chat Demo](https://gyazo.com/83124150b3def37113ee0106fff1b245/raw)
 
 ### 📊 お世話管理ダッシュボード
 予約状況、契約書、お世話レポートを一元管理。Stripe決済も統合されています。
 
-![Dashboard](https://gyazo.com/73d794a46e1db1cbc8544d814d52cd7e.gif)
+![Dashboard](https://gyazo.com/73d794a46e1db1cbc8544d814d52cd7e/raw)
 
 
 ## ⚡ 主な機能 (Features)
