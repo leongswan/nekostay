@@ -1,10 +1,16 @@
 class AddMissingColumnsToTables < ActiveRecord::Migration[7.1]
   def change
-    # checkinsテーブルに food と mood を追加
-    add_column :checkins, :food, :integer, default: 0
-    add_column :checkins, :mood, :integer, default: 0
+    # checkinsテーブルに food カラムがない場合のみ追加
+    unless column_exists?(:checkins, :food)
+      add_column :checkins, :food, :integer, default: 0
+    end
 
-    # messagesテーブルに user_id を追加（なければ）
+    # checkinsテーブルに mood カラムがない場合のみ追加
+    unless column_exists?(:checkins, :mood)
+      add_column :checkins, :mood, :integer, default: 0
+    end
+
+    # messagesテーブルに user_id がない場合のみ追加
     unless column_exists?(:messages, :user_id)
       add_reference :messages, :user, null: false, foreign_key: true
     end
